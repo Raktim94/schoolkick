@@ -16,7 +16,7 @@ const productStructuredData = {
   description: 'Self-hosted, open-source school attendance software with correction history, a family browser view, validated imports, fee records and exam registration.',
   url: 'https://schoolkick.nodedr.com/',
   applicationCategory: 'EducationalApplication',
-  operatingSystem: 'Linux, Docker',
+  operatingSystem: 'Web, Linux, Docker',
   softwareVersion: '0.3.0',
   license: 'https://www.gnu.org/licenses/agpl-3.0.html',
   codeRepository: 'https://github.com/Raktim94/schoolkick',
