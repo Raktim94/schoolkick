@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Scroll-driven reveals. Everything is visible without scripting or with reduced motion.
   const targets = [...document.querySelectorAll('.rv, .register, .history, .layers')];
   const fire = (el) => el.classList.add('in', 'go');
+  document.querySelectorAll('.feature-list').forEach((list) => list.querySelectorAll('li').forEach((row, i) => row.style.setProperty('--feature-index', String(i))));
   document.querySelectorAll('.register').forEach((r) => r.querySelectorAll('tbody tr').forEach((tr, ri) => [...tr.children].forEach((td, ci) => td.style.setProperty('--i', String(ri * 2 + ci)))));
   if (reduce || !('IntersectionObserver' in window)) { targets.forEach(fire); return; }
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { fire(e.target); io.unobserve(e.target); } }), { threshold: 0.05, rootMargin: '0px 0px -5% 0px' });

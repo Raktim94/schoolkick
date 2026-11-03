@@ -229,6 +229,8 @@ footer { border-top: 1px solid var(--color-rule); padding: var(--space-2xl) 0 va
 /* reveal on scroll: only when scripting runs, always visible otherwise */
 .js .rv { opacity: 0; transform: translateY(18px); transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out); }
 .js .rv.in { opacity: 1; transform: none; }
+.hero-copy.rv { transition-delay: 40ms; }
+.hero-photo.rv { transition-delay: 140ms; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -276,6 +278,8 @@ body { background: var(--color-paper); color: var(--color-ink); }
 .hero-note { margin: 1rem 0 0; color: var(--color-muted); font-size: .875rem; }
 .hero-photo { margin: 0; }
 .hero-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid var(--color-rule); border-radius: 10px; }
+.hero-photo img { transition: transform 700ms var(--ease-out); }
+.hero-photo:hover img { transform: scale(1.012); }
 .hero-photo figcaption, .overview-image figcaption { margin-top: .6rem; color: var(--color-muted); font-size: .8rem; }
 .fact-strip { border-block: 1px solid var(--color-rule); background: var(--color-paper-2); }
 .fact-strip ul { display: grid; grid-template-columns: 1fr; margin: 0; padding-block: 1rem; list-style: none; }
@@ -290,6 +294,8 @@ body { background: var(--color-paper); color: var(--color-ink); }
 .feature-no { color: var(--color-signal); font: 600 1rem/1.4 var(--font-body); font-variant-numeric: tabular-nums; }
 .feature-list h3, .docs-list h3 { margin: 0 0 .35rem; font-size: clamp(1.2rem, 2vw, 1.5rem); font-family: var(--font-body); font-weight: 650; letter-spacing: -.02em; }
 .feature-list p, .docs-list p { margin: 0; color: var(--color-muted); }
+.js .rv.in .feature-list li { animation: feature-enter 520ms var(--ease-out) both; animation-delay: calc(var(--feature-index, 0) * 70ms); }
+@keyframes feature-enter { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
 .text-link { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; color: var(--color-accent); font-weight: 650; text-decoration: none; }
 .text-link:hover { text-decoration: underline; text-underline-offset: .2em; }
 .overview-section { padding-block: clamp(3.5rem, 7vw, 6rem); background: var(--color-paper-3); }

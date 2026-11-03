@@ -111,7 +111,7 @@ export function loadSite(siteUrl: string, repoUrl: string) {
   const notFound = layout({ title: 'Page not found | SchoolKick', description: 'This page does not exist.', noindex: true }, fill(readFileSync(dir + '404.html', 'utf8')), siteUrl, repoUrl);
   const assets = new Map<string, Buffer>();
   for (const f of ['site.css', 'site.js', 'icon.png', 'icon-192.png', 'favicon-32.png', 'apple-touch-icon.png', 'logo.png', 'og.png', 'favicon.ico']) if (existsSync(dir + f)) assets.set(f, readFileSync(dir + f));
-  if (existsSync(dir + 'img')) for (const f of readdirSync(dir + 'img')) if (f.endsWith('.webp') || f.endsWith('.png')) assets.set(f, readFileSync(dir + 'img/' + f));
+  if (existsSync(dir + 'img')) for (const f of readdirSync(dir + 'img')) if (f.endsWith('.webp')) assets.set(f, readFileSync(dir + 'img/' + f));
   if (existsSync(shotsDir)) for (const f of readdirSync(shotsDir)) if (f.endsWith('.png')) assets.set(f, readFileSync(shotsDir + f));
   const installer = existsSync(installerPath) ? readFileSync(installerPath, 'utf8') : '';
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${PAGES.map((p) => `  <url><loc>${siteUrl}${p.path === '/' ? '/' : p.path}</loc><lastmod>${pages.get(p.path)!.mtime.toISOString().slice(0, 10)}</lastmod><priority>${p.path === '/' ? '1.0' : p.menu ? '0.8' : '0.5'}</priority></url>`).join('\n')}\n</urlset>\n`;

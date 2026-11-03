@@ -2,7 +2,11 @@
 name: schoolkick
 services:
   app:
-    build: { context: .., dockerfile: Dockerfile }
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    labels:
+      org.opencontainers.image.revision: ${SOURCE_COMMIT:-unknown}
     restart: unless-stopped
     depends_on: { db: { condition: service_healthy } }
     environment:
