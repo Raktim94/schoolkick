@@ -88,4 +88,4 @@ Tests need PostgreSQL reachable at `TEST_ADMIN_URL` (default `postgres://postgre
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE). Contributors: [contributors.html](contributors.html) and [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).
+AGPL-3.0. See [LICENSE](LICENSE). If you run a modified version for other people over a network, the licence requires you to offer them its source. Contributors: [contributors.html](contributors.html) and [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).

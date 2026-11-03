@@ -39,7 +39,7 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/Raktim94/schoolkick
             org.opencontainers.image.description=SchoolKick: open-source school attendance
-            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.licenses=AGPL-3.0-only
             org.opencontainers.image.version=${{ steps.v.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
