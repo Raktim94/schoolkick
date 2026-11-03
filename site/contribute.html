@@ -1,13 +1,13 @@
 <main id="main" class="page"><div class="wrap">
   <p class="crumbs"><a href="/">Home</a> / Contribute</p>
-  <h1>Contribute to CampusOS</h1>
+  <h1>Contribute to SchoolKick</h1>
   <p class="lede">Set up in a few minutes, run the checks, send a small pull request.</p>
-  <p>CampusOS is small on purpose: one TypeScript server, one React app, one PostgreSQL database. Fixes and improvements that keep it simple, fast and private are welcome. For anything bigger than a small fix, open an issue first so we can agree on the approach.</p>
+  <p>SchoolKick is small on purpose: one TypeScript server, one React app, one PostgreSQL database. Fixes and improvements that keep it simple, fast and private are welcome. For anything bigger than a small fix, open an issue first so we can agree on the approach.</p>
   <p>Please never put real learner data in tests, screenshots or issues. By sending a pull request you agree your work is released under the project’s <a href="%REPO_URL%/blob/main/LICENSE">MIT licence</a>.</p>
   <h2>Set up</h2><p>You need Node.js 22.18 or newer and PostgreSQL 16.</p>
-<div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>git clone %REPO_URL%.git &amp;&amp; cd campusos
+<div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>git clone %REPO_URL%.git &amp;&amp; cd schoolkick
 npm install
-DATABASE_URL=postgres://user:pass@localhost:5432/campusos npm run dev:server   # API on :8080
+DATABASE_URL=postgres://user:pass@localhost:5432/schoolkick npm run dev:server   # API on :8080
 npm run dev:web                                                                # app on :5173/app/</code></pre></div>
   <h2>Before you push</h2>
 <div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>export TEST_ADMIN_URL=postgres://postgres:secret@127.0.0.1:5432/postgres

@@ -14,7 +14,7 @@ const email = (n) => `${n}.${run}@demo.example`;
 function jar() {
   let cookie = '';
   return async (method, path, body, ct = 'application/json') => {
-    const r = await fetch(BASE + '/api/v1' + path, { method, headers: { 'x-requested-with': 'campusos', 'x-forwarded-for': `10.9.${Math.random() * 250 | 0}.${Math.random() * 250 | 0}`, ...(cookie && { cookie }), ...(body !== undefined && { 'content-type': ct }) }, body: body === undefined ? undefined : typeof body === 'string' ? body : JSON.stringify(body) });
+    const r = await fetch(BASE + '/api/v1' + path, { method, headers: { 'x-requested-with': 'schoolkick', 'x-forwarded-for': `10.9.${Math.random() * 250 | 0}.${Math.random() * 250 | 0}`, ...(cookie && { cookie }), ...(body !== undefined && { 'content-type': ct }) }, body: body === undefined ? undefined : typeof body === 'string' ? body : JSON.stringify(body) });
     const sc = r.headers.get('set-cookie'); if (sc) cookie = sc.split(';')[0];
     const data = await r.json().catch(() => null);
     assert.ok(r.ok, `${method} ${path} -> ${r.status} ${JSON.stringify(data)}`);

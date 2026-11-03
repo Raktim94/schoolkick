@@ -30,7 +30,7 @@ export function client(app: ReturnType<typeof buildApp>) {
   let cookie = '';
   const ip = `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
   const call = async (method: string, path: string, body?: unknown, extra: Record<string, string> = {}) => {
-    const headers: Record<string, string> = { 'x-requested-with': 'campusos', host: 'localhost', 'x-forwarded-for': ip, ...extra };
+    const headers: Record<string, string> = { 'x-requested-with': 'schoolkick', host: 'localhost', 'x-forwarded-for': ip, ...extra };
     if (cookie) headers.cookie = cookie;
     if (body !== undefined && typeof body !== 'string') headers['content-type'] = 'application/json';
     const res = await app.request(`http://localhost${path}`, { method, headers, body: body === undefined ? undefined : typeof body === 'string' ? body : JSON.stringify(body) });

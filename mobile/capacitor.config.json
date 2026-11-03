@@ -1,2 +1,2 @@
-{ "appId": "org.campusos.app", "appName": "CampusOS", "webDir": "www",
+{ "appId": "org.schoolkick.app", "appName": "SchoolKick", "webDir": "www",
   "server": { "url": "https://YOUR-CAMPUSOS-HOST/app/", "cleartext": false } }

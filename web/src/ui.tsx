@@ -53,10 +53,10 @@ export const fmtTime = (iso: string) => new Date(iso).toLocaleString(undefined, 
 
 export type Theme = 'auto' | 'light' | 'dark';
 export function useTheme(): [Theme, (t: Theme) => void] {
-  const [t, setT] = useState<Theme>(() => { try { return (localStorage.getItem('campusos:theme') as Theme) || 'auto'; } catch { return 'auto'; } });
+  const [t, setT] = useState<Theme>(() => { try { return (localStorage.getItem('schoolkick:theme') as Theme) || 'auto'; } catch { return 'auto'; } });
   useEffect(() => {
     if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.dataset.theme = t;
-    try { localStorage.setItem('campusos:theme', t); } catch { /* storage unavailable */ }
+    try { localStorage.setItem('schoolkick:theme', t); } catch { /* storage unavailable */ }
   }, [t]);
   return [t, setT];
 }

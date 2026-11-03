@@ -46,12 +46,12 @@ function navFor(role: Role): Item[] {
 
 function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
   const roles = ORDER.filter((r) => me.roles.includes(r));
-  const [active, setActive] = useState<Role>(() => { try { const s = localStorage.getItem('campusos:role') as Role; return roles.includes(s) ? s : roles[0]; } catch { return roles[0]; } });
+  const [active, setActive] = useState<Role>(() => { try { const s = localStorage.getItem('schoolkick:role') as Role; return roles.includes(s) ? s : roles[0]; } catch { return roles[0]; } });
   const [theme, setTheme] = useTheme();
   const path = usePath();
   const items = navFor(active);
   const out = async () => { await api('POST', '/auth/logout').catch(() => {}); onSignOut(); };
-  const switchRole = (r: Role) => { setActive(r); try { localStorage.setItem('campusos:role', r); } catch { /* ignore */ } navigate('/'); };
+  const switchRole = (r: Role) => { setActive(r); try { localStorage.setItem('schoolkick:role', r); } catch { /* ignore */ } navigate('/'); };
   const classId = /^\/classes\/([0-9a-f-]{36})$/.exec(path)?.[1];
 
   let page: ReactNode, title = 'Not found';
@@ -112,7 +112,7 @@ function Auth({ onAuthed }: { onAuthed: () => void }) {
   };
   return (
     <main className="auth" id="main">
-      <p className="inst"><Logo /><b>CampusOS</b></p>
+      <p className="inst"><Logo /><b>SchoolKick</b></p>
       <form className="auth-card" onSubmit={submit} aria-labelledby="auth-h">
         <div className="tabs" role="tablist">
           <button type="button" role="tab" aria-selected={mode === 'signin'} className={mode === 'signin' ? 'on' : ''} onClick={() => { setMode('signin'); act.clear(); }}>Sign in</button>
@@ -125,7 +125,7 @@ function Auth({ onAuthed }: { onAuthed: () => void }) {
         {act.msg && <Status kind={act.msg.kind}>{act.msg.text}</Status>}
         <button className="btn" disabled={act.busy}>{act.busy ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create institution'}</button>
       </form>
-      <p className="muted"><a href="/">About CampusOS</a>. Early release: do not use with real learner data until you have reviewed security and local privacy rules.</p>
+      <p className="muted"><a href="/">About SchoolKick</a>. Early release: do not use with real learner data until you have reviewed security and local privacy rules.</p>
     </main>
   );
 }

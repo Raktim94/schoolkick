@@ -18,7 +18,7 @@ export class ApiError extends Error {
   }
 }
 
-export const SESSION_COOKIE = 'campusos_session';
+export const SESSION_COOKIE = 'schoolkick_session';
 type Rec = Record<string, unknown>;
 export type PublicCtx = { c: Context; db: Db; ip: string; body: () => Promise<Rec> };
 export type Ctx = PublicCtx & {
@@ -66,7 +66,7 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
   app.use('/api/*', async (c, next) => {
     if (!['GET', 'HEAD', 'OPTIONS'].includes(c.req.method)) {
       const origin = c.req.header('origin');
-      if (c.req.header('x-requested-with') !== 'campusos' || (origin && new URL(origin).host !== c.req.header('host')))
+      if (c.req.header('x-requested-with') !== 'schoolkick' || (origin && new URL(origin).host !== c.req.header('host')))
         throw new ApiError(403, 'csrf', 'Cross-site request blocked');
     }
     await next();
@@ -110,7 +110,7 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
         responses: { '200': { description: 'OK' }, ...(r.access === 'public' ? {} : { '401': { description: 'Not signed in' }, '403': { description: 'Role not allowed' } }) },
       };
     }
-    return { openapi: '3.1.0', info: { title: 'CampusOS API', version: '0.1.0' }, paths,
+    return { openapi: '3.1.0', info: { title: 'SchoolKick API', version: '0.1.0' }, paths,
       components: { securitySchemes: { session: { type: 'apiKey', in: 'cookie', name: SESSION_COOKIE } } } };
   };
   pub('get', '/openapi.json', 'OpenAPI description of this API', async ({ c }) => c.json(openapi()));

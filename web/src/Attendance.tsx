@@ -9,7 +9,7 @@ type Row = { learnerId: string; name: string; status: St | null; reason: string 
 type Roster = { class: string; day: string; roster: Row[] };
 type Mark = { status: St; reason: string };
 
-const draftKey = (c: string, d: string) => `campusos:draft:${c}:${d}`;
+const draftKey = (c: string, d: string) => `schoolkick:draft:${c}:${d}`;
 const readDraft = (k: string): Record<string, Mark> => { try { return JSON.parse(localStorage.getItem(k) ?? '{}'); } catch { return {}; } };
 const writeDraft = (k: string, v: Record<string, Mark>) => { try { Object.keys(v).length ? localStorage.setItem(k, JSON.stringify(v)) : localStorage.removeItem(k); } catch { /* storage unavailable */ } };
 

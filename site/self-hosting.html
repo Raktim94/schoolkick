@@ -1,11 +1,11 @@
 <main id="main" class="page"><div class="wrap">
   <p class="crumbs"><a href="/">Home</a> / Self-hosting</p>
-  <h1>Self-hosting CampusOS with Docker or CasaOS</h1>
+  <h1>Self-hosting SchoolKick with Docker or CasaOS</h1>
   <p class="lede">One container for the app and one for PostgreSQL. It runs on Linux, Windows (Docker Desktop) and macOS, on x86 and ARM.</p>
 
   <section class="block"><div class="split"><h2>Start it</h2><div>
     <pre><code>git clone %REPO_URL%.git
-cd campusos
+cd schoolkick
 cp deploy/.env.example deploy/.env      # set a database password and SITE_URL
 docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d</code></pre>
     <p>Open <code>http://localhost:8080</code>, choose “Create institution”, and you are the administrator. Migrations run on start. Set <code>ALLOW_SIGNUP=0</code> once your institution exists to close public sign-up.</p>
@@ -23,8 +23,8 @@ docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d</code><
 
   <section class="block"><div class="split"><h2>HTTPS and backups</h2><div>
     <p>Put a reverse proxy that terminates HTTPS in front of the app, such as Caddy or Nginx, and forward the <code>X-Forwarded-For</code> and <code>X-Forwarded-Proto</code> headers. Session cookies become Secure when the request is HTTPS.</p>
-    <p>Back up the database with <code>pg_dump</code>. The data volume is named <code>campusos-db</code>.</p>
-    <pre><code>docker compose -f deploy/docker-compose.yml exec db pg_dump -U campusos campusos &gt; backup.sql</code></pre>
+    <p>Back up the database with <code>pg_dump</code>. The data volume is named <code>schoolkick-db</code>.</p>
+    <pre><code>docker compose -f deploy/docker-compose.yml exec db pg_dump -U schoolkick schoolkick &gt; backup.sql</code></pre>
   </div></div></section>
 
   <section class="block"><div class="split"><h2>CasaOS</h2><div>

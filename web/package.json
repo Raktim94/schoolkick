@@ -1,5 +1,5 @@
 {
-  "name": "@campusos/web",
+  "name": "@schoolkick/web",
   "private": true,
   "type": "module",
   "scripts": {

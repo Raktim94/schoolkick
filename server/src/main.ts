@@ -12,7 +12,7 @@ log({ msg: 'migrations', applied: await migrate(db) });
 const app = buildApp(db, { allowSignup: process.env.ALLOW_SIGNUP !== '0', log: true });
 mountWeb(app, {
   siteUrl: (process.env.SITE_URL ?? `http://localhost:${port}`).replace(/\/$/, ''),
-  repoUrl: (process.env.REPO_URL ?? 'https://github.com/Raktim94/campusos').replace(/\/$/, ''),
+  repoUrl: (process.env.REPO_URL ?? 'https://github.com/Raktim94/schoolkick').replace(/\/$/, ''),
   appDir: process.env.WEB_DIR ?? fileURLToPath(new URL('../../web/dist', import.meta.url)),
 });
 const server = serve({ fetch: app.fetch, port });

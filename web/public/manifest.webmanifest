@@ -1,2 +1,2 @@
-{ "name": "CampusOS", "short_name": "CampusOS", "start_url": "/app/", "scope": "/app/", "display": "standalone", "background_color": "#F5F7FA", "theme_color": "#2459A6",
+{ "name": "SchoolKick", "short_name": "SchoolKick", "start_url": "/app/", "scope": "/app/", "display": "standalone", "background_color": "#F5F7FA", "theme_color": "#2459A6",
   "icons": [{ "src": "/app/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }] }

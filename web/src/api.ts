@@ -15,7 +15,7 @@ export async function api<T = any>(method: string, path: string, body?: unknown,
     res = await fetch(`/api/v1${path}`, {
       method,
       credentials: 'same-origin',
-      headers: { 'x-requested-with': 'campusos', ...(body === undefined ? {} : { 'content-type': contentType }) },
+      headers: { 'x-requested-with': 'schoolkick', ...(body === undefined ? {} : { 'content-type': contentType }) },
       body: body === undefined ? undefined : typeof body === 'string' ? body : JSON.stringify(body),
     });
   } catch {

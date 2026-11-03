@@ -1,4 +1,4 @@
-{ "name": "campusos-mobile", "private": true, "version": "0.1.0",
+{ "name": "schoolkick-mobile", "private": true, "version": "0.1.0",
   "scripts": { "sync": "cap sync", "android": "cap open android", "ios": "cap open ios" },
   "dependencies": { "@capacitor/core": "^6.2.0", "@capacitor/android": "^6.2.0", "@capacitor/ios": "^6.2.0" },
   "devDependencies": { "@capacitor/cli": "^6.2.0" } }

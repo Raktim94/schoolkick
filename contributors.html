@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CampusOS contributors</title>
-<meta name="description" content="The people who build CampusOS, the open-source school attendance platform, and how to join them.">
+<title>SchoolKick contributors</title>
+<meta name="description" content="The people who build SchoolKick, the open-source school attendance platform, and how to join them.">
 <meta name="robots" content="index, follow">
 <style>
 :root{--canvas:#f5f7fa;--paper:#fff;--ink:#17212f;--ink2:#536174;--line:#dce3eb;--brand:#2459a6;--on:#fff;--focus:#f2a900}
@@ -24,30 +24,30 @@ ul.people{list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template
 </head>
 <body>
 <main>
-<p><a href="https://github.com/Raktim94/campusos">← CampusOS on GitHub</a></p>
-<h1>The people behind CampusOS</h1>
+<p><a href="https://github.com/Raktim94/schoolkick">← SchoolKick on GitHub</a></p>
+<h1>The people behind SchoolKick</h1>
 <p class="lede">Thank you to everyone who has tried it, reported a problem, or sent a change.</p>
 
 <h2>Maintainer</h2>
-<ul class="people"><li class="person"><span class="av" aria-hidden="true">RR</span><div><b>Raktim Ranjit</b><span>Creator and maintainer · <a href="https://github.com/Raktim94">@Raktim94</a></span></div></li></ul>
+<ul class="people"><li class="person"><span class="av" aria-hidden="true">RR</span><div><b>Raktim Ranjit</b><span>Creator and maintainer · <a href="https://raktimranjit.com">raktimranjit.com</a> · <a href="https://github.com/Raktim94">@Raktim94</a></span></div></li></ul>
 
 <h2>Contributors</h2>
 <p id="status">Loading the live list from GitHub…</p>
 <ul class="people" id="list"></ul>
-<noscript><p>The live list needs JavaScript. See the <a href="https://github.com/Raktim94/campusos/graphs/contributors">contributors graph</a> on GitHub.</p></noscript>
+<noscript><p>The live list needs JavaScript. See the <a href="https://github.com/Raktim94/schoolkick/graphs/contributors">contributors graph</a> on GitHub.</p></noscript>
 
 <h2>Join in</h2>
 <div class="cards">
-<div class="card"><h3>Report what breaks</h3><p>Install it from the <a href="https://github.com/Raktim94/campusos#run-it">README</a> and open an <a href="https://github.com/Raktim94/campusos/issues">issue</a> with what you saw.</p></div>
-<div class="card"><h3>Send a fix</h3><p>Read <a href="https://github.com/Raktim94/campusos/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>, keep the change small, and open a pull request.</p></div>
-<div class="card"><h3>Review safety</h3><p>Security and accessibility reviewers are welcome. Report vulnerabilities privately as in <a href="https://github.com/Raktim94/campusos/blob/main/SECURITY.md">SECURITY.md</a>.</p></div>
+<div class="card"><h3>Report what breaks</h3><p>Install it from the <a href="https://github.com/Raktim94/schoolkick#run-it">README</a> and open an <a href="https://github.com/Raktim94/schoolkick/issues">issue</a> with what you saw.</p></div>
+<div class="card"><h3>Send a fix</h3><p>Read <a href="https://github.com/Raktim94/schoolkick/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>, keep the change small, and open a pull request.</p></div>
+<div class="card"><h3>Review safety</h3><p>Security and accessibility reviewers are welcome. Report vulnerabilities privately as in <a href="https://github.com/Raktim94/schoolkick/blob/main/SECURITY.md">SECURITY.md</a>.</p></div>
 </div>
 <p style="margin-top:2rem;color:var(--ink2);font-size:.9rem">Never put real learner data in issues, tests or screenshots.</p>
 </main>
 <script>
 (function () {
   var s = document.getElementById('status'), list = document.getElementById('list');
-  fetch('https://api.github.com/repos/Raktim94/campusos/contributors?per_page=100', { headers: { Accept: 'application/vnd.github+json' } })
+  fetch('https://api.github.com/repos/Raktim94/schoolkick/contributors?per_page=100', { headers: { Accept: 'application/vnd.github+json' } })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (rows) {
       rows = rows.filter(function (u) { return u.type === 'User'; });
@@ -62,7 +62,7 @@ ul.people{list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template
         d.appendChild(b); d.appendChild(sp); li.appendChild(img); li.appendChild(d); list.appendChild(li);
       });
     })
-    .catch(function () { s.innerHTML = 'Could not load the live list. See the <a href="https://github.com/Raktim94/campusos/graphs/contributors">contributors graph</a> on GitHub.'; });
+    .catch(function () { s.innerHTML = 'Could not load the live list. See the <a href="https://github.com/Raktim94/schoolkick/graphs/contributors">contributors graph</a> on GitHub.'; });
 })();
 </script>
 </body>

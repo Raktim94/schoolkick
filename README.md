@@ -1,4 +1,4 @@
-# CampusOS
+# SchoolKick
 
 Open-source school software. Teachers take attendance from a phone, families see today's status in a browser, and every correction stays on the record.
 
@@ -35,7 +35,7 @@ Without Docker:
 
 ```sh
 npm install && npm run build
-DATABASE_URL=postgres://user:pass@localhost:5432/campusos npm start
+DATABASE_URL=postgres://user:pass@localhost:5432/schoolkick npm start
 ```
 
 The database role needs permission to create roles on first start (migration 002 creates the unprivileged `campusos_app` role used for row-level security).
