@@ -16,15 +16,19 @@ export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; ap
   const appIndex = hasApp ? readFileSync(o.appDir + '/index.html', 'utf8') : '';
   app.use('*', compress());
 
-  app.get('/robots.txt', (c) => { const f = resolve(publicDir, 'robots.txt'); return existsSync(f) ? c.text(readFileSync(f, 'utf8')) : c.text(site.robots); });
+  app.get('/robots.txt', (c) => { const f = resolve(publicDir, 'robots.txt'); return c.text(existsSync(f) ? readFileSync(f, 'utf8') : site.robots, 200, { 'Cache-Control': 'no-cache' }); });
   app.get('/install-linux.sh', (c) => (site.installer ? c.body(site.installer, 200, { 'Content-Type': 'text/x-shellscript; charset=utf-8', 'Cache-Control': 'public, max-age=300', 'X-Content-Type-Options': 'nosniff' }) : c.notFound()));
   app.get('/downloads/:file', (c) => {
     const m = /^schoolkick-(amd64|arm64)\.deb$/.exec(c.req.param('file'));
     return m ? c.redirect(`${o.repoUrl}/releases/download/v${DEB_VERSION}/schoolkick_${DEB_VERSION}_${m[1]}.deb`, 302) : c.notFound();
   });
   app.get('/favicon.ico', (c) => { const f = resolve(publicDir, 'favicon.ico'); if (existsSync(f)) return c.body(readFileSync(f) as unknown as ArrayBuffer, 200, { 'Content-Type': 'image/x-icon', 'Cache-Control': 'public, max-age=86400' }); const old = site.assets.get('favicon.ico'); return old ? c.body(old as unknown as ArrayBuffer, 200, { 'Content-Type': 'image/x-icon', 'Cache-Control': 'public, max-age=86400' }) : c.notFound(); });
-  app.get('/llms.txt', (c) => { const f = resolve(publicDir, 'llms.txt'); return c.text(existsSync(f) ? readFileSync(f, 'utf8') : site.llms, 200, { 'Cache-Control': 'public, max-age=3600' }); });
-  app.get('/sitemap.xml', (c) => { const f = resolve(publicDir, 'sitemap.xml'); return c.body((existsSync(f) ? readFileSync(f) : Buffer.from(site.sitemap)) as unknown as ArrayBuffer, 200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }); });
+  app.get('/llms.txt', (c) => { const f = resolve(publicDir, 'llms.txt'); return c.text(existsSync(f) ? readFileSync(f, 'utf8') : site.llms, 200, { 'Cache-Control': 'no-cache' }); });
+  app.get('/llms-full.txt', (c) => {
+    const f = resolve(publicDir, 'llms-full.txt');
+    return existsSync(f) ? c.body(readFileSync(f) as unknown as ArrayBuffer, 200, { 'Content-Type': 'text/markdown; charset=utf-8', 'Cache-Control': 'no-cache' }) : c.notFound();
+  });
+  app.get('/sitemap.xml', (c) => { const f = resolve(publicDir, 'sitemap.xml'); return c.body((existsSync(f) ? readFileSync(f) : Buffer.from(site.sitemap)) as unknown as ArrayBuffer, 200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'no-cache' }); });
 
   app.get('/s/:file', (c) => {
     const nextFile = resolve(publicDir, 's', c.req.param('file'));
@@ -53,7 +57,7 @@ export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; ap
     const staticFile = resolve(publicDir, relativePath);
     if (staticFile.startsWith(publicDir + sep) || staticFile === resolve(publicDir, 'index.html')) {
       const buf = existsSync(staticFile) ? readFileSync(staticFile) : null;
-      if (buf) return c.body(buf as unknown as ArrayBuffer, 200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300' });
+      if (buf) return c.body(buf as unknown as ArrayBuffer, 200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
     }
     const assetPath = resolve(publicDir, `.${c.req.path}`);
     if (assetPath.startsWith(publicDir + sep) && extname(assetPath)) {
@@ -61,7 +65,7 @@ export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; ap
       if (buf) return c.body(buf as unknown as ArrayBuffer, 200, { 'Content-Type': MIME[extname(assetPath)] ?? 'application/octet-stream', 'Cache-Control': 'public, max-age=31536000, immutable' });
     }
     const page = site.pages.get(path);
-    if (page) return c.html(page.html, 200, { 'Cache-Control': 'public, max-age=300' });
+    if (page) return c.html(page.html, 200, { 'Cache-Control': 'no-cache' });
     return c.html(site.notFound, 404); // a real 404, not a soft one
   });
 }
