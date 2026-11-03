@@ -227,7 +227,7 @@ Treat the table above as the starting design contract, then inspect the actual r
 
 Evidence base: the four referenced files were read; findings are in the repository's `docs/design-alignment.md`. Screenshots at 375/768/1440 px are in `docs/screenshots/` (`fees-*`, `receipt-mobile`, `reconcile-desktop`), produced by `e2e/fees.mjs` with synthetic data.
 
-**Palette.** The app now uses the blue brand tokens (`#2459a6` light, `#8ab4f8` dark) with neutral surfaces, matching section 3; the public marketing site keeps its own forest/parchment/coral identity. Measured contrast (WCAG formula, 2026-11-03): white on `#2459a6` 6.87:1; `#101722` on dark brand `#8ab4f8` is checked in the next audit; `--ok #20734a` on `#e6f4ec` 5.13:1; `--bad #b42318` on `#fdecea` 5.75:1; dark `#6fcf97` on `#16301f` 7.48:1; `#ff9a8f` on `#3a1c19` 7.55:1; ink on canvas 15.11:1. Muted ink and focus ring were not re-measured; a specialist accessibility audit is still pending.
+**Palette.** The app now uses the blue brand tokens (`#2459a6` light, `#8ab4f8` dark) with neutral surfaces, matching section 3; the public marketing site keeps its own forest/parchment/coral identity. Measured contrast (WCAG formula, 2026-11-03): white on `#2459a6` 6.87:1; `#101722` on dark brand `#8ab4f8` 8.53:1; `--ok #20734a` on `#e6f4ec` 5.13:1; `--bad #b42318` on `#fdecea` 5.75:1; dark `#6fcf97` on `#16301f` 7.48:1; `#ff9a8f` on `#3a1c19` 7.55:1; ink on canvas 15.11:1. Muted ink and focus ring were not re-measured; a specialist accessibility audit is still pending.
 
 **Logo.** Supplied PNG only (`/app/icon-192.png`, round, `border-radius:50%`). The earlier inline SVG mark in the shell was removed (upstream commit e81945e).
 

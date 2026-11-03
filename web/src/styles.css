@@ -51,7 +51,7 @@ input,select,textarea{font:inherit;font-weight:400;color:var(--ink);background:v
 .seg-ctl button+button{border-left:1px solid var(--line)} .seg-ctl .on{background:var(--brand);color:var(--on-brand);font-weight:600}
 
 /* shell */
-.shell{display:grid;grid-template-columns:15rem 1fr;min-height:100vh}
+.shell{display:grid;grid-template-columns:15rem 1fr;min-height:100vh;align-content:start}
 .side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:1rem;padding:1rem;background:var(--surface);border-right:1px solid var(--line);overflow-y:auto}
 .app-mark{display:block;flex:none;object-fit:cover;border-radius:50%}
 .inst{display:flex;gap:.6rem;align-items:center;color:var(--brand);margin:0} .inst b{color:var(--ink);line-height:1.2;overflow-wrap:anywhere}
