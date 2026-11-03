@@ -74,6 +74,7 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
   });
   app.onError((e, c) => {
     if (e instanceof ApiError) return c.json({ error: { code: e.code, message: e.message } }, e.status);
+    if ((e as { code?: string }).code === '23505') return c.json({ error: { code: 'duplicate', message: 'That already exists. Refresh and check.' } }, 409); // lost a race on a unique rule
     console.error(JSON.stringify({ level: 'error', path: c.req.path, msg: e.message }));
     return c.json({ error: { code: 'internal', message: 'Something went wrong on our side. Try again.' } }, 500);
   });

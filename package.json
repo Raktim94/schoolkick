@@ -20,6 +20,7 @@
     "e2e": "node e2e/run.mjs"
   },
   "devDependencies": {
+    "axe-core": "^4.14.0",
     "puppeteer-core": "^23.11.1"
   }
 }

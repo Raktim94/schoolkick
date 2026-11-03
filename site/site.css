@@ -171,7 +171,7 @@ section.block, section.band { padding: clamp(3rem, 7vw, 5.5rem) 0; border-top: 1
 table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); }
 th, td { text-align: left; padding: var(--space-sm) var(--space-md); border-bottom: 1px solid var(--color-rule); vertical-align: top; }
 th { font-weight: 650; background: var(--color-paper-2); }
-.scroll { overflow-x: auto; border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-paper); }
+.scroll { position: relative; overflow-x: auto; border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-paper); }
 .history tbody tr { transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out); }
 .js .history:not(.go) tbody tr { opacity: 0; transform: translateY(10px); }
 .js .history.go tbody tr:nth-child(2) { transition-delay: 0.6s; } .js .history.go tbody tr:nth-child(3) { transition-delay: 1.2s; }

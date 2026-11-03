@@ -2,6 +2,9 @@ import pg from 'pg';
 import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
+// A calendar day must stay a plain YYYY-MM-DD string, never a Date that shifts with the server's timezone.
+pg.types.setTypeParser(1082, (v) => v);
+
 export type Db = pg.Pool;
 export type Tx = pg.PoolClient;
 

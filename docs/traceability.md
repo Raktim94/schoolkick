@@ -17,30 +17,43 @@ Status: **working** = implemented, tested, reachable in the UI or API; **partial
 | Overview dashboard | working | owner, registrar | `/insights/overview` | staff | api.test |
 | Audit log | working | owner | `/audit` | owner | api.test |
 
-## Fees, payments, receipts (this slice, v0.2)
+## Fees, payments, receipts, exams (v0.2)
 
 | Feature | Status | Owner role | Route / API | Permissions | Evidence |
 |---|---|---|---|---|---|
 | Invoices (immutable, numbered, minor units) | working | finance, owner | `POST /fees/invoices` | finance/owner write; registrar read | fees.test |
-| Bulk invoice per class | partial | finance, owner | `POST /fees/invoices/bulk` | finance/owner | fees.test; API only, no UI |
+| Invoice a whole class | working | finance, owner | `POST /fees/invoices/bulk`, UI "Invoice a whole class" | finance/owner, confirm step | fees.test |
 | Void with reason, never delete | working | finance, owner | `POST /fees/invoices/:id/void` | blocked once paid | fees.test |
-| Hosted checkout, test provider | partial | guardian | `POST /guardian/invoices/:id/pay` | linked + `can_pay` | fees.test, e2e. **Sandbox only; no real provider adapter** |
-| Never paid from return URL | working | guardian | `GET /guardian/payments/:id` | linked child | fees.test |
-| Signed webhook, idempotent, out-of-order safe | working | system | `POST /webhooks/payments/sandbox` | HMAC-SHA256 | fees.test |
-| One open online payment per invoice (no double pay) | working | guardian | partial unique index | DB-enforced | fees.test |
-| "Do not pay again yet" + reference + case note | working | guardian | `GET /guardian/fees` | linked child | fees.test, e2e screenshot |
-| Reconciliation queue, resolve with evidence, case ETA | working | finance, owner | `/fees/reconciliation`, `/fees/payments/:id/resolve` | finance/owner | fees.test |
-| Cash / bank / cheque entry with receipt | working | finance, owner | `POST /fees/invoices/:id/payments/manual` | finance/owner | fees.test, e2e |
-| Numbered receipt after verified payment only | working | all payers | `GET /receipts/:id` | staff or linked guardian | fees.test |
-| Printable receipt | partial | guardian, staff | `/app/receipts/:id` + browser print | same | e2e. **No server-generated PDF, no verification QR** |
-| Refund recording, history kept | partial | finance, owner | `POST /fees/payments/:id/refund` | finance/owner | fees.test. **No approval step, no provider-side refund** |
+| **Cash at the office, receipt printed** (no gateway needed) | working | finance, owner | `POST /fees/invoices/:id/payments/manual` | finance/owner | fees.test, e2e |
+| **UPI payment QR** (school UPI id, exact amount, reference; INR only) | working | guardian, finance | `POST /guardian/invoices/:id/upi`, `GET /fees/invoices/:id/upi` | linked guardian with pay right; finance/owner at counter | fees.test, e2e |
+| UPI is never "paid" from a claim: payer gives UTR, office confirms against bank statement | working | guardian, finance | `POST /guardian/payments/:id/claim`, `/fees/payments/:id/resolve` | linked guardian; finance/owner | fees.test, e2e |
+| Hosted online checkout, test provider | partial | guardian | `POST /guardian/invoices/:id/pay` | linked + `can_pay` | fees.test, e2e. **Test provider only** |
+| Real card/bank provider adapter | planned | | | | webhook and state machine are provider-neutral; needs a provider contract and keys |
+| Never paid from return URL; signed idempotent webhook; out-of-order safe | working | system | `POST /webhooks/payments/sandbox` | HMAC-SHA256 | fees.test |
+| One open online/UPI payment per invoice (no double pay) | working | guardian | partial unique index | DB-enforced | fees.test |
+| "Do not pay again yet" + reference + case note | working | guardian | `GET /guardian/fees` | linked child | fees.test, e2e |
+| Reconciliation queue with UTR, evidence, case ETA | working | finance, owner | `/fees/reconciliation`, `/fees/payments/:id/resolve` | finance/owner | fees.test, e2e |
+| Numbered receipt after verified payment only | working | payers, staff | `GET /receipts/:id` | staff or linked guardian | fees.test |
+| **Receipt PDF with verification QR** | working | payers, staff | `GET /receipts/:id/pdf`, public `GET /verify/:id/:sig` | same as receipt; verify shows no names | fees.test. Latin and Devanagari text; other scripts not rendered |
+| **Refund request and owner approval** | working | finance requests, owner decides | `/fees/payments/:id/refund`, `/fees/refunds`, `/fees/refunds/:id/decide` | finance/owner; owner decides | fees.test. Money is paid back outside the system; no provider-side refund |
+| Partial payments | working | guardian, finance | `amountMinor` | outstanding cap | fees.test |
+| Payment settings (UPI id) | working | owner, finance | `GET/PUT /fees/settings` | finance/owner | fees.test |
 | Financial rows immutable at SQL level | working | n/a | triggers + grants | n/a | fees.test |
-| Partial payments | working | guardian, finance | pay `amountMinor`; manual | outstanding cap | fees.test |
-| Late fee, grace, installments, scholarships, sponsors | planned | | | | |
-| Exam payment workflow (eligibility, form, admit card) | planned | | | | invoice kind `exam` exists; nothing else |
-| Real provider adapters (card, UPI, bank) | planned | | | | webhook shape is provider-neutral; needs a provider contract |
+| **Exam registration, fee, review, hall ticket** | working | owner, registrar; guardian | `/exams*`, `/guardian/exams*` | registrar/owner manage; guardian own children | exams.test, e2e |
+| Exam windows (open, late with late fee, closed) and attendance eligibility, staff override with reason | working | registrar | `POST /exams`, `POST /exams/:id/register` | registrar/owner | exams.test |
+| Late fees on invoices, instalments, scholarships, sponsors | planned | | | | late fee exists for exams only |
 | Ledger, cashbook, expenses, accounting export | planned | | | | |
+
+## Public site
+
+| Feature | Status | Evidence |
+|---|---|---|
+| `/countries` page: seven markets, honest status (none Available or Pilot) | working | e2e/run.mjs SEO checks |
+
+## Accessibility
+
+Automated axe-core run (WCAG 2.0/2.1/2.2 A and AA rules) on parent fees, UPI checkout, parent exams, finance fees and reconciliation: no violations (harness checked against a deliberately broken page). **Not done:** manual screen-reader pass, keyboard-only walkthrough record, specialist audit. Status: partial.
 
 ## Not built
 
-Admissions and applicant portal; student portal; teacher QR check-in and ID cards; timetable; gradebook, report cards, exam management; HR and payroll; messaging/inbox and channel adapters; website CMS; scoped API keys and outbound webhooks; AI/MCP; library, transport, hostel, health; country packs and the `/countries` page; i18n (UI is English only); MFA; background jobs/outbox; private file storage; Windows/macOS/mobile builds (Capacitor config only). All **planned**.
+Admissions and applicant portal; student portal; teacher QR check-in and ID cards; timetable; gradebook, report cards, marks and results; HR and payroll; messaging/inbox and channel adapters; website CMS; scoped API keys and outbound webhooks; AI/MCP; library, transport, hostel, health; country packs; i18n (UI is English only); MFA; background jobs/outbox; private file storage; Windows/macOS/mobile builds (Capacitor config only). All **planned**.

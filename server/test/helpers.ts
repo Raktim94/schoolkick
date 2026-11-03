@@ -40,5 +40,9 @@ export function client(app: ReturnType<typeof buildApp>) {
     const data = await res.json().catch(() => null) as any;
     return { status: res.status, data, headers: res.headers };
   };
-  return { get: (p: string) => call('GET', p), post: (p: string, b?: unknown, h?: Record<string, string>) => call('POST', p, b ?? {}, h), put: (p: string, b: unknown) => call('PUT', p, b), raw: call };
+  const bytes = async (path: string) => {
+    const res = await app.request(`http://localhost${path}`, { headers: { cookie, host: 'localhost' } });
+    return { status: res.status, type: res.headers.get('content-type'), body: Buffer.from(await res.arrayBuffer()) };
+  };
+  return { bytes, get: (p: string) => call('GET', p), post: (p: string, b?: unknown, h?: Record<string, string>) => call('POST', p, b ?? {}, h), put: (p: string, b: unknown) => call('PUT', p, b), raw: call };
 }

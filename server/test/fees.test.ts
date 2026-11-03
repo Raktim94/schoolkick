@@ -189,14 +189,41 @@ describe('fees and verified payments', () => {
     assert.equal((await inv(id)).outstandingMinor, 60000);
     // A paid invoice cannot be voided.
     assert.equal((await finance.post(`/api/v1/fees/invoices/${id}/void`, { reason: 'mistake' })).status, 409);
-    // Refund part, then too much.
-    assert.equal((await finance.post(`/api/v1/fees/payments/${m.data.paymentId}/refund`, { amountMinor: 10000, reason: 'Charged twice at counter' })).status, 201);
-    assert.equal((await finance.post(`/api/v1/fees/payments/${m.data.paymentId}/refund`, { amountMinor: 40000, reason: 'again' })).status, 409);
+    // Refund needs a request by finance and a decision by the owner; nothing is refunded until approved.
+    const reqOk = await finance.post(`/api/v1/fees/payments/${m.data.paymentId}/refund`, { amountMinor: 10000, reason: 'Charged twice at counter' });
+    assert.equal(reqOk.status, 201);
+    assert.equal((await inv(id)).paidMinor, 40000);
+    assert.equal((await finance.post(`/api/v1/fees/payments/${m.data.paymentId}/refund`, { amountMinor: 35000, reason: 'again' })).status, 409); // 10000 pending + 35000 > 40000
+    assert.equal((await finance.post(`/api/v1/fees/refunds/${reqOk.data.id}/decide`, { decision: 'approved', note: 'self' })).status, 403); // finance cannot approve
+    assert.equal((await parent.post(`/api/v1/fees/refunds/${reqOk.data.id}/decide`, { decision: 'approved', note: 'me' })).status, 403);
+    const ap = await owner.post(`/api/v1/fees/refunds/${reqOk.data.id}/decide`, { decision: 'approved', note: 'Verified duplicate slip' }); assert.equal(ap.data.status, 'approved', JSON.stringify(ap));
+    assert.equal((await owner.post(`/api/v1/fees/refunds/${reqOk.data.id}/decide`, { decision: 'rejected', note: 'changed mind' })).status, 409);
+    const rej = await finance.post(`/api/v1/fees/payments/${m.data.paymentId}/refund`, { amountMinor: 5000, reason: 'Parent asked' });
+    assert.equal((await owner.post(`/api/v1/fees/refunds/${rej.data.id}/decide`, { decision: 'rejected', note: 'Not eligible' })).data.status, 'rejected');
+    assert.deepEqual((await finance.get('/api/v1/fees/refunds')).data.refunds.map((r: any) => r.status).sort(), ['approved', 'rejected']);
     const g = await inv(id);
     assert.equal(g.paidMinor, 30000);
     const rc = (await parent.get(`/api/v1/receipts/${m.data.receiptId}`)).data;
     assert.equal(rc.refundedMinor, 10000);
     assert.equal(rc.amountMinor, 40000); // the original receipt is not rewritten
+    // PDF: only people who may see the receipt can fetch it; it is a real PDF.
+    assert.equal((await stranger.get(`/api/v1/receipts/${m.data.receiptId}/pdf`)).status, 404);
+    const pdf = await parent.bytes(`/api/v1/receipts/${m.data.receiptId}/pdf`);
+    assert.equal(pdf.status, 200);
+    assert.equal(pdf.type, 'application/pdf');
+    assert.equal(pdf.body.subarray(0, 5).toString(), '%PDF-');
+    assert.ok(pdf.body.length > 2000);
+    // Public verification: valid link works and shows no personal names; a tampered link does not.
+    const [, vid, vsig] = new URL(rc.verifyUrl, 'http://x').pathname.match(/\/verify\/([^/]+)\/([^/]+)/)!;
+    const okv = await env.app.request(`http://localhost/api/v1/verify/${vid}/${vsig}`);
+    assert.equal(okv.status, 200);
+    const vj = (await okv.json()) as any;
+    assert.equal(vj.valid, true);
+    assert.equal(vj.number, rc.number);
+    assert.ok(!JSON.stringify(vj).includes('Asha'));
+    assert.equal((await env.app.request(`http://localhost/api/v1/verify/${vid}/${vsig.slice(0, -1)}x`)).status, 404);
+    const page = await env.app.request(`http://localhost/verify/${vid}/${vsig}`);
+    assert.match(await page.text(), /genuine/);
   });
 
   it('voids an unpaid invoice by recording it, never deleting it', async () => {
@@ -250,6 +277,72 @@ describe('fees and verified payments', () => {
       const raw = JSON.stringify({ eventId: 'e', type: 'settled', providerRef: 'x', amountMinor: 1 });
       const res = await app.request('http://localhost/api/v1/webhooks/payments/sandbox', { method: 'POST', body: raw, headers: { 'x-signature': signPaymentBody('anything', raw) } });
       assert.equal(res.status, 503);
+    } finally { await off.close(); }
+  });
+
+  it('works with no payment gateway: cash at the office and UPI by QR, paid only after the office confirms', async () => {
+    const off = await freshApp();
+    try {
+      const app = buildApp(off.db);
+      const o = client(app);
+      await o.post('/api/v1/tenants', { institution: 'No Gateway School', name: 'Olga Owner', email: 'o@ng.test', password: PW });
+      for (const [mail, role] of [['fin@ng.test', 'finance'], ['g@ng.test', 'guardian']]) await o.post('/api/v1/users', { email: mail, name: 'User ' + role, password: PW, roles: [role] });
+      const l = (await o.post('/api/v1/learners', { name: 'Kiran Kid' })).data.id;
+      await o.post(`/api/v1/learners/${l}/guardians`, { email: 'g@ng.test' });
+      const fin = client(app), g = client(app);
+      await fin.post('/api/v1/auth/login', { email: 'fin@ng.test', password: PW });
+      await g.post('/api/v1/auth/login', { email: 'g@ng.test', password: PW });
+      const invId = (await fin.post('/api/v1/fees/invoices', { learnerId: l, description: 'Term fee', amountMinor: 250000, dueDate: '2999-01-01' })).data.id;
+      // UPI is off until the school sets its id; settings are validated and finance/owner only.
+      assert.equal((await g.post(`/api/v1/guardian/invoices/${invId}/upi`, {})).data.error.code, 'upi_off');
+      assert.equal((await g.raw('PUT', '/api/v1/fees/settings', { upiId: 'x@y', upiName: 'N' })).status, 403);
+      assert.equal((await fin.raw('PUT', '/api/v1/fees/settings', { upiId: 'not a upi id', upiName: 'N' })).status, 400);
+      assert.equal((await fin.raw('PUT', '/api/v1/fees/settings', { upiId: 'school@okbank', upiName: 'No Gateway School' })).status, 200);
+      const list = (await g.get('/api/v1/guardian/fees')).data;
+      assert.equal(list.onlineAvailable, false);
+      assert.equal(list.upiAvailable, true);
+      assert.equal(list.invoices[0].canUpi, true);
+      // Parent starts a UPI payment and gets a link for the exact amount.
+      const start = await g.post(`/api/v1/guardian/invoices/${invId}/upi`, {});
+      assert.equal(start.status, 201);
+      const payId = start.data.paymentId;
+      const view = (await g.get(`/api/v1/guardian/payments/${payId}`)).data;
+      const uri = new URL(view.upi.uri);
+      assert.equal(uri.protocol, 'upi:');
+      assert.equal(uri.searchParams.get('pa'), 'school@okbank');
+      assert.equal(uri.searchParams.get('am'), '2500.00');
+      assert.equal(uri.searchParams.get('cu'), 'INR');
+      assert.match(uri.searchParams.get('tr')!, /^INV-000001-/);
+      // A second start is refused; the QR does not make it paid.
+      assert.equal((await g.post(`/api/v1/guardian/invoices/${invId}/upi`, {})).status, 409);
+      const claim = (path: string, utr: string) => g.post(`/api/v1/guardian/payments/${path}/claim`, { utr });
+      assert.equal((await claim(payId, 'short')).status, 400);
+      assert.equal((await claim(payId, '412345678901')).status, 200);
+      const after = (await g.get('/api/v1/guardian/fees')).data.invoices[0];
+      assert.equal(after.status, 'due');
+      assert.equal(after.doNotPayAgain, true);
+      // Office sees the claim with the UTR and confirms against the bank statement.
+      const q = (await fin.get('/api/v1/fees/reconciliation')).data.items;
+      assert.equal(q[0].utr, '412345678901');
+      assert.equal(q[0].method, 'upi');
+      assert.equal((await fin.post(`/api/v1/fees/payments/${payId}/resolve`, { action: 'settle', note: 'Seen on statement', evidence: 'UTR 412345678901' })).status, 200);
+      const paid = (await g.get('/api/v1/guardian/fees')).data.invoices[0];
+      assert.equal(paid.status, 'paid');
+      const rc = (await g.get(`/api/v1/receipts/${paid.payments[0].receiptId}`)).data;
+      assert.equal(rc.snapshot.method, 'upi');
+      assert.equal(rc.snapshot.utr, '412345678901');
+      // Cash at the office counter on another invoice: receipt immediately, counter QR available too.
+      const inv2 = (await fin.post('/api/v1/fees/invoices', { learnerId: l, description: 'Bus fee', amountMinor: 40000, dueDate: '2999-01-01' })).data.id;
+      const counter = (await fin.get(`/api/v1/fees/invoices/${inv2}/upi`)).data;
+      assert.match(counter.uri, /^upi:\/\/pay\?pa=/);
+      assert.equal((await g.get(`/api/v1/fees/invoices/${inv2}/upi`)).status, 403);
+      const cash = await fin.post(`/api/v1/fees/invoices/${inv2}/payments/manual`, { method: 'cash', amountMinor: 40000, reference: 'Office desk, book 4' });
+      assert.equal(cash.status, 201);
+      assert.equal((await g.get(`/api/v1/receipts/${cash.data.receiptId}`)).data.snapshot.method, 'cash');
+      // The same UTR cannot be used to claim a second payment.
+      const inv3 = (await fin.post('/api/v1/fees/invoices', { learnerId: l, description: 'Lab fee', amountMinor: 10000, dueDate: '2999-01-01' })).data.id;
+      const p3 = (await g.post(`/api/v1/guardian/invoices/${inv3}/upi`, {})).data.paymentId;
+      assert.equal((await claim(p3, '412345678901')).data.error.code, 'utr_used');
     } finally { await off.close(); }
   });
 });
