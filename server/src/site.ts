@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -17,6 +18,7 @@ export const PAGES: SitePage[] = [
   { path: '/license', file: 'license.html', nav: 'License', menu: false, title: 'SchoolKick license: GNU AGPL v3.0 only', description: 'SchoolKick is free software under the GNU Affero General Public License version 3 only (AGPL-3.0-only). Read the complete license text.' },
 ];
 const dir = fileURLToPath(new URL('../../site/', import.meta.url));
+const assetVersion = createHash('sha256').update(readFileSync(dir + 'site.css')).update(readFileSync(dir + 'site.js')).digest('hex').slice(0, 12);
 const installerPath = fileURLToPath(new URL('../../packaging/deb/install-linux.sh', import.meta.url));
 const shotsDir = fileURLToPath(new URL('../../docs/screenshots/', import.meta.url));
 
@@ -81,7 +83,7 @@ ${p.noindex ? '<meta name="robots" content="noindex">' : `<meta name="robots" co
 <meta name="author" content="Raktim Ranjit"><link rel="alternate" type="text/plain" href="/llms.txt" title="Plain-text summary for AI assistants">
 <meta property="og:type" content="website"><meta property="og:site_name" content="SchoolKick"><meta property="og:locale" content="en"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.description)}"><meta property="og:url" content="${url}"><meta property="og:image" content="${siteUrl}/s/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="A school attendance register with slash marks for present and circles for absent">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${siteUrl}/s/og.png"><meta name="theme-color" content="#174b3b">
-<script src="/s/site.js"></script><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/s/favicon-32.png" type="image/png" sizes="32x32"><link rel="icon" href="/s/icon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/s/apple-touch-icon.png"><link rel="stylesheet" href="/s/site.css">
+<script src="/s/site.js?v=${assetVersion}"></script><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/s/favicon-32.png" type="image/png" sizes="32x32"><link rel="icon" href="/s/icon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/s/apple-touch-icon.png"><link rel="stylesheet" href="/s/site.css?v=${assetVersion}">
 ${ld.map((d) => `<script type="application/ld+json">${JSON.stringify(d)}</script>`).join('\n')}
 </head><body><a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap"><a class="brand" href="/">${logo} SchoolKick</a>
