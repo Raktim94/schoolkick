@@ -1,91 +1,150 @@
-<p align="center"><img src="docs/logo.png" alt="SchoolKick logo" width="160"></p>
+![SchoolKick demo: overview, teacher attendance, family view and import checks](docs/screenshots/schoolkick-demo.gif)
 
 # SchoolKick
 
-**SchoolKick is free, open-source school attendance software you host yourself.** Website: [schoolkick.nodedr.com](https://schoolkick.nodedr.com) · [Install guide](https://schoolkick.nodedr.com/get-started) · [Screenshots](https://schoolkick.nodedr.com/screenshots) · [FAQ](https://schoolkick.nodedr.com/faq)
+Open-source school attendance software that keeps a clear history of every correction.
 
-Open-source school software. Teachers take attendance from a phone, families see today's status in a browser, and every correction stays on the record.
+[Live demo](https://schoolkick.nodedr.com/) · [Features](https://schoolkick.nodedr.com/features) · [Documentation](https://schoolkick.nodedr.com/docs) · [Installation](https://schoolkick.nodedr.com/get-started) · [AI access](https://schoolkick.nodedr.com/ai) · [Changelog](CHANGELOG.md) · [Security notes](https://schoolkick.nodedr.com/security) · AGPL-3.0-only
 
-![School overview dashboard with today's attendance, trend and class register](docs/screenshots/dashboard-desktop.png)
+---
 
-**Status: early release (v0.1).** Attendance, guardian view, classes, CSV import and the owner dashboard work and are tested. Fees, messaging, learning content and native mobile apps are planned, not built. It has not had a security audit or legal review. Read [what is and is not covered](docs/traceability.md) before putting real learner data in it.
+SchoolKick is a self-hosted school attendance and learner-record system. Teachers can take a class register from a phone, guardians can see linked learners in a browser, and school staff can review attendance, imports and recent changes in one place.
 
-<p align="center"><img src="site/img/teacher-attendance.webp" alt="A teacher takes attendance on a tablet" width="340"> <img src="site/img/family-portal.webp" alt="A parent checks their child's school day on a phone" width="340"></p>
+It is an early release (v0.3.0). Review the [current scope](https://schoolkick.nodedr.com/roadmap), [security notes](https://schoolkick.nodedr.com/security) and [privacy notice](https://schoolkick.nodedr.com/privacy) before using real learner information.
 
-## What works today
+## At a glance
 
-| Area | Details |
+| | |
 |---|---|
-| Institutions and roles | Create an institution; owner, registrar, teacher, finance (placeholder), guardian roles; default-deny API |
-| People | Learners, guardians, staff accounts; guardian-to-learner links |
-| Classes | Create classes, assign teachers, enrol learners; teachers only see their classes |
-| Attendance | One-tap "all present", per-learner status, mandatory reason to change a mark, full history per day, drafts survive a dropped connection |
-| Guardian view | Today's status per child and a 14-day strip, with a "Corrected" tag |
-| Overview | Today's split, attendance trend, class-by-day register heatmap, items needing attention; each chart has a table view and keyboard support |
-| CSV import | `name, external_id, guardian_email`; dry run lists every problem, real run is all-or-nothing |
-| Audit log | Append-only, enforced by database triggers and restricted privileges |
+| Product | School attendance, learner records and family access |
+| Hosting | Your server, with PostgreSQL |
+| License | [GNU AGPL v3.0 only](LICENSE) |
+| Current release | 0.3.0 |
+| Browser app | [schoolkick.nodedr.com](https://schoolkick.nodedr.com/) |
+| Install guide | [Choose a setup](https://schoolkick.nodedr.com/get-started) |
 
-## Where it is heading
+## See SchoolKick
 
-Fees, QR check-in, study materials, coaching batches, a library, transport alerts and college use are planned, not built. See the [roadmap](https://schoolkick.nodedr.com/roadmap).
+### School overview
 
-<p align="center"><img src="site/img/fee-payment.webp" width="150" alt="Planned: fees"> <img src="site/img/qr-attendance.webp" width="150" alt="Planned: QR check-in"> <img src="site/img/study-materials.webp" width="150" alt="Planned: study materials"> <img src="site/img/safe-transport.webp" width="150" alt="Planned: transport"></p>
+![SchoolKick dashboard showing today's attendance, class registers and items needing attention](docs/screenshots/dashboard-desktop.png)
 
-## Run it
+### Teacher attendance on a phone
 
-Needs Docker, or Node 22.18+ and PostgreSQL 16.
+![SchoolKick teacher roster on a phone](docs/screenshots/teacher-roster-mobile.png)
+
+### Family view
+
+![SchoolKick guardian view on a phone](docs/screenshots/guardian-mobile.png)
+
+All names and records in screenshots are fictional demonstration data.
+
+## What is included
+
+- **Class attendance:** mark unmarked learners present, record exceptions and save a register from a responsive browser interface.
+- **Kept correction history:** changing a submitted mark requires a reason and preserves the original entry, new entry, actor and time.
+- **Guardian browser view:** show a guardian only the learners linked to their account, with recent attendance history.
+- **CSV learner import:** review row and column validation before import; invalid input does not create a partial set of records.
+- **School overview:** review attendance totals, missing registers, recent corrections and school trends.
+- **Fee management:** numbered invoices, cash or UPI QR payments confirmed by the school office, receipts, refund approval and payment history. Card and bank payment provider integrations are not available yet.
+- **Exam registration:** publish subjects, registration windows, attendance eligibility and fees; families can register learners and view hall tickets. Marks entry and result release are not available yet.
+- **Self-hosted data:** run the app with a PostgreSQL database you administer.
+
+### Current release limits
+
+Card or bank payment-provider integration, marks entry and result release, messaging, timetable, password reset by email, teacher QR check-in, learning content and native mobile apps are not available yet. See the [release roadmap](https://schoolkick.nodedr.com/roadmap) for the current list.
+
+## Install
+
+Choose the path that matches your setup. The [installation guide](https://schoolkick.nodedr.com/get-started) includes requirements, current test status and follow-up steps.
+
+### Ubuntu or Debian
+
+For Ubuntu 24.04+ or Debian 12+ with sudo access. Read the installer before running it:
 
 ```sh
-cp deploy/.env.example deploy/.env      # set POSTGRES_PASSWORD
-docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build
-# open http://localhost:8080  (public site)   http://localhost:8080/app/  (the app)
+curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash
 ```
 
-Step-by-step with screenshots: the **Get started** page on the public site (`/get-started`).
+This runs the maintained installer as root. Review its contents at [packaging/deb/install-linux.sh](packaging/deb/install-linux.sh) before running it.
 
-Without Docker:
+### Docker Compose
 
 ```sh
-npm install && npm run build
+git clone https://github.com/Raktim94/schoolkick.git
+cd schoolkick
+cp deploy/.env.example deploy/.env
+```
+
+Set a strong `POSTGRES_PASSWORD` and the external `SITE_URL` in `deploy/.env`, then start the application:
+
+```sh
+docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build
+curl http://localhost:8080/readyz
+```
+
+The ready endpoint returns `{"ok":true}` when the server is accepting requests. Open `http://localhost:8080/app/` to create the first school owner. Configure HTTPS before inviting staff or families.
+
+### From source
+
+Needs Node.js 22.18+, npm and PostgreSQL 16.
+
+```sh
+git clone https://github.com/Raktim94/schoolkick.git
+cd schoolkick
+npm install
+npm run build
+createdb schoolkick
 DATABASE_URL=postgres://user:pass@localhost:5432/schoolkick npm start
 ```
 
-The database role needs permission to create roles on first start (migration 002 creates the unprivileged `campusos_app` role used for row-level security).
+Then open `http://localhost:8080/app/`. Database migrations run when the server starts. The migration connection needs permission to create the restricted `campusos_app` role.
 
-More: [self-hosting and CasaOS](site/self-hosting.html), [mobile wrapper](mobile/README.md).
+## First day setup
 
-| Platform | Status |
-|---|---|
-| Linux, Windows, macOS | Node server or Docker. Linux server tested here; others not yet. |
-| Docker, CasaOS | Compose file with CasaOS metadata written. **Not run** in the build environment (no Docker daemon). |
-| Android, iOS | Works as an installable PWA. Capacitor shell is configuration only and unbuilt. |
+1. Create the school owner account during first sign-in.
+2. Create classes, teacher accounts and guardian accounts.
+3. Add learners individually or prepare a CSV with `name`, `external_id` and `guardian_email` columns.
+4. Use the import preview to resolve all validation issues before saving.
+5. Assign teachers, enrol learners and link each learner to a guardian.
+6. Take attendance as a teacher, then sign in as a guardian to review the linked learner view.
 
-## Develop
+The [full documentation](https://schoolkick.nodedr.com/docs) covers operations, hosting and API details.
+
+## Privacy, security and accessibility
+
+SchoolKick processes learner, guardian, staff, account and attendance information in the PostgreSQL database configured by the operator. The project does not include advertising trackers or analytics in the public site. The app uses a protected session cookie. A school operator remains responsible for HTTPS, account access, backups, retention, notices and local requirements for children's information.
+
+This early release has **not** had an independent security, accessibility or legal audit. Do not use the hosted demonstration for real learner information. Read the [privacy notice](https://schoolkick.nodedr.com/privacy), [accessibility statement](https://schoolkick.nodedr.com/accessibility), [security notes](https://schoolkick.nodedr.com/security) and [legal information](https://schoolkick.nodedr.com/legal) before deployment.
+
+Report suspected vulnerabilities privately using the contact described in [SECURITY.md](SECURITY.md). Please do not file an undisclosed vulnerability in a public issue.
+
+## Technology
+
+- **Web application:** React, TypeScript and Vite
+- **Public website:** Next.js static export, TypeScript and React
+- **API and web server:** Node.js, Hono and PostgreSQL
+- **Mobile packaging:** Capacitor
+- **Deployment:** Docker Compose; Debian package installer for supported Linux systems
+
+## Development
 
 ```sh
-npm run dev:server   # API on :8080
-npm run dev:web      # Vite on :5173/app/
-npm test             # 18 API tests against a throwaway PostgreSQL database
-npm run e2e          # Chrome end-to-end run, writes docs/screenshots
+npm install
+npm run build
+npm run typecheck
 ```
 
-Tests need PostgreSQL reachable at `TEST_ADMIN_URL` (default `postgres://postgres@127.0.0.1:54329/postgres`).
+The API tests use PostgreSQL. Set `TEST_ADMIN_URL` to a disposable PostgreSQL database before running `npm test`. Browser end-to-end checks also need a running app and Chrome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-## Design in brief
+## Contributing
 
-- **One small TypeScript server** (Hono, `pg`, no ORM) serves the API, the public site and the app. See [architecture](docs/architecture.md) and the [decision records](docs/decisions).
-- **Tenant isolation twice:** every query is scoped in code, and PostgreSQL row-level security rejects cross-tenant access even if a query forgets.
-- **Default-deny routes:** a route must declare its roles or be explicitly public. A test walks the route table to prove it. OpenAPI 3.1 is generated at `/api/v1/openapi.json`.
-- **Interface:** React 19 and Vite, hand-built SVG charts, WCAG 2.2 AA targets, dark theme, reduced-motion support. Status is never colour-only.
+Bug reports, accessibility feedback, documentation improvements and code contributions are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md), read [`SECURITY.md`](SECURITY.md) for vulnerability reports and open a focused issue for larger changes.
 
-## Known limits
+## License
 
-- No security audit, penetration test, or accessibility audit by a specialist. Automated and manual checks only.
-- Rate limiting is in memory, so it is per process.
-- No email, so there is no password reset yet. An owner can create accounts, not reset them.
-- Single timezone per institution; no academic calendar or holidays.
-- Reference projects named in the design brief were not available, so [design alignment](docs/design-alignment.md) is not asserted.
+SchoolKick is licensed under the **GNU Affero General Public License v3.0 only (AGPL-3.0-only)**. See [`LICENSE`](LICENSE). If you run a modified version for other people over a network, the license requires you to offer those users the corresponding source code. The SchoolKick name and logo are not granted under the software license. See [`COMMERCIAL-LICENSE.md`](COMMERCIAL-LICENSE.md) for the separate commercial licensing contact.
 
-## Licence
+---
 
-AGPL-3.0. See [LICENSE](LICENSE). If you run a modified version for other people over a network, the licence requires you to offer them its source. A [commercial licence](COMMERCIAL-LICENSE.md) is available on request; the SchoolKick name and logo are not covered by the AGPL. Contributors: [contributors.html](contributors.html) and [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).
+Built for a clearer school day. Maintained by [Raktim Ranjit](https://www.raktimranjit.com/).

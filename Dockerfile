@@ -21,6 +21,7 @@ COPY site site
 COPY docs/screenshots docs/screenshots
 COPY packaging/deb/install-linux.sh packaging/deb/install-linux.sh
 COPY --from=web /src/web/dist web/dist
+COPY --from=web /src/web/next-build web/next-build
 USER node
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=20s CMD node -e "fetch('http://127.0.0.1:'+process.env.PORT+'/readyz').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"

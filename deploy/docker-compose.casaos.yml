@@ -3,7 +3,7 @@
 name: schoolkick
 services:
   app:
-    image: ghcr.io/raktim94/schoolkick:0.1.0
+    image: ghcr.io/raktim94/schoolkick:0.3.0
     restart: unless-stopped
     depends_on:
       db: { condition: service_healthy }

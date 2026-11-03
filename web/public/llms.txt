@@ -1,0 +1,41 @@
+# SchoolKick
+
+> SchoolKick is free, open-source school attendance software that schools host themselves. Teachers take attendance, families see a browser view of linked learners, and every correction keeps its history. Source code is licensed AGPL-3.0-only.
+
+## Product
+
+- Stage: early release, version 0.3.0.
+- Audience: schools and education teams that can operate their own server.
+- Available: class attendance, learner and guardian records, correction history, CSV learner import with validation, school overview, family browser view, invoices, office-confirmed cash or UPI QR payments, receipts, refund approval, exam registration, exam fees and hall tickets.
+- Not available yet: card/bank payment provider integration, marks entry and result release, messaging, timetable, password reset by email, teacher QR check-in, learning content and native mobile applications.
+- Hosting: operator-managed PostgreSQL with Node.js or Docker Compose. The public demo is not for real learner records.
+- No independent security, accessibility or legal audit has been completed.
+
+## Main pages
+
+- [Home](https://schoolkick.nodedr.com/): product purpose, real screenshots and release scope.
+- [Features](https://schoolkick.nodedr.com/features/): teacher, family, registrar, school-leader and finance workflows.
+- [Installation](https://schoolkick.nodedr.com/get-started/): Ubuntu/Debian, Docker Compose and source setup.
+- [Documentation](https://schoolkick.nodedr.com/docs/): install, first-day operation and API overview.
+- [Screenshots](https://schoolkick.nodedr.com/screenshots/): real interface images with fictional sample data.
+- [Security](https://schoolkick.nodedr.com/security/): current controls and known limits.
+- [Privacy](https://schoolkick.nodedr.com/privacy/): self-hosted data and operator responsibilities.
+- [Accessibility](https://schoolkick.nodedr.com/accessibility/): target and known audit status.
+- [Legal](https://schoolkick.nodedr.com/legal/): license and operator responsibilities.
+- [Roadmap](https://schoolkick.nodedr.com/roadmap/): release scope and planned work.
+
+## Machine-readable interfaces
+
+- [AI access and privacy boundaries](https://schoolkick.nodedr.com/ai/): public documentation is readable by AI tools; private school records remain protected.
+- [OpenAPI 3.1 route map](https://schoolkick.nodedr.com/api/v1/openapi.json): API operations, summaries, role notes and cookie-based session authentication. Request and response schemas are incomplete; verify workflows before automating them.
+- API record endpoints require an authenticated session and server-side role authorization. Do not assume the API grants anonymous access to school data.
+- [Full text overview](https://schoolkick.nodedr.com/llms-full.txt): product details and page descriptions in Markdown.
+- [Markdown docs](https://schoolkick.nodedr.com/llms.txt): concise product guide and links for crawlers and assistants.
+- [Sitemap](https://schoolkick.nodedr.com/sitemap.xml)
+
+## Source and support
+
+- [GitHub repository](https://github.com/Raktim94/schoolkick)
+- [Report an issue](https://github.com/Raktim94/schoolkick/issues)
+- [License](https://github.com/Raktim94/schoolkick/blob/main/LICENSE): AGPL-3.0-only.
+- Never include real learner data in an issue, prompt, screenshot or test fixture.

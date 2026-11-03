@@ -1,0 +1,46 @@
+# SchoolKick: open-source school attendance software
+
+SchoolKick is a self-hosted school attendance and learner-record app. It gives teachers a responsive class register, families a browser view of linked learners, registrars a validated CSV import, school leaders an overview of missing registers and recent corrections, and school offices tools for fees and exam registration.
+
+## Attendance records
+
+Teachers can mark unmarked learners present, set exceptions and submit a register. A saved mark can be changed with a reason; the original status, new status, actor and timestamp stay in the record. A draft can survive a dropped connection.
+
+## Family access
+
+Guardians use a browser and see only learners linked to their account. The public demonstration uses fictional data and must not be used for actual student records.
+
+## Imports and overview
+
+CSV imports are checked before writing data. Invalid rows are reported and a failed import does not partially commit. The school overview highlights missing registers and recent changes before attendance trends.
+
+## Fee management
+
+The fee module supports numbered invoices, cash or UPI QR payments confirmed by the school office, receipts, refund approval and payment history. It does not process card or bank payments through an online provider. Exam registration supports subject selection, attendance eligibility checks, registration windows, fees and hall tickets; marks entry and result release are not available yet.
+
+## Installation and operation
+
+SchoolKick runs with Node.js and PostgreSQL or Docker Compose. The Ubuntu/Debian installer is another guided route. Operators must configure HTTPS, control signup and account access, maintain tested backups, define data retention and follow local requirements for children's information. See https://schoolkick.nodedr.com/get-started/ and https://schoolkick.nodedr.com/security/.
+
+## API and AI tools
+
+AI assistants and other software can use the public pages, this file, https://schoolkick.nodedr.com/llms.txt and the OpenAPI 3.1 route map at https://schoolkick.nodedr.com/api/v1/openapi.json to understand SchoolKick. The route map lists operations, summaries and role requirements, but request and response schemas are incomplete; verify workflows against source and test before use. School-data API calls require a valid signed-in session and an authorized role. There is no anonymous learner-data API and no built-in AI assistant. Do not send learner information to an AI provider. Public documentation access does not grant access to a school database; AI crawlers remain subject to their own policies.
+
+See https://schoolkick.nodedr.com/ai/ for the integration and privacy boundaries.
+
+## Current limits
+
+SchoolKick is in early release. Card/bank payment provider integration, marks entry and result release, messaging, timetable, password reset by email, teacher QR check-in, learning content and native mobile applications are not available. No independent security, accessibility or legal audit has been completed.
+
+## License and links
+
+The code is licensed under GNU Affero General Public License version 3 only (AGPL-3.0-only). The SchoolKick name and logo are not covered by that license.
+
+- Website: https://schoolkick.nodedr.com/
+- Features: https://schoolkick.nodedr.com/features/
+- Docs: https://schoolkick.nodedr.com/docs/
+- Privacy: https://schoolkick.nodedr.com/privacy/
+- Accessibility: https://schoolkick.nodedr.com/accessibility/
+- Legal: https://schoolkick.nodedr.com/legal/
+- Source: https://github.com/Raktim94/schoolkick
+- API schema: https://schoolkick.nodedr.com/api/v1/openapi.json

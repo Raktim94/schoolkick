@@ -112,7 +112,7 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
         responses: { '200': { description: 'OK' }, ...(r.access === 'public' ? {} : { '401': { description: 'Not signed in' }, '403': { description: 'Role not allowed' } }) },
       };
     }
-    return { openapi: '3.1.0', info: { title: 'SchoolKick API', version: '0.1.0' }, paths,
+    return { openapi: '3.1.0', info: { title: 'SchoolKick API', version: '0.3.0' }, paths,
       components: { securitySchemes: { session: { type: 'apiKey', in: 'cookie', name: SESSION_COOKIE } } } };
   };
   pub('get', '/openapi.json', 'OpenAPI description of this API', async ({ c }) => c.json(openapi()));

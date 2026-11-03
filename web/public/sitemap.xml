@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://schoolkick.nodedr.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/features/</loc><priority>0.85</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/get-started/</loc><priority>0.9</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/docs/</loc><priority>0.8</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/ai/</loc><priority>0.6</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/screenshots/</loc><priority>0.7</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/security/</loc><priority>0.6</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/privacy/</loc><priority>0.5</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/accessibility/</loc><priority>0.5</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/legal/</loc><priority>0.5</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/self-hosting/</loc><priority>0.7</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/roadmap/</loc><priority>0.5</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/faq/</loc><priority>0.5</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/license/</loc><priority>0.4</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/contribute/</loc><priority>0.4</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/contributors/</loc><priority>0.4</priority></url>
+</urlset>

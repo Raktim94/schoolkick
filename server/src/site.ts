@@ -57,7 +57,7 @@ function jsonLd(p: SitePage, siteUrl: string, repoUrl: string, body: string) {
     return [
       { '@context': 'https://schema.org', '@type': 'WebSite', '@id': siteUrl + '/#website', name: 'SchoolKick', url: siteUrl + '/', inLanguage: 'en' },
       // No aggregateRating or review: there are none, and inventing one would break Google's structured data rules.
-      { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'SchoolKick', applicationCategory: 'EducationalApplication', operatingSystem: 'Web, Linux, Windows, macOS, Docker', description: p.description, url: siteUrl + '/', license: 'https://www.gnu.org/licenses/agpl-3.0.html', softwareVersion: '0.1.0', isAccessibleForFree: true, sameAs: [repoUrl], featureList: ['Attendance with a kept correction history', 'Family view with no app to install', 'School overview dashboard', 'CSV import with dry run'], codeRepository: repoUrl, screenshot: siteUrl + '/s/dashboard-desktop.png', author: org, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+      { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'SchoolKick', applicationCategory: 'EducationalApplication', operatingSystem: 'Web, Linux, Windows, macOS, Docker', description: p.description, url: siteUrl + '/', license: 'https://www.gnu.org/licenses/agpl-3.0.html', softwareVersion: '0.3.0', isAccessibleForFree: true, sameAs: [repoUrl], featureList: ['Attendance with a kept correction history', 'Family view with no app to install', 'School overview dashboard', 'CSV import with dry run', 'Fee records and office-confirmed payments', 'Exam registration and hall tickets'], codeRepository: repoUrl, screenshot: siteUrl + '/s/dashboard-desktop.png', author: org, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
     ];
   const out: unknown[] = [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl + '/' }, { '@type': 'ListItem', position: 2, name: p.nav, item: url }] }];
   if (p.kind === 'faq') {
@@ -101,7 +101,7 @@ ${main}
 </body></html>`;
 }
 
-export const DEB_VERSION = '0.1.0';
+export const DEB_VERSION = '0.3.0';
 export function loadSite(siteUrl: string, repoUrl: string) {
   const reg = register();
   const fill = (h: string) => h.replaceAll('%SITE_URL%', siteUrl).replaceAll('%REPO_URL%', repoUrl).replaceAll('%REGISTER%', reg);

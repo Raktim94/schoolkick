@@ -1,0 +1,17 @@
+name: Feature request
+description: Suggest a focused improvement for a school workflow.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes: { label: What problem should this solve?, description: Describe the school task and who does it. }
+    validations: { required: true }
+  - type: textarea
+    id: proposal
+    attributes: { label: What would help?, description: Share the smallest useful outcome. }
+    validations: { required: true }
+  - type: textarea
+    id: privacy
+    attributes: { label: Privacy or accessibility needs, description: Do not include real learner information. }
+    validations: { required: false }
