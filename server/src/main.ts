@@ -5,7 +5,7 @@ import { connect, migrate } from './db.ts';
 import { mountWeb } from './web.ts';
 
 const log = (o: object) => console.log(JSON.stringify({ level: 'info', ...o }));
-const port = Number(process.env.PORT ?? 8080);
+const port = Number(process.env.PORT ?? 3847);
 const db = connect(process.env.DATABASE_URL ?? 'postgres://postgres@127.0.0.1:5432/campus');
 log({ msg: 'migrations', applied: await migrate(db) });
 

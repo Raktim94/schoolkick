@@ -8,7 +8,7 @@
 cd schoolkick
 cp deploy/.env.example deploy/.env      # set a database password and SITE_URL
 docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d</code></pre>
-    <p>Open <code>http://localhost:8080</code>, choose “Create institution”, and you are the administrator. Migrations run on start. Set <code>ALLOW_SIGNUP=0</code> once your institution exists to close public sign-up.</p>
+    <p>Open <code>http://localhost:3847</code>, choose “Create institution”, and you are the administrator. Migrations run on start. Set <code>ALLOW_SIGNUP=0</code> once your institution exists to close public sign-up.</p>
   </div></div></section>
 
   <section class="block"><div class="split"><h2>Settings</h2><div class="scroll"><table>
@@ -17,7 +17,7 @@ docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d</code><
       <tr><td><code>DATABASE_URL</code></td><td>PostgreSQL connection string. Set by the compose file.</td></tr>
       <tr><td><code>SITE_URL</code></td><td>Public address, used in page metadata and the sitemap. Example: <code>https://school.example.org</code></td></tr>
       <tr><td><code>ALLOW_SIGNUP</code></td><td><code>1</code> lets anyone create an institution. <code>0</code> closes it.</td></tr>
-      <tr><td><code>PORT</code></td><td>Port inside the container. Default 8080.</td></tr>
+      <tr><td><code>PORT</code></td><td>Port inside the container. Default 3847.</td></tr>
     </tbody>
   </table></div></div></section>
 

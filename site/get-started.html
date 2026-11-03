@@ -13,9 +13,9 @@ cd schoolkick</code></pre></div></li>
     <li><h3 id="step-2">Choose a database password</h3><p>Copy the example settings and set <code>POSTGRES_PASSWORD</code> to a long random value. Set <code>SITE_URL</code> to the address people will use.</p><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>cp deploy/.env.example deploy/.env
 nano deploy/.env</code></pre></div></li>
     <li><h3 id="step-3">Start it</h3><p>The first start builds the image and runs the database migrations.</p><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build</code></pre></div></li>
-    <li><h3 id="step-4">Check it is healthy</h3><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>curl http://localhost:8080/readyz
+    <li><h3 id="step-4">Check it is healthy</h3><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>curl http://localhost:3847/readyz
 # {"ok":true}</code></pre></div></li>
-    <li><h3 id="step-5">Create your institution</h3><p>Open <a href="http://localhost:8080/app/">http://localhost:8080/app/</a>, choose <b>Create institution</b>, and enter the school name, your name, email and a password of at least 10 characters. You become the owner. Afterwards set <code>ALLOW_SIGNUP=0</code> in <code>deploy/.env</code> and run the compose command again so nobody else can create an institution.</p></li>
+    <li><h3 id="step-5">Create your institution</h3><p>Open <a href="http://localhost:3847/app/">http://localhost:3847/app/</a>, choose <b>Create institution</b>, and enter the school name, your name, email and a password of at least 10 characters. You become the owner. Afterwards set <code>ALLOW_SIGNUP=0</code> in <code>deploy/.env</code> and run the compose command again so nobody else can create an institution.</p></li>
   </ol>
 
   <h2>Option B: Node.js and PostgreSQL</h2>
@@ -27,7 +27,7 @@ npm run build</code></pre></div></li>
     <li><h3 id="step-7">Create a database</h3><p>The database user needs permission to create roles, because migration 002 creates the unprivileged <code>campusos_app</code> role that row-level security relies on.</p><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>createdb schoolkick</code></pre></div></li>
     <li><h3 id="step-8">Start the server</h3><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>DATABASE_URL=postgres://user:pass@localhost:5432/schoolkick npm start
 # {"level":"info","msg":"migrations","applied":["001_core.sql","002_rls.sql"]}
-# {"level":"info","msg":"listening","port":8080}</code></pre></div><p>Open <a href="http://localhost:8080/app/">http://localhost:8080/app/</a> and create your institution as in step 5.</p></li>
+# {"level":"info","msg":"listening","port":3847}</code></pre></div><p>Open <a href="http://localhost:3847/app/">http://localhost:3847/app/</a> and create your institution as in step 5.</p></li>
   </ol>
 
   <h2>Your first register</h2>

@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 const AXE = readFileSync(new URL('../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 
-const BASE = process.env.BASE ?? 'http://localhost:8080';
+const BASE = process.env.BASE ?? 'http://localhost:3847';
 const CHROME = process.env.CHROME ?? '/usr/bin/google-chrome';
 const OUT = new URL('../docs/screenshots/', import.meta.url).pathname;
 const PW = 'demo-password-123', run = Date.now().toString(36), email = (n) => `${n}.${run}@demo.example`;

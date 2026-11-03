@@ -379,3 +379,9 @@ footer { background: var(--color-paper-2); border-top: 1px solid var(--color-rul
   .feature-list .text-link { grid-column: 2; }
   .final-note .btn { width: 100%; }
 }
+
+.install-steps { padding-left: 1.4rem; margin: 2rem 0 0; }
+.install-steps li { padding-left: .6rem; margin-bottom: 2rem; }
+.install-steps li::marker { color: var(--color-accent); font-weight: 700; }
+.install-steps h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+.install-steps p { margin: .5rem 0; }

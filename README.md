@@ -58,15 +58,15 @@ Card or bank payment-provider integration, marks entry and result release, messa
 
 Choose the path that matches your setup. The [installation guide](https://schoolkick.nodedr.com/get-started) includes requirements, current test status and follow-up steps.
 
-### Ubuntu or Debian
+### One command (Docker)
 
-For Ubuntu 24.04+ or Debian 12+ with sudo access. Read the installer before running it:
+Requires Bash, Git, curl, OpenSSL and Docker with Compose v2. On Windows, use WSL with Docker Desktop integration.
 
 ```sh
-curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash
+curl -fsSL https://schoolkick.nodedr.com/install.sh | bash
 ```
 
-This runs the maintained installer as root. Review its contents at [packaging/deb/install-linux.sh](packaging/deb/install-linux.sh) before running it.
+This builds the current main branch, generates a database password, and starts the app at http://localhost:3847/app/. It creates a new `schoolkick` directory and refuses to overwrite an existing installation. Review [the script](packaging/install.sh) before running it.
 
 ### Docker Compose
 
@@ -80,10 +80,10 @@ Set a strong `POSTGRES_PASSWORD` and the external `SITE_URL` in `deploy/.env`, t
 
 ```sh
 docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build
-curl http://localhost:8080/readyz
+curl http://localhost:3847/readyz
 ```
 
-The ready endpoint returns `{"ok":true}` when the server is accepting requests. Open `http://localhost:8080/app/` to create the first school owner. Configure HTTPS before inviting staff or families.
+The ready endpoint returns `{"ok":true}` when the server is accepting requests. Open `http://localhost:3847/app/` to create the first school owner. Configure HTTPS before inviting staff or families.
 
 ### From source
 
@@ -98,7 +98,7 @@ createdb schoolkick
 DATABASE_URL=postgres://user:pass@localhost:5432/schoolkick npm start
 ```
 
-Then open `http://localhost:8080/app/`. Database migrations run when the server starts. The migration connection needs permission to create the restricted `campusos_app` role.
+Then open `http://localhost:3847/app/`. Database migrations run when the server starts. The migration connection needs permission to create the restricted `campusos_app` role.
 
 ## First day setup
 

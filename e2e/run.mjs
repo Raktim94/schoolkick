@@ -3,7 +3,7 @@
 import puppeteer from 'puppeteer-core';
 import assert from 'node:assert/strict';
 
-const BASE = process.env.BASE ?? 'http://localhost:8080';
+const BASE = process.env.BASE ?? 'http://localhost:3847';
 const CHROME = process.env.CHROME ?? '/usr/bin/google-chrome';
 const OUT = new URL('../docs/screenshots/', import.meta.url).pathname;
 const PW = 'demo-password-123';

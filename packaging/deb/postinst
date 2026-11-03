@@ -26,6 +26,6 @@ if [ "$1" = configure ]; then
     systemctl restart schoolkick.service >/dev/null 2>&1 || \
       echo "schoolkick: could not start yet; check Docker, then run: sudo systemctl start schoolkick" >&2
   fi
-  echo "SchoolKick is installed. Open http://localhost:8480 (first start pulls the images and can take a few minutes)."
+  echo "SchoolKick is installed. Open http://localhost:3847 (first start pulls the images and can take a few minutes)."
 fi
 exit 0

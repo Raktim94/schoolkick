@@ -8,15 +8,16 @@ services:
     depends_on:
       db: { condition: service_healthy }
     environment:
+      PORT: "3847"
       DATABASE_URL: postgres://schoolkick:change-this-password@db:5432/schoolkick
-      SITE_URL: http://localhost:8480
+      SITE_URL: http://localhost:3847
       ALLOW_SIGNUP: "1"
-    ports: ["8480:8080"]
+    ports: ["3847:3847"]
     read_only: true
     security_opt: ["no-new-privileges:true"]
     cap_drop: [ALL]
     x-casaos:
-      ports: [{ container: "8080", description: { en_us: "Web port" } }]
+      ports: [{ container: "3847", description: { en_us: "Web port" } }]
   db:
     image: postgres:16-alpine
     restart: unless-stopped
@@ -36,4 +37,4 @@ x-casaos:
   description: { en_us: "Open-source attendance and family view for schools, colleges and coaching centres. Early release, not security audited." }
   icon: https://raw.githubusercontent.com/Raktim94/schoolkick/main/site/icon.png
   index: /
-  port_map: "8480"
+  port_map: "3847"

@@ -16,6 +16,11 @@ export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; ap
   const appIndex = hasApp ? readFileSync(o.appDir + '/index.html', 'utf8') : '';
   app.use('*', compress());
 
+  app.get('/install.sh', (c) => {
+    const installer = resolve('packaging/install.sh');
+    return existsSync(installer) ? c.body(readFileSync(installer) as unknown as ArrayBuffer, 200, { 'Content-Type': 'text/x-shellscript; charset=utf-8', 'Cache-Control': 'no-cache' }) : c.notFound();
+  });
+
   app.get('/robots.txt', (c) => { const f = resolve(publicDir, 'robots.txt'); return c.text(existsSync(f) ? readFileSync(f, 'utf8') : site.robots, 200, { 'Cache-Control': 'no-cache' }); });
   app.get('/install-linux.sh', (c) => (site.installer ? c.body(site.installer, 200, { 'Content-Type': 'text/x-shellscript; charset=utf-8', 'Cache-Control': 'public, max-age=300', 'X-Content-Type-Options': 'nosniff' }) : c.notFound()));
   app.get('/downloads/:file', (c) => {
