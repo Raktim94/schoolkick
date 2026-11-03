@@ -5,7 +5,7 @@ import { enterTenant, tx } from '../db.ts';
 import type { Db } from '../db.ts';
 import { ApiError, SESSION_COOKIE } from '../kernel.ts';
 import type { Kernel } from '../kernel.ts';
-import { bad, email, password, str } from '../validate.ts';
+import { bad, currency, email, password, str } from '../validate.ts';
 
 export function authModule(k: Kernel, db: Db, opts: { allowSignup: boolean }) {
   const loginLimit = limiter(10, 15 * 60_000);
@@ -22,10 +22,11 @@ export function authModule(k: Kernel, db: Db, opts: { allowSignup: boolean }) {
     const b = await body();
     const tz = typeof b.timezone === 'string' ? b.timezone : 'UTC';
     try { new Intl.DateTimeFormat('en', { timeZone: tz }); } catch { throw bad('timezone is not a valid IANA zone'); }
+    const cur = b.currency === undefined ? 'INR' : currency(b.currency);
     const name = str(b.institution, 'institution', 2, 120), ownerName = str(b.name, 'name', 2, 120);
     const mail = email(b.email), hash = await hashPassword(password(b.password));
     const out = await tx(db, async (q) => {
-      const t = (await q.query('insert into tenants (name, timezone) values ($1,$2) returning id', [name, tz])).rows[0];
+      const t = (await q.query('insert into tenants (name, timezone, currency) values ($1,$2,$3) returning id', [name, tz, cur])).rows[0];
       const u = (await q.query(`insert into users (tenant_id, email, name, pw_hash, roles) values ($1,$2,$3,$4,'{owner}') returning id`, [t.id, mail, ownerName, hash])).rows[0];
       await enterTenant(q, t.id);
       await q.query(`insert into audit_events (tenant_id, actor_id, action, entity, entity_id) values ($1,$2,'tenant.create','tenant',$3)`, [t.id, u.id, String(t.id)]);
@@ -57,6 +58,6 @@ export function authModule(k: Kernel, db: Db, opts: { allowSignup: boolean }) {
     const p = t ? await principalFor(db, t) : null;
     if (!p) return { me: null };
     const inst = (await db.query('select name from tenants where id = $1', [p.tenantId])).rows[0];
-    return { me: { name: p.name, roles: p.roles, institution: inst.name, timezone: p.timezone } };
+    return { me: { name: p.name, roles: p.roles, institution: inst.name, timezone: p.timezone, currency: p.currency } };
   });
 }

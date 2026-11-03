@@ -4,6 +4,7 @@ import { api } from './api';
 import type { Me, Role } from './api';
 import { Audit, Classes, Learners, People } from './Admin';
 import { Attendance, Today } from './Attendance';
+import { Checkout, GuardianFees, Receipt, Reconciliation, StaffFees } from './Fees';
 import { Guardian } from './Guardian';
 import { Overview } from './Overview';
 import { Link, navigate, usePath } from './router';
@@ -17,6 +18,8 @@ const ICONS: Record<string, string> = {
   learners: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0',
   people: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-6 9a6 6 0 0 1 12 0m1-9a3 3 0 1 0 0-6m3 15a5 5 0 0 0-3-4.6',
   audit: 'M6 3h9l4 4v14H6V3Zm8 0v5h5M9 13h7M9 17h7',
+  fees: 'M3 7h18v12H3V7Zm0 4h18M7 15h4M7 3l-.01 4M17 3v4',
+  recon: 'M4 12a8 8 0 0 1 14-5l2 2M20 4v5h-5M20 12a8 8 0 0 1-14 5l-2-2M4 20v-5h5',
   today: 'M5 5h14v15H5V5Zm0 5h14M9 3v4m6-4v4',
   more: 'M5 12h.01M12 12h.01M19 12h.01',
 };
@@ -37,10 +40,13 @@ type Item = { to: string; label: string; icon: string };
 
 function navFor(role: Role): Item[] {
   if (role === 'owner' || role === 'registrar') return [
-    { to: '/', label: 'Overview', icon: 'overview' }, { to: '/classes', label: 'Classes', icon: 'classes' }, { to: '/learners', label: 'Learners', icon: 'learners' }, { to: '/people', label: 'People', icon: 'people' },
-    ...(role === 'owner' ? [{ to: '/audit', label: 'Audit log', icon: 'audit' }] : []),
+    { to: '/', label: 'Overview', icon: 'overview' }, { to: '/classes', label: 'Classes', icon: 'classes' }, { to: '/learners', label: 'Learners', icon: 'learners' },
+    { to: '/fees', label: 'Fees', icon: 'fees' }, { to: '/people', label: 'People', icon: 'people' },
+    ...(role === 'owner' ? [{ to: '/reconciliation', label: 'Reconcile', icon: 'recon' }, { to: '/audit', label: 'Audit log', icon: 'audit' }] : []),
   ];
-  return [{ to: '/', label: role === 'teacher' ? 'Today' : role === 'guardian' ? 'Today' : 'Home', icon: 'today' }];
+  if (role === 'finance') return [{ to: '/', label: 'Fees', icon: 'fees' }, { to: '/reconciliation', label: 'Reconcile', icon: 'recon' }];
+  if (role === 'guardian') return [{ to: '/', label: 'Today', icon: 'today' }, { to: '/fees', label: 'Fees', icon: 'fees' }];
+  return [{ to: '/', label: 'Today', icon: 'today' }];
 }
 
 function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
@@ -52,14 +58,21 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
   const moreActive = items.slice(3).some((i) => i.to === '/' ? path === '/' : path.startsWith(i.to));
   const out = async () => { await api('POST', '/auth/logout').catch(() => {}); onSignOut(); };
   const switchRole = (r: Role) => { setActive(r); try { localStorage.setItem('schoolkick:role', r); } catch { /* ignore */ } navigate('/'); };
+  const payId = /^\/pay\/([0-9a-f-]{36})$/.exec(path)?.[1];
+  const receiptId = /^\/receipts\/([0-9a-f-]{36})$/.exec(path)?.[1];
   const classId = /^\/classes\/([0-9a-f-]{36})$/.exec(path)?.[1];
 
   let page: ReactNode, title = 'Not found';
   const staff = active === 'owner' || active === 'registrar';
   if (path === '/') {
-    page = staff ? <Overview canAudit={active === 'owner'} /> : active === 'teacher' ? <Today /> : active === 'guardian' ? <Guardian /> : <Empty title="Fees and reconciliation are planned for the next release" hint="Nothing to do here yet." />;
+    page = staff ? <Overview canAudit={active === 'owner'} /> : active === 'teacher' ? <Today /> : active === 'guardian' ? <Guardian /> : <StaffFees canEdit currency={me.currency} />;
     title = items[0].label;
-  } else if (classId && (staff || active === 'teacher')) { page = <Attendance key={classId} classId={classId} back={staff ? '/classes' : '/'} />; title = 'Attendance'; }
+  } else if (path === '/fees' && active === 'guardian') { page = <GuardianFees />; title = 'Fees'; }
+  else if (path === '/fees' && staff) { page = <StaffFees canEdit={active === 'owner'} currency={me.currency} />; title = 'Fees'; }
+  else if (path === '/reconciliation' && (active === 'owner' || active === 'finance')) { page = <Reconciliation />; title = 'Reconciliation'; }
+  else if (payId && active === 'guardian') { page = <Checkout key={payId} id={payId} />; title = 'Payment'; }
+  else if (receiptId && active !== 'teacher') { page = <Receipt key={receiptId} id={receiptId} />; title = 'Receipt'; }
+  else if (classId && (staff || active === 'teacher')) { page = <Attendance key={classId} classId={classId} back={staff ? '/classes' : '/'} />; title = 'Attendance'; }
   else if (staff && path === '/classes') { page = <Classes />; title = 'Classes'; }
   else if (staff && path === '/learners') { page = <Learners />; title = 'Learners'; }
   else if (staff && path === '/people') { page = <People canAdd={active === 'owner'} />; title = 'People'; }

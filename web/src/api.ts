@@ -27,4 +27,4 @@ export async function api<T = any>(method: string, path: string, body?: unknown,
 }
 
 export type Role = 'owner' | 'registrar' | 'teacher' | 'finance' | 'guardian';
-export type Me = { name: string; roles: Role[]; institution: string; timezone: string };
+export type Me = { name: string; roles: Role[]; institution: string; timezone: string; currency: string };

@@ -4,6 +4,7 @@ import { connect, migrate } from '../src/db.ts';
 
 const admin = process.env.TEST_ADMIN_URL ?? 'postgres://postgres@127.0.0.1:54329/postgres';
 
+export const WEBHOOK_SECRET = 'test-webhook-secret';
 export async function freshApp() {
   const name = `campus_test_${process.pid}_${Math.random().toString(36).slice(2, 8)}`;
   const a = new pg.Client({ connectionString: admin });
@@ -12,7 +13,7 @@ export async function freshApp() {
   await a.end();
   const db = connect(admin.replace(/\/[^/]*$/, `/${name}`));
   await migrate(db);
-  const app = buildApp(db);
+  const app = buildApp(db, { payments: { sandbox: true, webhookSecret: WEBHOOK_SECRET } });
   return {
     app, db,
     async close() {

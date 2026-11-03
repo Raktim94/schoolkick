@@ -31,3 +31,19 @@ export function dayOrToday(v: unknown, tz: string): string {
   if (d > today) throw bad('Attendance cannot be recorded for a future day');
   return d;
 }
+
+/** Money is always integer minor units. */
+export function minor(v: unknown, field = 'amountMinor'): number {
+  if (typeof v !== 'number' || !Number.isSafeInteger(v) || v < 1 || v > 1_000_000_000_000) throw bad(`${field} must be a whole number of minor units (for example paise or cents) above zero`);
+  return v;
+}
+export function currency(v: unknown): string {
+  const c = str(v, 'currency', 3, 3).toUpperCase();
+  try { new Intl.NumberFormat('en', { style: 'currency', currency: c }); } catch { throw bad('currency must be an ISO 4217 code such as INR, USD or JPY'); }
+  return c;
+}
+export function isoDay(v: unknown, field: string): string {
+  const s = str(v, field, 10, 10);
+  if (!ISO_DAY.test(s) || Number.isNaN(Date.parse(s))) throw bad(`${field} must be YYYY-MM-DD`);
+  return s;
+}

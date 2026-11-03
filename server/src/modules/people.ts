@@ -22,7 +22,7 @@ export function peopleModule(k: Kernel) {
     return c.json({ id: r.rows[0].id }, 201);
   });
 
-  k.secure('get', '/learners', ['owner', 'registrar'], 'List learners with their guardians', async ({ q, p }) => ({
+  k.secure('get', '/learners', ['owner', 'registrar', 'finance'], 'List learners with their guardians', async ({ q, p }) => ({
     learners: (await q.query(
       `select l.id, l.name, l.external_id, coalesce(array_agg(u.email) filter (where u.id is not null), '{}') as guardians
          from learners l left join guardianships g on g.learner_id = l.id left join users u on u.id = g.user_id
@@ -39,14 +39,15 @@ export function peopleModule(k: Kernel) {
   });
 
   k.secure('post', '/learners/:id/guardians', ['owner', 'registrar'], 'Link a guardian account to a learner', async ({ q, p, body, audit, param, c }) => {
-    const mail = email((await body()).email), id = uuid(param('id'), 'id');
+    const b = await body(), mail = email(b.email), id = uuid(param('id'), 'id');
+    const canPay = b.canPay !== false; // linked for information only when false
     const r = await q.query(
-      `insert into guardianships (tenant_id, user_id, learner_id)
-       select $1, u.id, l.id from users u, learners l
+      `insert into guardianships (tenant_id, user_id, learner_id, can_pay)
+       select $1, u.id, l.id, $4 from users u, learners l
         where u.tenant_id = $1 and u.email = $2 and 'guardian' = any(u.roles) and l.tenant_id = $1 and l.id = $3
-       on conflict do nothing returning user_id`, [p.tenantId, mail, id]);
+       on conflict do nothing returning user_id`, [p.tenantId, mail, id, canPay]);
     if (!r.rowCount) throw new ApiError(404, 'not_found', 'No guardian account with that email, or learner not found');
-    await audit('guardianship.link', 'learner', id, { guardian: r.rows[0].user_id });
+    await audit('guardianship.link', 'learner', id, { guardian: r.rows[0].user_id, canPay });
     return c.json({ ok: true }, 201);
   });
 

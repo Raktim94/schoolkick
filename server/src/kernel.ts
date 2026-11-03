@@ -9,7 +9,7 @@ import { scoped } from './db.ts';
 import type { Db, Tx } from './db.ts';
 
 export class ApiError extends Error {
-  status: 400 | 401 | 403 | 404 | 409 | 413 | 429;
+  status: 400 | 401 | 403 | 404 | 409 | 413 | 429 | 503;
   code: string;
   constructor(status: ApiError['status'], code: string, message: string) {
     super(message);
@@ -64,7 +64,8 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
   });
   app.use('/api/*', bodyLimit({ maxSize: 2 * 1024 * 1024, onError: (c) => c.json({ error: { code: 'too_large', message: 'Body too large' } }, 413) }));
   app.use('/api/*', async (c, next) => {
-    if (!['GET', 'HEAD', 'OPTIONS'].includes(c.req.method)) {
+    // Provider webhooks are server-to-server and authenticated by signature instead of a browser session.
+    if (!['GET', 'HEAD', 'OPTIONS'].includes(c.req.method) && !c.req.path.startsWith('/api/v1/webhooks/')) {
       const origin = c.req.header('origin');
       if (c.req.header('x-requested-with') !== 'schoolkick' || (origin && new URL(origin).host !== c.req.header('host')))
         throw new ApiError(403, 'csrf', 'Cross-site request blocked');

@@ -1,13 +1,15 @@
 # Roadmap
 
-Built (v0.1): tenant, auth and roles, learners and guardians, classes, attendance with correction history, guardian view, overview dashboard, CSV import, audit log.
+Built: v0.1 core (tenant, auth/roles, learners, guardians, classes, attendance with correction history, guardian view, overview, CSV import, audit). v0.2 fees: invoices, verified payments, reconciliation, receipts, refunds (see `traceability.md` for what is partial).
 
-Next, in order, each as a separate slice with its own tests and handoff note:
-1. Password reset and email delivery; session management screen.
-2. Fee schedules, invoices and manual payment recording with reconciliation.
-3. Guardian notifications (email first), announcements.
-4. Timetable, holidays and academic calendar; reports export.
-5. Native wrappers built and tested (Android, then iOS on macOS).
-6. Specialist security review and accessibility audit before any claim of production readiness.
+Decision needed before real money: pick a payment provider (card/UPI/bank) per market and sign its contract; the webhook, state machine and reconciliation are already provider-neutral.
 
-Not planned until requirements are confirmed with real schools: grading, learning content, QR check-in.
+Next slices, each tested and handed off on its own:
+1. Real provider adapter + server-side receipt PDF with verification QR; refund approval step.
+2. Student record depth (guardian restrictions, consent history, correction requests) and admissions pipeline.
+3. Exam registration with the fee flow (eligibility, deadline, form status, admit card).
+4. Teacher QR check-in (short-lived signed sessions, replay protection, manual fallback) and ID cards.
+5. Inbox and notifications (email first, quiet hours, deduplication, draft save).
+6. `/countries` page with honest statuses, i18n framework (EN, ES, HI, JA, FR), then country packs one at a time with acceptance checks.
+7. Payroll as a separate, restricted module with versioned, reviewed rule sets.
+8. Security review, accessibility audit, MFA for privileged roles before any production-readiness claim.

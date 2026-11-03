@@ -6,7 +6,7 @@ const scryptAsync = promisify(scrypt) as (p: string, s: Buffer, n: number) => Pr
 
 export const ROLES = ['owner', 'registrar', 'teacher', 'finance', 'guardian'] as const;
 export type Role = (typeof ROLES)[number];
-export type Principal = { userId: string; tenantId: string; roles: Role[]; name: string; timezone: string };
+export type Principal = { userId: string; tenantId: string; roles: Role[]; name: string; timezone: string; currency: string };
 
 export async function hashPassword(pw: string): Promise<string> {
   const salt = randomBytes(16);
@@ -38,14 +38,14 @@ export const destroySession = (db: Db, token: string) => db.query('delete from s
 /** Resolve a session token to a principal. Tenant and roles always come from the DB, never from the client. */
 export async function principalFor(db: Db, token: string): Promise<Principal | null> {
   const { rows } = await db.query(
-    `select u.id, u.tenant_id, u.roles, u.name, t.timezone from sessions s
+    `select u.id, u.tenant_id, u.roles, u.name, t.timezone, t.currency from sessions s
        join users u on u.id = s.user_id and u.tenant_id = s.tenant_id and u.active
        join tenants t on t.id = u.tenant_id
       where s.token_hash = $1 and s.expires_at > now()`,
     [sha(token)],
   );
   const r = rows[0];
-  return r ? { userId: r.id, tenantId: r.tenant_id, roles: r.roles, name: r.name, timezone: r.timezone } : null;
+  return r ? { userId: r.id, tenantId: r.tenant_id, roles: r.roles, name: r.name, timezone: r.timezone, currency: r.currency } : null;
 }
 
 /** Fixed-window limiter, in-memory (single node). */
