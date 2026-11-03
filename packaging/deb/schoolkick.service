@@ -1,0 +1,16 @@
+[Unit]
+Description=SchoolKick (Docker Compose)
+Documentation=https://schoolkick.nodedr.com/get-started
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+TimeoutStartSec=900
+ExecStart=/usr/bin/docker compose --project-name schoolkick --env-file /etc/schoolkick/schoolkick.env -f /usr/lib/schoolkick/docker-compose.yml up -d --remove-orphans
+ExecStop=/usr/bin/docker compose --project-name schoolkick --env-file /etc/schoolkick/schoolkick.env -f /usr/lib/schoolkick/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
