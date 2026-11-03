@@ -12,7 +12,7 @@ export const PAGES: SitePage[] = [
   { path: '/faq', file: 'faq.html', nav: 'FAQ', menu: true, kind: 'faq', title: 'SchoolKick FAQ: cost, data, languages, mobile and limits', description: 'Answers to common questions about SchoolKick: price, who owns the data, mobile use, password reset, fees, and what the early release does not do yet.' },
   { path: '/roadmap', file: 'roadmap.html', nav: 'Roadmap', menu: false, title: 'SchoolKick roadmap: what is built and what comes next', description: 'What works in v0.1, the next planned slices (password reset, fees, notifications) and what is deliberately not planned until real schools confirm it.' },
   { path: '/contribute', file: 'contribute.html', nav: 'Contribute', menu: false, title: 'Contribute to SchoolKick: setup, checks and pull requests', description: 'How to run SchoolKick locally, the checks to run before a pull request, how the code is organised and the rules that keep it safe for school data.' },
-  { path: '/contributors', file: 'contributors.html', nav: 'Contributors', menu: false, title: 'SchoolKick contributors', description: 'The people who build SchoolKick, and how to join them.' },
+  { path: '/contributors', file: 'contributors.html', nav: 'Contributors', menu: false, title: 'SchoolKick contributors: the people building open-source school software', description: 'Meet the maintainer and contributors of SchoolKick, the free open-source school attendance platform, and find out how to report issues, send fixes or review security.' },
 ];
 const dir = fileURLToPath(new URL('../../site/', import.meta.url));
 const shotsDir = fileURLToPath(new URL('../../docs/screenshots/', import.meta.url));
@@ -49,7 +49,7 @@ function jsonLd(p: SitePage, siteUrl: string, repoUrl: string, body: string) {
     return [
       { '@context': 'https://schema.org', '@type': 'WebSite', '@id': siteUrl + '/#website', name: 'SchoolKick', url: siteUrl + '/', inLanguage: 'en' },
       // No aggregateRating or review: there are none, and inventing one would break Google's structured data rules.
-      { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'SchoolKick', applicationCategory: 'EducationalApplication', operatingSystem: 'Web, Linux, Windows, macOS, Docker', description: p.description, url: siteUrl + '/', license: 'https://opensource.org/license/mit', codeRepository: repoUrl, screenshot: siteUrl + '/s/dashboard-desktop.png', author: org, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+      { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'SchoolKick', applicationCategory: 'EducationalApplication', operatingSystem: 'Web, Linux, Windows, macOS, Docker', description: p.description, url: siteUrl + '/', license: 'https://opensource.org/license/mit', softwareVersion: '0.1.0', isAccessibleForFree: true, sameAs: [repoUrl], featureList: ['Attendance with a kept correction history', 'Family view with no app to install', 'School overview dashboard', 'CSV import with dry run'], codeRepository: repoUrl, screenshot: siteUrl + '/s/dashboard-desktop.png', author: org, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
     ];
   const out: unknown[] = [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl + '/' }, { '@type': 'ListItem', position: 2, name: p.nav, item: url }] }];
   if (p.kind === 'faq') {

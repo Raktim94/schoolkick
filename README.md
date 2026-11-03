@@ -1,5 +1,7 @@
 # SchoolKick
 
+**SchoolKick is free, open-source school attendance software you host yourself.** Website: [schoolkick.nodedr.com](https://schoolkick.nodedr.com) · [Install guide](https://schoolkick.nodedr.com/get-started) · [Screenshots](https://schoolkick.nodedr.com/screenshots) · [FAQ](https://schoolkick.nodedr.com/faq)
+
 Open-source school software. Teachers take attendance from a phone, families see today's status in a browser, and every correction stays on the record.
 
 ![School overview dashboard with today's attendance, trend and class register](docs/screenshots/dashboard-desktop.png)
