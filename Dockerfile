@@ -18,6 +18,7 @@ RUN npm ci --omit=dev --workspace server --include-workspace-root=false && npm c
 COPY server/src server/src
 COPY server/migrations server/migrations
 COPY site site
+COPY docs/screenshots docs/screenshots
 COPY --from=web /src/web/dist web/dist
 USER node
 EXPOSE 8080

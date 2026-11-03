@@ -75,15 +75,29 @@ const clickLabel = (page, scope, label) => page.evaluate((scope, label) => [...d
 const clickText = (page, sel, t) => page.evaluate((sel, t) => [...document.querySelectorAll(sel)].find((e) => e.textContent.trim() === t).click(), sel, t);
 
 // public site: SEO basics per page
-for (const [path, name] of [['/', 'site-home-desktop'], ['/features', 'site-features-desktop'], ['/security', 'site-security-desktop'], ['/self-hosting', 'site-selfhosting-desktop']]) {
+const SITE = [['/', 'home'], ['/features', 'features'], ['/get-started', 'get-started'], ['/screenshots', 'screenshots'], ['/self-hosting', 'selfhosting'], ['/security', 'security'], ['/faq', 'faq'], ['/roadmap', 'roadmap'], ['/contribute', 'contribute'], ['/contributors', 'contributors']];
+for (const [path, name] of SITE) {
   await session(1440, 900, path, async (p) => {
     assert.ok((await p.title()).length > 10, `title on ${path}`);
     assert.equal(await p.$$eval('h1', (h) => h.length), 1, `one h1 on ${path}`);
     assert.ok(await p.$eval('link[rel=canonical]', (l) => l.href), `canonical on ${path}`);
-    await shot(p, name, path === '/');
+    assert.ok(await p.$eval('meta[name=description]', (m) => m.content.length > 50), `description on ${path}`);
+    assert.equal(await p.$$eval('img', (i) => i.filter((x) => !x.alt && x.getAttribute('alt') === null).length), 0, `img alt on ${path}`);
+    await shot(p, 'site-' + name + '-desktop', path === '/' || path === '/get-started');
   });
 }
-await session(375, 812, '/', async (p) => { await shot(p, 'site-home-mobile'); });
+// phone widths: no sideways scroll, menu opens, lazy images decode
+for (const [path, name] of SITE) {
+  await session(375, 812, path, async (p) => {
+    assert.ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `no horizontal scroll on ${path} at 375px`);
+    if (path === '/') { await p.click('details.mob summary'); assert.ok(await p.$eval('details.mob', (d) => d.open)); await shot(p, 'site-menu-mobile'); await p.click('details.mob summary'); }
+    if (['/', '/get-started', '/screenshots', '/faq'].includes(path)) await shot(p, 'site-' + name + '-mobile', path !== '/');
+  });
+}
+await session(1440, 900, '/screenshots', async (p) => {
+  await p.evaluate(async () => { for (const i of document.images) { i.loading = 'eager'; await i.decode().catch(() => {}); } });
+  assert.equal(await p.$$eval('img', (i) => i.filter((x) => !x.naturalWidth).length), 0, 'every screenshot loads');
+});
 
 await session(375, 812, '/app/', async (p) => {
   await shot(p, 'sign-in-mobile');

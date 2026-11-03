@@ -1,0 +1,48 @@
+<main id="main" class="page"><div class="wrap">
+  <p class="crumbs"><a href="/">Home</a> / Get started</p>
+  <h1>Install CampusOS in about 15 minutes</h1>
+  <p class="lede">Docker Compose or plain Node.js, then your first register. Every command on this page can be copied with one click.</p>
+  <div class="note"><b>Status:</b> early release (v0.1). The Node.js route below was run end to end from a fresh clone. The Docker route has not been built on the machine used to write this page (no Docker daemon was available), so treat it as likely to work, not proven. Tell us what breaks on the <a href="%REPO_URL%/issues">issue tracker</a>.</div>
+  <h2>Before you start</h2>
+  <ul class="plain"><li><b>Docker route:</b> Docker with Compose v2 (Docker Engine on Linux, Docker Desktop on Windows or macOS).</li><li><b>Node.js route:</b> Node.js 22.18 or newer, and PostgreSQL 16 where you can create a database and roles.</li><li>About 15 minutes and a modern browser. Chrome, Edge, Firefox and Safari all work.</li></ul>
+
+  <h2>Option A: Docker Compose</h2>
+  <ol class="steps">
+    <li><h3 id="step-1">Get the code</h3><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>git clone %REPO_URL%.git
+cd campusos</code></pre></div></li>
+    <li><h3 id="step-2">Choose a database password</h3><p>Copy the example settings and set <code>POSTGRES_PASSWORD</code> to a long random value. Set <code>SITE_URL</code> to the address people will use.</p><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>cp deploy/.env.example deploy/.env
+nano deploy/.env</code></pre></div></li>
+    <li><h3 id="step-3">Start it</h3><p>The first start builds the image and runs the database migrations.</p><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build</code></pre></div></li>
+    <li><h3 id="step-4">Check it is healthy</h3><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>curl http://localhost:8080/readyz
+# {"ok":true}</code></pre></div></li>
+    <li><h3 id="step-5">Create your institution</h3><p>Open <a href="http://localhost:8080/app/">http://localhost:8080/app/</a>, choose <b>Create institution</b>, and enter the school name, your name, email and a password of at least 10 characters. You become the owner. Afterwards set <code>ALLOW_SIGNUP=0</code> in <code>deploy/.env</code> and run the compose command again so nobody else can create an institution.</p></li>
+  </ol>
+
+  <h2>Option B: Node.js and PostgreSQL</h2>
+  <ol class="steps">
+    <li><h3 id="step-6">Install and build</h3><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>git clone %REPO_URL%.git
+cd campusos
+npm install
+npm run build</code></pre></div></li>
+    <li><h3 id="step-7">Create a database</h3><p>The database user needs permission to create roles, because migration 002 creates the unprivileged <code>campusos_app</code> role that row-level security relies on.</p><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>createdb campusos</code></pre></div></li>
+    <li><h3 id="step-8">Start the server</h3><div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>DATABASE_URL=postgres://user:pass@localhost:5432/campusos npm start
+# {"level":"info","msg":"migrations","applied":["001_core.sql","002_rls.sql"]}
+# {"level":"info","msg":"listening","port":8080}</code></pre></div><p>Open <a href="http://localhost:8080/app/">http://localhost:8080/app/</a> and create your institution as in step 5.</p></li>
+  </ol>
+
+  <h2>Your first register</h2>
+  <ol class="steps">
+    <li><h3 id="step-9">Add classes and people</h3><p>In <b>Classes</b> create a class. In <b>People</b> add a teacher account and a guardian account. In <b>Learners</b> add learners one by one or open <b>Import from CSV</b> (columns <code>name</code>, <code>external_id</code>, <code>guardian_email</code>). Use <b>Check file</b> before importing: it lists every problem and saves nothing.</p></li>
+    <li><h3 id="step-10">Assign and enrol</h3><p>Assign the teacher to the class, enrol the learners, and link each learner to a guardian.</p></li>
+    <li><h3 id="step-11">Take attendance</h3><p>Sign in as the teacher, open the class, tap <b>Mark all unmarked as present</b> (the button shows the count), change the exceptions and save. Changing a saved mark asks for a reason, and the original entry stays visible. Sign in as the guardian to see the family view.</p></li>
+  </ol>
+
+  <h2>Run the checks yourself</h2>
+  <p>Tests need a PostgreSQL admin URL in <code>TEST_ADMIN_URL</code>.</p>
+<div class="codewrap"><button class="copy" type="button" aria-label="Copy the commands">Copy</button><pre><code>TEST_ADMIN_URL=postgres://postgres:secret@127.0.0.1:5432/postgres npm test
+npm run typecheck
+CHROME=/usr/bin/google-chrome npm run e2e   # needs the app running; writes screenshots</code></pre></div>
+  <h2>Before real learner data</h2>
+  <p>Put it behind HTTPS, set up backups, and read <a href="/security">what is and is not covered</a>. There is no password reset by email yet. Check your local rules for children's data. Details: <a href="/self-hosting">self-hosting guide</a>.</p>
+
+</div></main>

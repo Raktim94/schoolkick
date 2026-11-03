@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { loadSite } from './site.ts';
 
-const MIME: Record<string, string> = { '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.json': 'application/json', '.woff2': 'font/woff2' };
+const MIME: Record<string, string> = { '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.txt': 'text/plain', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.json': 'application/json', '.woff2': 'font/woff2' };
 
 /** Public site (static, SEO-friendly), the app under /app, and crawler files. Registered after the API. */
 export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; appDir: string }) {
@@ -16,6 +16,7 @@ export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; ap
   app.use('*', compress());
 
   app.get('/robots.txt', (c) => c.text(site.robots));
+  app.get('/llms.txt', (c) => c.text(site.llms, 200, { 'Cache-Control': 'public, max-age=3600' }));
   app.get('/sitemap.xml', (c) => c.body(site.sitemap, 200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }));
 
   app.get('/s/:file', (c) => {

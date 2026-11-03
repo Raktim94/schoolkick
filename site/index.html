@@ -4,7 +4,8 @@
       <div>
         <h1>Take attendance in a minute. Keep every correction on the record.</h1>
         <p class="lede">CampusOS is open-source school software. Teachers mark a class from a phone, families see today’s status in any browser, and when someone fixes a mistake the original entry stays visible.</p>
-        <div class="actions"><a class="btn" href="/app">Open the app</a><a class="btn ghost" href="/self-hosting">Run it yourself</a></div>
+        <div class="actions"><a class="btn" href="/app">Open the app</a><a class="btn ghost" href="/get-started">Install in 15 minutes</a></div>
+        <ul class="trust"><li>Free and open source (MIT)</li><li>No app for families to install</li><li>Early release v0.1</li></ul>
       </div>
       <figure>
         %REGISTER%
@@ -13,6 +14,11 @@
       </figure>
     </div>
   </div>
+
+  <section class="shotband"><div class="wrap">
+    <div class="shot"><img src="/s/dashboard-desktop.png" width="1440" height="970" alt="CampusOS school overview: today’s attendance split, a seven-day trend, a class-by-day register and a short list of items needing attention"></div>
+    <p class="caption">The school overview, with synthetic demo data. <a href="/screenshots">See more screenshots</a>.</p>
+  </div></section>
 
   <section class="block"><div class="wrap split">
     <h2>What each person gets today</h2>
@@ -52,7 +58,7 @@
   </div></section>
 
   <section class="block"><div class="wrap split">
-    <div><h2>Open source, yours to run</h2><p>The code is MIT licensed. One Docker Compose file starts the app and its database. It also runs on a home server or NAS through CasaOS.</p><p><a href="/self-hosting">Read the self-hosting guide</a> or <a href="%REPO_URL%">browse the source</a>.</p></div>
+    <div><h2>Open source, yours to run</h2><p>The code is MIT licensed. One Docker Compose file starts the app and its database. It also runs on a home server or NAS through CasaOS.</p><p><a href="/get-started">Follow the install steps</a>, read the <a href="/self-hosting">self-hosting guide</a>, check the <a href="/faq">FAQ</a>, or <a href="%REPO_URL%">browse the source</a>. Want to help? See <a href="/contribute">how to contribute</a>.</p></div>
     <pre><code>git clone %REPO_URL%.git
 cd campusos
 docker compose -f deploy/docker-compose.yml up -d

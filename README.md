@@ -29,6 +29,8 @@ docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build
 # open http://localhost:8080  (public site)   http://localhost:8080/app/  (the app)
 ```
 
+Step-by-step with screenshots: the **Get started** page on the public site (`/get-started`).
+
 Without Docker:
 
 ```sh
@@ -74,4 +76,4 @@ Tests need PostgreSQL reachable at `TEST_ADMIN_URL` (default `postgres://postgre
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE). Security reports: [SECURITY.md](SECURITY.md).
+MIT. See [LICENSE](LICENSE). Contributors: [contributors.html](contributors.html) and [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CampusOS contributors</title>
+<meta name="description" content="The people who build CampusOS, the open-source school attendance platform, and how to join them.">
+<meta name="robots" content="index, follow">
+<style>
+:root{--canvas:#f5f7fa;--paper:#fff;--ink:#17212f;--ink2:#536174;--line:#dce3eb;--brand:#2459a6;--on:#fff;--focus:#f2a900}
+@media (prefers-color-scheme:dark){:root{--canvas:#101722;--paper:#17212f;--ink:#f3f6fa;--ink2:#bcc7d4;--line:#344255;--brand:#8ab4f8;--on:#101722}}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:1.0625rem/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+a{color:var(--brand)}:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+main{max-width:56rem;margin:0 auto;padding:2.5rem 1rem 4rem}
+h1{font-size:clamp(2rem,5vw,2.8rem);line-height:1.1;letter-spacing:-.03em;margin:.5rem 0 .75rem}h2{font-size:1.4rem;margin:2.5rem 0 .75rem}
+.lede{color:var(--ink2);font-size:1.15rem;max-width:40rem}
+ul.people{list-style:none;padding:0;margin:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}
+.person{display:flex;gap:.85rem;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.person img,.av{width:3rem;height:3rem;border-radius:50%;flex:none}.av{background:var(--brand);color:var(--on);display:grid;place-items:center;font-weight:700}
+.person b{display:block}.person span{color:var(--ink2);font-size:.9rem}
+.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:1rem 1.25rem}.card h3{margin:0 0 .35rem;font-size:1.05rem}.card p{margin:0;color:var(--ink2);font-size:.975rem}
+#status{color:var(--ink2);font-size:.95rem}
+</style>
+</head>
+<body>
+<main>
+<p><a href="https://github.com/Raktim94/campusos">← CampusOS on GitHub</a></p>
+<h1>The people behind CampusOS</h1>
+<p class="lede">Thank you to everyone who has tried it, reported a problem, or sent a change.</p>
+
+<h2>Maintainer</h2>
+<ul class="people"><li class="person"><span class="av" aria-hidden="true">RR</span><div><b>Raktim Ranjit</b><span>Creator and maintainer · <a href="https://github.com/Raktim94">@Raktim94</a></span></div></li></ul>
+
+<h2>Contributors</h2>
+<p id="status">Loading the live list from GitHub…</p>
+<ul class="people" id="list"></ul>
+<noscript><p>The live list needs JavaScript. See the <a href="https://github.com/Raktim94/campusos/graphs/contributors">contributors graph</a> on GitHub.</p></noscript>
+
+<h2>Join in</h2>
+<div class="cards">
+<div class="card"><h3>Report what breaks</h3><p>Install it from the <a href="https://github.com/Raktim94/campusos#run-it">README</a> and open an <a href="https://github.com/Raktim94/campusos/issues">issue</a> with what you saw.</p></div>
+<div class="card"><h3>Send a fix</h3><p>Read <a href="https://github.com/Raktim94/campusos/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>, keep the change small, and open a pull request.</p></div>
+<div class="card"><h3>Review safety</h3><p>Security and accessibility reviewers are welcome. Report vulnerabilities privately as in <a href="https://github.com/Raktim94/campusos/blob/main/SECURITY.md">SECURITY.md</a>.</p></div>
+</div>
+<p style="margin-top:2rem;color:var(--ink2);font-size:.9rem">Never put real learner data in issues, tests or screenshots.</p>
+</main>
+<script>
+(function () {
+  var s = document.getElementById('status'), list = document.getElementById('list');
+  fetch('https://api.github.com/repos/Raktim94/campusos/contributors?per_page=100', { headers: { Accept: 'application/vnd.github+json' } })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (rows) {
+      rows = rows.filter(function (u) { return u.type === 'User'; });
+      if (!rows.length) { s.textContent = 'No contributors listed yet.'; return; }
+      s.textContent = rows.length + (rows.length === 1 ? ' contributor' : ' contributors') + ' on GitHub.';
+      rows.forEach(function (u) {
+        var li = document.createElement('li'); li.className = 'person';
+        var img = document.createElement('img'); img.src = u.avatar_url + '&s=96'; img.width = 48; img.height = 48; img.alt = ''; img.loading = 'lazy';
+        var d = document.createElement('div'), b = document.createElement('b'), a = document.createElement('a'), sp = document.createElement('span');
+        a.href = u.html_url; a.textContent = '@' + u.login; b.appendChild(a);
+        sp.textContent = u.contributions + (u.contributions === 1 ? ' commit' : ' commits');
+        d.appendChild(b); d.appendChild(sp); li.appendChild(img); li.appendChild(d); list.appendChild(li);
+      });
+    })
+    .catch(function () { s.innerHTML = 'Could not load the live list. See the <a href="https://github.com/Raktim94/campusos/graphs/contributors">contributors graph</a> on GitHub.'; });
+})();
+</script>
+</body>
+</html>
