@@ -15,6 +15,7 @@ export const PAGES: SitePage[] = [
   { path: '/contributors', file: 'contributors.html', nav: 'Contributors', menu: false, title: 'SchoolKick contributors: the people building open-source school software', description: 'Meet the maintainer and contributors of SchoolKick, the free open-source school attendance platform, and find out how to report issues, send fixes or review security.' },
 ];
 const dir = fileURLToPath(new URL('../../site/', import.meta.url));
+const installerPath = fileURLToPath(new URL('../../packaging/deb/install-linux.sh', import.meta.url));
 const shotsDir = fileURLToPath(new URL('../../docs/screenshots/', import.meta.url));
 
 // A synthetic register for the hero. Seeded so it is stable between deploys and builds.
@@ -27,8 +28,8 @@ function register(): string {
   const rows = names.map((n, r) => {
     const cells = days.map((_, c) => {
       const x = rnd();
-      const k = x < 0.8 ? 'p' : x < 0.88 ? 'a' : x < 0.95 ? 'l' : 'e';
       const fix = r === 2 && c === 7; // one corrected entry, marked with a dot
+      const k = fix ? 'l' : x < 0.88 ? 'p' : x < 0.93 ? 'a' : x < 0.97 ? 'l' : 'e';
       return `<td class="${k}${fix ? ' fix' : ''}"><span class="sr">${cls[k]}${fix ? ', corrected' : ''}</span></td>`;
     });
     return `<tr><td>${n}</td>${cells.join('')}</tr>`;
@@ -37,10 +38,12 @@ function register(): string {
 }
 
 const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-const logo = '<svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><path d="M12 24 32 14l20 10-20 10z" fill="#fff"/><path d="M20 32v10c0 4 6 8 12 8s12-4 12-8V32l-12 6z" fill="#fff" opacity=".85"/></svg>';
+const logoOld = '<svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><path d="M12 24 32 14l20 10-20 10z" fill="#fff"/><path d="M20 32v10c0 4 6 8 12 8s12-4 12-8V32l-12 6z" fill="#fff" opacity=".85"/></svg>';
 
 const FAQ_RE = /<details[^>]*><summary>(.*?)<\/summary>\s*<div>(.*?)<\/div>\s*<\/details>/gs;
 const strip = (h: string) => h.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/\s+/g, ' ').trim();
+
+const logo = '<img src="/s/icon-192.png" width="36" height="36" alt="">';
 
 function jsonLd(p: SitePage, siteUrl: string, repoUrl: string, body: string) {
   const url = siteUrl + (p.path === '/' ? '/' : p.path);
@@ -76,23 +79,24 @@ ${p.noindex ? '<meta name="robots" content="noindex">' : `<meta name="robots" co
 <meta name="author" content="Raktim Ranjit"><link rel="alternate" type="text/plain" href="/llms.txt" title="Plain-text summary for AI assistants">
 <meta property="og:type" content="website"><meta property="og:site_name" content="SchoolKick"><meta property="og:locale" content="en"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.description)}"><meta property="og:url" content="${url}"><meta property="og:image" content="${siteUrl}/s/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="A school attendance register with slash marks for present and circles for absent">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${siteUrl}/s/og.png"><meta name="theme-color" content="#2459A6">
-<link rel="icon" href="/s/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/s/icon.svg"><link rel="stylesheet" href="/s/site.css">
+<script src="/s/site.js"></script><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/s/favicon-32.png" type="image/png" sizes="32x32"><link rel="icon" href="/s/icon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/s/apple-touch-icon.png"><link rel="stylesheet" href="/s/site.css">
 ${ld.map((d) => `<script type="application/ld+json">${JSON.stringify(d)}</script>`).join('\n')}
 </head><body><a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap"><a class="brand" href="/">${logo} SchoolKick</a>
-<nav class="desk" aria-label="Main">${menu.map(link).join('')}</nav>
-<a class="btn" href="/app">Open the app</a>
-<details class="mob"><summary>Menu</summary><nav aria-label="Mobile">${[PAGES[0], ...menu, ...PAGES.filter((x) => !x.menu && x.path !== '/')].map(link).join('')}<a href="${repoUrl}">Source on GitHub ↗</a></nav></details></div></header>
+<nav class="desk" aria-label="Main">${menu.map(link).join('')}<a href="${repoUrl}">GitHub</a></nav>
+<a class="btn sm" href="/app">Open the app</a>
+<details class="mob"><summary>Menu</summary><nav aria-label="Mobile">${[PAGES[0], ...menu, ...PAGES.filter((x) => !x.menu && x.path !== '/')].map(link).join('')}<a href="${repoUrl}">Source on GitHub</a></nav></details></div></header>
 ${main}
 <footer><div class="wrap foot">
 <div><a class="brand" href="/">${logo} SchoolKick</a><p>Open-source school attendance, MIT licensed. Early release: not security audited and not legally reviewed for any country.</p></div>
 <nav aria-label="Product"><h2>Product</h2>${['/features', '/screenshots', '/roadmap', '/faq'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}</nav>
 <nav aria-label="Run it"><h2>Run it</h2>${['/get-started', '/self-hosting', '/security'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}</nav>
-<nav aria-label="Project"><h2>Project</h2><a href="${repoUrl}">Source code ↗</a><a href="${repoUrl}/issues">Report an issue ↗</a>${['/contribute', '/contributors'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}<a href="/llms.txt">llms.txt</a></nav>
+<nav aria-label="Project"><h2>Project</h2><a href="${repoUrl}">Source code</a><a href="${repoUrl}/issues">Report an issue</a>${['/contribute', '/contributors'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}<a href="/llms.txt">llms.txt</a></nav>
 </div></footer>
-<script src="/s/site.js" defer></script></body></html>`;
+</body></html>`;
 }
 
+export const DEB_VERSION = '0.1.0';
 export function loadSite(siteUrl: string, repoUrl: string) {
   const reg = register();
   const fill = (h: string) => h.replaceAll('%SITE_URL%', siteUrl).replaceAll('%REPO_URL%', repoUrl).replaceAll('%REGISTER%', reg);
@@ -104,11 +108,14 @@ export function loadSite(siteUrl: string, repoUrl: string) {
   );
   const notFound = layout({ title: 'Page not found | SchoolKick', description: 'This page does not exist.', noindex: true }, fill(readFileSync(dir + '404.html', 'utf8')), siteUrl, repoUrl);
   const assets = new Map<string, Buffer>();
-  for (const f of ['site.css', 'site.js', 'icon.svg', 'og.png']) if (existsSync(dir + f)) assets.set(f, readFileSync(dir + f));
+  for (const f of ['site.css', 'site.js', 'icon.png', 'icon-192.png', 'favicon-32.png', 'apple-touch-icon.png', 'logo.png', 'og.png', 'favicon.ico']) if (existsSync(dir + f)) assets.set(f, readFileSync(dir + f));
+  if (existsSync(dir + 'img')) for (const f of readdirSync(dir + 'img')) if (f.endsWith('.webp')) assets.set(f, readFileSync(dir + 'img/' + f));
   if (existsSync(shotsDir)) for (const f of readdirSync(shotsDir)) if (f.endsWith('.png')) assets.set(f, readFileSync(shotsDir + f));
+  const installer = existsSync(installerPath) ? readFileSync(installerPath, 'utf8') : '';
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${PAGES.map((p) => `  <url><loc>${siteUrl}${p.path === '/' ? '/' : p.path}</loc><lastmod>${pages.get(p.path)!.mtime.toISOString().slice(0, 10)}</lastmod><priority>${p.path === '/' ? '1.0' : p.menu ? '0.8' : '0.5'}</priority></url>`).join('\n')}\n</urlset>\n`;
   // /app and /api are NOT disallowed here: they send X-Robots-Tag: noindex, and a crawler blocked by robots.txt would never see it.
-  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
+  const AI_BOTS = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'anthropic-ai', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'Amazonbot', 'Meta-ExternalAgent', 'CCBot', 'Bytespider', 'cohere-ai', 'Googlebot', 'Bingbot'];
+  const robots = `User-agent: *\nAllow: /\n\n${AI_BOTS.map((b) => `User-agent: ${b}\nAllow: /\n`).join('\n')}\nSitemap: ${siteUrl}/sitemap.xml\n`;
   const llms = `# SchoolKick\n\n> Free, open-source (MIT) school attendance software you host yourself. Teachers mark attendance on a phone, families see today's status in a browser, and every correction keeps its history. Early release v0.1: not security audited, not legally reviewed for any country.\n\n## Pages\n${PAGES.map((p) => `- [${p.nav}](${siteUrl}${p.path}): ${p.description}`).join('\n')}\n\n## Source\n- [GitHub repository](${repoUrl})\n- Licence: MIT\n\n## Not built yet\nFees and payments, messaging, password reset by email, timetable and calendar, learning content, QR check-in, native mobile apps.\n`;
-  return { pages, notFound, assets, sitemap, robots, llms };
+  return { pages, notFound, assets, sitemap, robots, llms, installer };
 }

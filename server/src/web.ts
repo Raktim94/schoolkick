@@ -3,9 +3,9 @@ import { compress } from 'hono/compress';
 import { existsSync, readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
-import { loadSite } from './site.ts';
+import { DEB_VERSION, loadSite } from './site.ts';
 
-const MIME: Record<string, string> = { '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.txt': 'text/plain', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.json': 'application/json', '.woff2': 'font/woff2' };
+const MIME: Record<string, string> = { '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.webp': 'image/webp', '.txt': 'text/plain', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.json': 'application/json', '.woff2': 'font/woff2' };
 
 /** Public site (static, SEO-friendly), the app under /app, and crawler files. Registered after the API. */
 export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; appDir: string }) {
@@ -16,6 +16,12 @@ export function mountWeb(app: Hono, opts: { siteUrl: string; repoUrl: string; ap
   app.use('*', compress());
 
   app.get('/robots.txt', (c) => c.text(site.robots));
+  app.get('/install-linux.sh', (c) => (site.installer ? c.body(site.installer, 200, { 'Content-Type': 'text/x-shellscript; charset=utf-8', 'Cache-Control': 'public, max-age=300', 'X-Content-Type-Options': 'nosniff' }) : c.notFound()));
+  app.get('/downloads/:file', (c) => {
+    const m = /^schoolkick-(amd64|arm64)\.deb$/.exec(c.req.param('file'));
+    return m ? c.redirect(`${o.repoUrl}/releases/download/v${DEB_VERSION}/schoolkick_${DEB_VERSION}_${m[1]}.deb`, 302) : c.notFound();
+  });
+  app.get('/favicon.ico', (c) => { const f = site.assets.get('favicon.ico'); return f ? c.body(f as unknown as ArrayBuffer, 200, { 'Content-Type': 'image/x-icon', 'Cache-Control': 'public, max-age=86400' }) : c.notFound(); });
   app.get('/llms.txt', (c) => c.text(site.llms, 200, { 'Cache-Control': 'public, max-age=3600' }));
   app.get('/sitemap.xml', (c) => c.body(site.sitemap, 200, { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }));
 

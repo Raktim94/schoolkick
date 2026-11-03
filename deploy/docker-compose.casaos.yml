@@ -1,0 +1,39 @@
+# For CasaOS "Install a customized app" > Import. Pulls the published image, so nothing is built on the box.
+# The database is not published on any port; change the password below before you put real data in.
+name: schoolkick
+services:
+  app:
+    image: ghcr.io/raktim94/schoolkick:0.1.0
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      DATABASE_URL: postgres://schoolkick:change-this-password@db:5432/schoolkick
+      SITE_URL: http://localhost:8480
+      ALLOW_SIGNUP: "1"
+    ports: ["8480:8080"]
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    x-casaos:
+      ports: [{ container: "8080", description: { en_us: "Web port" } }]
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: schoolkick
+      POSTGRES_PASSWORD: change-this-password
+      POSTGRES_DB: schoolkick
+    volumes: ["/DATA/AppData/schoolkick/pgdata:/var/lib/postgresql/data"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U schoolkick -d schoolkick"], interval: 5s, timeout: 3s, retries: 12 }
+x-casaos:
+  architectures: [amd64, arm64]
+  main: app
+  author: Raktim Ranjit
+  category: Productivity
+  title: { en_us: SchoolKick }
+  tagline: { en_us: School attendance with a kept correction history }
+  description: { en_us: "Open-source attendance and family view for schools, colleges and coaching centres. Early release, not security audited." }
+  icon: https://raw.githubusercontent.com/Raktim94/schoolkick/main/site/icon.png
+  index: /
+  port_map: "8480"

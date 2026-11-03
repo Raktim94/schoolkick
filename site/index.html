@@ -1,67 +1,168 @@
 <main id="main">
-  <div class="wrap">
-    <div class="hero">
-      <div>
-        <h1>Take attendance in a minute. Keep every correction on the record.</h1>
-        <p class="lede">SchoolKick is open-source school software. Teachers mark a class from a phone, families see today’s status in any browser, and when someone fixes a mistake the original entry stays visible.</p>
-        <div class="actions"><a class="btn" href="/app">Open the app</a><a class="btn ghost" href="/get-started">Install in 15 minutes</a></div>
-        <ul class="trust"><li>Free and open source (MIT)</li><li>No app for families to install</li><li>Early release v0.1</li></ul>
-      </div>
-      <figure>
-        %REGISTER%
-        <div class="legend" aria-hidden="true"><span><b>/</b> present</span><span><b>○</b> absent</span><span><b>L</b> late</span><span><b>E</b> excused</span><span>Shaded cell with a dot: corrected, history kept</span></div>
-        <figcaption>A sample register with synthetic names. The app draws the same layout for every class.</figcaption>
-      </figure>
+  <div class="wrap hero">
+    <div>
+      <h1>Attendance that keeps every correction.</h1>
+      <p class="lede">Free, open-source school software you host yourself.</p>
+      <div class="actions"><a class="btn" href="#install">Install in one command</a><a class="btn ghost" href="/screenshots">See it working</a></div>
+      <ul class="trust"><li>MIT licence</li><li>No app for families</li><li>Early release v0.1</li></ul>
     </div>
+    <figure class="ledger">
+      %REGISTER%
+      <div class="correction" role="note"><b>Chitra D., 12 Nov: present changed to late</b><span>Tara T. at 10:14. Reason: arrived after the bell. The first entry stays on record.</span></div>
+      <figcaption>A sample register with synthetic names. The dotted cell was corrected in place.</figcaption>
+    </figure>
   </div>
+  <section class="install" id="install" aria-labelledby="install-h">
+    <div class="wrap">
+      <div class="head rv"><h2 id="install-h">Install it in one command</h2><p class="sub">Pick your system. Every route ends at the same sign-in page, and each box says how far it has been tested.</p></div>
+      <div class="tabs rv" role="tablist" aria-label="Install method"><button role="tab" type="button" id="t-0" data-os="deb" aria-controls="p-0" aria-selected="true">Ubuntu and Debian</button><button role="tab" type="button" id="t-1" data-os="docker" aria-controls="p-1" aria-selected="false">Docker Compose</button><button role="tab" type="button" id="t-2" data-os="node" aria-controls="p-2" aria-selected="false">Node.js</button><button role="tab" type="button" id="t-3" data-os="casaos" aria-controls="p-3" aria-selected="false">CasaOS</button><button role="tab" type="button" id="t-4" data-os="win" aria-controls="p-4" aria-selected="false">Windows</button><button role="tab" type="button" id="t-5" data-os="mac" aria-controls="p-5" aria-selected="false">macOS</button></div>
+      
+      <div class="panel" role="tabpanel" id="p-0" aria-labelledby="t-0" tabindex="0">
+        <div>
+          <h3>One command, then open your browser</h3>
+          <p class="why">Downloads the latest release, checks its SHA-256, installs Docker if it is missing, and starts SchoolKick under systemd.</p>
+          <div class="term"><div class="bar"><span>Terminal</span><button class="copy" type="button" aria-label="Copy the commands">Copy</button></div><pre><code><span class="line"><span class="prompt">$ </span>curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash</span>
+<span class="line c"># then open http://localhost:8480</span></code></pre></div>
+          <div class="dl"><a class="btn sm" href="/downloads/schoolkick-amd64.deb">Download .deb (amd64)</a><a class="btn sm" href="/downloads/schoolkick-arm64.deb">Download .deb (arm64)</a><a class="btn sm ghost" href="/install-linux.sh">Read the script</a><a class="btn sm ghost" href="%REPO_URL%/releases/tag/v0.1.0">Release notes</a></div>
+        </div>
+        <div><ul class="facts"><li>Ubuntu 24.04 and Debian 12 or newer, amd64 and arm64, with systemd.</li><li>Runs in Docker and keeps data in a volume. Settings are in <code>/etc/schoolkick/schoolkick.env</code>.</li><li>Update by running the command again. <code>sudo apt remove schoolkick</code> keeps your data.</li></ul><p class="tested">Installed, reinstalled, removed and purged on native amd64 and arm64 runners in CI.</p></div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-1" aria-labelledby="t-1" tabindex="0">
+        <div>
+          <h3>Build and run from source with Compose</h3>
+          <p class="why">Starts the app and PostgreSQL 16 in two containers. Set a database password first.</p>
+          <div class="term"><div class="bar"><span>Terminal</span><button class="copy" type="button" aria-label="Copy the commands">Copy</button></div><pre><code><span class="line"><span class="prompt">$ </span>git clone https://github.com/Raktim94/schoolkick.git</span>
+<span class="line"><span class="prompt">$ </span>cd schoolkick</span>
+<span class="line"><span class="prompt">$ </span>cp deploy/.env.example deploy/.env   # set POSTGRES_PASSWORD</span>
+<span class="line"><span class="prompt">$ </span>docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build</span>
+<span class="line c"># then open http://localhost:8080/app/</span></code></pre></div>
+          
+        </div>
+        <div><ul class="facts"><li>Needs Docker with Compose v2 on Linux, Windows or macOS.</li><li>Migrations run on start. Set <code>ALLOW_SIGNUP=0</code> once your school exists.</li><li>Check health at <code>/readyz</code>.</li></ul><p class="tested">This is how schoolkick.nodedr.com is built and deployed.</p></div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-2" aria-labelledby="t-2" tabindex="0">
+        <div>
+          <h3>Run it with Node.js and your own PostgreSQL</h3>
+          <p class="why">For development, or when you already run PostgreSQL. The database user must be able to create roles.</p>
+          <div class="term"><div class="bar"><span>Terminal</span><button class="copy" type="button" aria-label="Copy the commands">Copy</button></div><pre><code><span class="line"><span class="prompt">$ </span>git clone https://github.com/Raktim94/schoolkick.git</span>
+<span class="line"><span class="prompt">$ </span>cd schoolkick</span>
+<span class="line"><span class="prompt">$ </span>npm install &amp;&amp; npm run build</span>
+<span class="line"><span class="prompt">$ </span>createdb schoolkick</span>
+<span class="line"><span class="prompt">$ </span>DATABASE_URL=postgres://user:pass@localhost:5432/schoolkick npm start</span>
+<span class="line c"># then open http://localhost:8080/app/</span></code></pre></div>
+          
+        </div>
+        <div><ul class="facts"><li>Node.js 22.18 or newer and PostgreSQL 16.</li><li>Run <code>npm test</code> with <code>TEST_ADMIN_URL</code> set to check your setup.</li></ul><p class="tested">Run from a fresh clone on Linux; 18 of 18 API tests pass.</p></div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-3" aria-labelledby="t-3" tabindex="0">
+        <div>
+          <h3>Import the Compose file in CasaOS</h3>
+          <p class="why">Choose Install a customized app, then Import, and paste the file. It pulls the published image, so nothing is built on the box.</p>
+          <div class="term"><div class="bar"><span>Terminal</span><button class="copy" type="button" aria-label="Copy the commands">Copy</button></div><pre><code><span class="line"><span class="prompt">$ </span>curl -fsSL https://raw.githubusercontent.com/Raktim94/schoolkick/main/deploy/docker-compose.casaos.yml</span>
+<span class="line c"># paste the output into CasaOS, change the database password, then install</span></code></pre></div>
+          <div class="dl"><a class="btn sm ghost" href="%REPO_URL%/blob/main/deploy/docker-compose.casaos.yml">View the CasaOS file</a></div>
+        </div>
+        <div><ul class="facts"><li>amd64 and arm64, so a Raspberry Pi or a Zima board works.</li><li>The app opens on port 8480.</li></ul><p class="tested">The image and Compose layout are tested; the import itself has not been tried on a CasaOS box.</p></div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-4" aria-labelledby="t-4" tabindex="0">
+        <div>
+          <h3>Windows through WSL2</h3>
+          <p class="why">Install Ubuntu under WSL2, then use the same one-line installer inside it.</p>
+          <div class="term"><div class="bar"><span>Terminal</span><button class="copy" type="button" aria-label="Copy the commands">Copy</button></div><pre><code><span class="line"><span class="prompt">$ </span>wsl --install -d Ubuntu</span>
+<span class="line c"># open Ubuntu from the Start menu, then run:</span>
+<span class="line"><span class="prompt">$ </span>curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash</span>
+<span class="line c"># then open http://localhost:8480 in your Windows browser</span></code></pre></div>
+          
+        </div>
+        <div><ul class="facts"><li>Needs a current WSL with systemd (the default for recent Ubuntu images).</li><li>Prefer Docker Desktop? Use the Docker Compose tab in PowerShell.</li></ul><p class="tested">Not yet tried on Windows. Tell us what you see on the issue tracker.</p></div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-5" aria-labelledby="t-5" tabindex="0">
+        <div>
+          <h3>macOS with Docker Desktop</h3>
+          <p class="why">Install Docker Desktop with Homebrew, then build with Compose.</p>
+          <div class="term"><div class="bar"><span>Terminal</span><button class="copy" type="button" aria-label="Copy the commands">Copy</button></div><pre><code><span class="line"><span class="prompt">$ </span>brew install --cask docker</span>
+<span class="line"><span class="prompt">$ </span>git clone https://github.com/Raktim94/schoolkick.git &amp;&amp; cd schoolkick</span>
+<span class="line"><span class="prompt">$ </span>cp deploy/.env.example deploy/.env   # set POSTGRES_PASSWORD</span>
+<span class="line"><span class="prompt">$ </span>docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build</span>
+<span class="line c"># then open http://localhost:8080/app/</span></code></pre></div>
+          
+        </div>
+        <div><ul class="facts"><li>Apple silicon and Intel both work with Docker Desktop.</li><li>Open Docker Desktop once so it can finish setup.</li></ul><p class="tested">Not yet tried on macOS.</p></div>
+      </div>
+    </div>
+  </section>
 
-  <section class="shotband"><div class="wrap">
-    <div class="shot"><img src="/s/dashboard-desktop.png" width="1440" height="970" alt="SchoolKick school overview: today’s attendance split, a seven-day trend, a class-by-day register and a short list of items needing attention"></div>
-    <p class="caption">The school overview, with synthetic demo data. <a href="/screenshots">See more screenshots</a>.</p>
+  <section class="band" id="features" aria-labelledby="f-h"><div class="wrap split">
+    <div class="rv"><h2 id="f-h">What each person gets</h2><p>Built around the school day, in the order it happens.</p></div>
+    <ol class="rows rv">
+      <li><div><h3>Teachers mark a class in a minute</h3><p>One tap marks everyone present, then change the exceptions and save. A draft survives a dropped connection.</p></div></li>
+      <li><div><h3>Families need no app</h3><p>A browser page shows each child’s status today and the last two weeks, and says when the school corrected an entry.</p></div></li>
+      <li><div><h3>Corrections never overwrite</h3><p>Changing a mark needs a reason. The earlier entry stays visible, and the database refuses edits and deletes.</p></div></li>
+      <li><div><h3>Registrars import safely</h3><p>The CSV check lists every problem by row and saves nothing until the whole file is clean.</p></div></li>
+      <li><div><h3>Owners see what needs them</h3><p>Classes that have not taken attendance, recent corrections, and learners with no guardian linked.</p></div></li>
+    </ol>
   </div></section>
 
-  <section class="block"><div class="wrap split">
-    <h2>What each person gets today</h2>
-    <dl class="rows">
-      <div><dt>Teachers</dt><dd>Open a class, mark everyone present with one tap, adjust the exceptions, save. A draft survives a dropped connection.</dd></div>
-      <div><dt>Families</dt><dd>A browser page, no app to install. It shows today’s attendance for each child and the last two weeks, and says when the school corrected an entry.</dd></div>
-      <div><dt>Registrars</dt><dd>Add learners one by one or import a CSV. The importer checks every row first and saves nothing until the whole file is clean.</dd></div>
-      <div><dt>Principals and owners</dt><dd>A school overview with today’s attendance, a trend, a class-by-day register, and a short list of things that need attention. Every change is in the audit log.</dd></div>
-    </dl>
+  <section class="band" aria-labelledby="p-h"><div class="wrap">
+    <h2 id="p-h" class="rv">Made for the people in the room</h2>
+    <div class="pair">
+      <figure class="rv"><div class="shot"><img src="/s/teacher-attendance.webp" width="960" height="960" loading="lazy" alt="A teacher holds a tablet showing an attendance list while pupils sit at their desks"></div><figcaption><b>Teachers</b> take the register on a tablet or phone, in a minute.</figcaption></figure>
+      <figure class="rv"><div class="shot"><img src="/s/family-portal.webp" width="960" height="960" loading="lazy" alt="A parent and child look at a school schedule on a phone"></div><figcaption><b>Families</b> check today’s status from any browser.</figcaption></figure>
+    </div>
   </div></section>
 
-  <section class="block"><div class="wrap split">
-    <div><h2>Corrections never overwrite</h2><p>Changing a mark needs a reason. The new entry is added next to the old one, with who made it and when. Neither teachers nor administrators can edit or delete past entries, and the database enforces that.</p></div>
-    <div class="scroll"><table>
-      <caption class="sr">Example correction history</caption>
-      <thead><tr><th scope="col">Time</th><th scope="col">By</th><th scope="col">Change</th><th scope="col">Reason</th></tr></thead>
+  <section class="band" aria-labelledby="s-h"><div class="wrap">
+    <h2 id="s-h" class="rv">The school overview</h2>
+    <div class="shot rv"><img src="/s/dashboard-desktop.png" width="1440" height="970" loading="lazy" alt="SchoolKick overview with today's attendance split, a trend line, a class-by-day register and a needs-attention list"></div>
+    <p class="caption">Synthetic demo data. <a href="/screenshots">More screenshots, light and dark, phone and desktop</a>.</p>
+  </div></section>
+
+  <section class="band" aria-labelledby="h-h"><div class="wrap split">
+    <div class="rv"><h2 id="h-h">The old mark stays</h2><p>Every change adds a line: who, when, what and why. Nobody can rewrite the past, including the owner.</p></div>
+    <div class="scroll rv"><table class="history">
+      <caption class="sr">Correction history for one entry</caption>
+      <thead><tr><th scope="col">Time</th><th scope="col">By</th><th scope="col">Entry</th><th scope="col">Reason</th></tr></thead>
       <tbody>
-        <tr><td>08:52</td><td>Tara T.</td><td>Marked present</td><td>First entry</td></tr>
-        <tr><td>10:14</td><td>Tara T.</td><td>Present to absent</td><td>Marked the wrong learner</td></tr>
+        <tr><td>08:52</td><td>Tara T.</td><td class="struck">Present</td><td>First entry</td></tr>
+        <tr><td>10:14</td><td>Tara T.</td><td>Late</td><td>Arrived after the bell</td></tr>
       </tbody>
     </table></div>
   </div></section>
 
-  <section class="block"><div class="wrap split">
-    <div><h2>What is built, and what is not</h2><p>This is an early release. The parts below work and are tested. Fees, messaging and learning are planned, not available.</p></div>
-    <div class="scroll"><table>
-      <thead><tr><th scope="col">Area</th><th scope="col">Status</th></tr></thead>
-      <tbody>
-        <tr><td>Institutions, roles, sign-in</td><td class="status-yes">Available</td></tr>
-        <tr><td>Learners, guardians, classes, CSV import</td><td class="status-yes">Available</td></tr>
-        <tr><td>Attendance with correction history and audit log</td><td class="status-yes">Available</td></tr>
-        <tr><td>Family view and school overview dashboard</td><td class="status-yes">Available</td></tr>
-        <tr><td>Fee payments and reconciliation</td><td class="status-no">Planned, next</td></tr>
-        <tr><td>Messaging, learning content, QR check-in, mobile apps</td><td class="status-no">Planned</td></tr>
-      </tbody>
-    </table></div>
+  <section class="band" aria-labelledby="w-h"><div class="wrap">
+    <h2 id="w-h" class="rv">One school day, three screens</h2>
+    <div class="steps3">
+      <div class="rv"><div class="shot"><img src="/s/teacher-roster-mobile.png" width="375" height="1214" loading="lazy" alt="Teacher roster on a phone with one tap to mark everyone present"></div><h3>Take attendance</h3><p>Open a class and mark it present in one tap.</p></div>
+      <div class="rv"><div class="shot"><img src="/s/teacher-correction-mobile.png" width="375" height="1348" loading="lazy" alt="Changing a saved mark asks for a reason"></div><h3>Correct with a reason</h3><p>Fixing a mistake asks why, and keeps the first entry.</p></div>
+      <div class="rv"><div class="shot"><img src="/s/guardian-mobile.png" width="375" height="812" loading="lazy" alt="Family view showing today's status and a 14-day strip"></div><h3>Families look in</h3><p>Today’s status and two weeks, with corrections marked.</p></div>
+    </div>
   </div></section>
 
-  <section class="block"><div class="wrap split">
-    <div><h2>Open source, yours to run</h2><p>The code is MIT licensed. One Docker Compose file starts the app and its database. It also runs on a home server or NAS through CasaOS.</p><p><a href="/get-started">Follow the install steps</a>, read the <a href="/self-hosting">self-hosting guide</a>, check the <a href="/faq">FAQ</a>, or <a href="%REPO_URL%">browse the source</a>. Want to help? See <a href="/contribute">how to contribute</a>.</p></div>
-    <pre><code>git clone %REPO_URL%.git
-cd schoolkick
-docker compose -f deploy/docker-compose.yml up -d
-# open http://localhost:8080</code></pre>
+  <section class="band" aria-labelledby="sec-h"><div class="wrap split">
+    <div class="rv"><h2 id="sec-h">School data stays apart</h2><p>Every request is checked in code, then PostgreSQL enforces the same boundary again. Not audited yet: <a href="/security">read what is and is not covered</a>.</p></div>
+    <svg class="layers rv" viewBox="0 0 640 220" role="img" aria-labelledby="lt ld">
+      <title id="lt">Two checks for every request</title><desc id="ld">A browser request passes the API, which checks role, institution and class, then reaches PostgreSQL, which applies row-level security.</desc>
+      <rect class="box" x="8" y="70" width="150" height="80" rx="10"/><text x="83" y="108" text-anchor="middle">Browser</text><text class="s" x="83" y="130" text-anchor="middle">teacher or family</text>
+      <rect class="box hot" x="245" y="70" width="170" height="80" rx="10"/><text x="330" y="106" text-anchor="middle">API</text><text class="s" x="330" y="128" text-anchor="middle">role, school, class</text>
+      <rect class="box hot" x="500" y="70" width="132" height="80" rx="10"/><text x="566" y="106" text-anchor="middle">PostgreSQL</text><text class="s" x="566" y="128" text-anchor="middle">row-level security</text>
+      <path class="wire w1" d="M160 110 H243"/><path class="wire w2" d="M417 110 H498"/>
+    </svg>
+  </div></section>
+
+  <section class="band faq" aria-labelledby="q-h"><div class="wrap split">
+    <div class="rv"><h2 id="q-h">Questions</h2><p><a href="/faq">All questions and answers</a></p></div>
+    <div class="rv">
+      <details><summary>Is it free?</summary><div><p>Yes. It is MIT licensed and you run it on your own server. There is no paid plan.</p></div></details>
+      <details><summary>Is it ready for real learner data?</summary><div><p>Not yet. It has automated tests but no independent security or accessibility audit and no legal review. Read the security page first.</p></div></details>
+      <details><summary>What can it not do yet?</summary><div><p>Fees, messaging, password reset by email, timetables and native mobile apps. The <a href="/roadmap">roadmap</a> lists the order.</p></div></details>
+      <details><summary>Do families install anything?</summary><div><p>No. It is a web page, and it can be added to a phone’s home screen.</p></div></details>
+    </div>
+  </div></section>
+
+  <section class="closer" aria-labelledby="c-h"><div class="wrap">
+    <h2 id="c-h">Run your first register today.</h2>
+    <p>One command on Ubuntu or Debian. Other systems are in the install tabs.</p>
+    <div class="term"><div class="bar"><span>Terminal</span><button class="copy" type="button" aria-label="Copy the commands">Copy</button></div><pre><code><span class="line"><span class="prompt">$ </span>curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash</span></code></pre></div>
+    <p></p><div class="actions"><a class="btn ghost" href="/get-started">Step-by-step guide</a><a class="btn ghost" href="%REPO_URL%">Source on GitHub</a></div>
   </div></section>
 </main>

@@ -34,6 +34,6 @@ x-casaos:
   title: { en_us: SchoolKick }
   tagline: { en_us: School attendance with a kept correction history }
   description: { en_us: "Open-source attendance and family view for schools, colleges and coaching centres. Early release." }
-  icon: https://raw.githubusercontent.com/Raktim94/schoolkick/main/site/icon.svg
+  icon: https://raw.githubusercontent.com/Raktim94/schoolkick/main/site/icon.png
   index: /
   port_map: "8080"

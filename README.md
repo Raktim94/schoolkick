@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/logo.png" alt="SchoolKick logo" width="160"></p>
+
 # SchoolKick
 
 **SchoolKick is free, open-source school attendance software you host yourself.** Website: [schoolkick.nodedr.com](https://schoolkick.nodedr.com) · [Install guide](https://schoolkick.nodedr.com/get-started) · [Screenshots](https://schoolkick.nodedr.com/screenshots) · [FAQ](https://schoolkick.nodedr.com/faq)
@@ -7,6 +9,8 @@ Open-source school software. Teachers take attendance from a phone, families see
 ![School overview dashboard with today's attendance, trend and class register](docs/screenshots/dashboard-desktop.png)
 
 **Status: early release (v0.1).** Attendance, guardian view, classes, CSV import and the owner dashboard work and are tested. Fees, messaging, learning content and native mobile apps are planned, not built. It has not had a security audit or legal review. Read [what is and is not covered](docs/traceability.md) before putting real learner data in it.
+
+<p align="center"><img src="site/img/teacher-attendance.webp" alt="A teacher takes attendance on a tablet" width="340"> <img src="site/img/family-portal.webp" alt="A parent checks their child's school day on a phone" width="340"></p>
 
 ## What works today
 
@@ -20,6 +24,12 @@ Open-source school software. Teachers take attendance from a phone, families see
 | Overview | Today's split, attendance trend, class-by-day register heatmap, items needing attention; each chart has a table view and keyboard support |
 | CSV import | `name, external_id, guardian_email`; dry run lists every problem, real run is all-or-nothing |
 | Audit log | Append-only, enforced by database triggers and restricted privileges |
+
+## Where it is heading
+
+Fees, QR check-in, study materials, coaching batches, a library, transport alerts and college use are planned, not built. See the [roadmap](https://schoolkick.nodedr.com/roadmap).
+
+<p align="center"><img src="site/img/fee-payment.webp" width="150" alt="Planned: fees"> <img src="site/img/qr-attendance.webp" width="150" alt="Planned: QR check-in"> <img src="site/img/study-materials.webp" width="150" alt="Planned: study materials"> <img src="site/img/safe-transport.webp" width="150" alt="Planned: transport"></p>
 
 ## Run it
 

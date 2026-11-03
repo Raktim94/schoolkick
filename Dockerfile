@@ -19,6 +19,7 @@ COPY server/src server/src
 COPY server/migrations server/migrations
 COPY site site
 COPY docs/screenshots docs/screenshots
+COPY packaging/deb/install-linux.sh packaging/deb/install-linux.sh
 COPY --from=web /src/web/dist web/dist
 USER node
 EXPOSE 8080
