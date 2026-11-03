@@ -1,0 +1,61 @@
+<main id="main">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Take attendance in a minute. Keep every correction on the record.</h1>
+        <p class="lede">CampusOS is open-source school software. Teachers mark a class from a phone, families see today’s status in any browser, and when someone fixes a mistake the original entry stays visible.</p>
+        <div class="actions"><a class="btn" href="/app">Open the app</a><a class="btn ghost" href="/self-hosting">Run it yourself</a></div>
+      </div>
+      <figure>
+        %REGISTER%
+        <div class="legend" aria-hidden="true"><span><b>/</b> present</span><span><b>○</b> absent</span><span><b>L</b> late</span><span><b>E</b> excused</span><span>Shaded cell with a dot: corrected, history kept</span></div>
+        <figcaption>A sample register with synthetic names. The app draws the same layout for every class.</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <section class="block"><div class="wrap split">
+    <h2>What each person gets today</h2>
+    <dl class="rows">
+      <div><dt>Teachers</dt><dd>Open a class, mark everyone present with one tap, adjust the exceptions, save. A draft survives a dropped connection.</dd></div>
+      <div><dt>Families</dt><dd>A browser page, no app to install. It shows today’s attendance for each child and the last two weeks, and says when the school corrected an entry.</dd></div>
+      <div><dt>Registrars</dt><dd>Add learners one by one or import a CSV. The importer checks every row first and saves nothing until the whole file is clean.</dd></div>
+      <div><dt>Principals and owners</dt><dd>A school overview with today’s attendance, a trend, a class-by-day register, and a short list of things that need attention. Every change is in the audit log.</dd></div>
+    </dl>
+  </div></section>
+
+  <section class="block"><div class="wrap split">
+    <div><h2>Corrections never overwrite</h2><p>Changing a mark needs a reason. The new entry is added next to the old one, with who made it and when. Neither teachers nor administrators can edit or delete past entries, and the database enforces that.</p></div>
+    <div class="scroll"><table>
+      <caption class="sr">Example correction history</caption>
+      <thead><tr><th scope="col">Time</th><th scope="col">By</th><th scope="col">Change</th><th scope="col">Reason</th></tr></thead>
+      <tbody>
+        <tr><td>08:52</td><td>Tara T.</td><td>Marked present</td><td>First entry</td></tr>
+        <tr><td>10:14</td><td>Tara T.</td><td>Present to absent</td><td>Marked the wrong learner</td></tr>
+      </tbody>
+    </table></div>
+  </div></section>
+
+  <section class="block"><div class="wrap split">
+    <div><h2>What is built, and what is not</h2><p>This is an early release. The parts below work and are tested. Fees, messaging and learning are planned, not available.</p></div>
+    <div class="scroll"><table>
+      <thead><tr><th scope="col">Area</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+        <tr><td>Institutions, roles, sign-in</td><td class="status-yes">Available</td></tr>
+        <tr><td>Learners, guardians, classes, CSV import</td><td class="status-yes">Available</td></tr>
+        <tr><td>Attendance with correction history and audit log</td><td class="status-yes">Available</td></tr>
+        <tr><td>Family view and school overview dashboard</td><td class="status-yes">Available</td></tr>
+        <tr><td>Fee payments and reconciliation</td><td class="status-no">Planned, next</td></tr>
+        <tr><td>Messaging, learning content, QR check-in, mobile apps</td><td class="status-no">Planned</td></tr>
+      </tbody>
+    </table></div>
+  </div></section>
+
+  <section class="block"><div class="wrap split">
+    <div><h2>Open source, yours to run</h2><p>The code is MIT licensed. One Docker Compose file starts the app and its database. It also runs on a home server or NAS through CasaOS.</p><p><a href="/self-hosting">Read the self-hosting guide</a> or <a href="%REPO_URL%">browse the source</a>.</p></div>
+    <pre><code>git clone %REPO_URL%.git
+cd campusos
+docker compose -f deploy/docker-compose.yml up -d
+# open http://localhost:8080</code></pre>
+  </div></section>
+</main>

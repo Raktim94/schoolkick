@@ -1,0 +1,28 @@
+<main id="main" class="page"><div class="wrap">
+  <p class="crumbs"><a href="/">Home</a> / Security and privacy</p>
+  <h1>Security and privacy: what is in place, and what is not</h1>
+  <p class="lede">School data is about children. This page lists the controls that exist in the code today and the ones that do not.</p>
+
+  <section class="block"><div class="split"><h2>In place and tested</h2><div>
+    <ul class="plain">
+      <li><b>Default deny.</b> Every API route must name the roles that may call it, or be marked public on purpose. A test calls every route without signing in and expects refusal.</li>
+      <li><b>Tenant isolation in two layers.</b> Queries filter by institution, and the database also enforces it with row-level security, so a forgotten filter returns nothing instead of another school’s rows.</li>
+      <li><b>Teachers see only their classes.</b> Guardians see only learners linked to them. Both are checked on the server for every request.</li>
+      <li><b>Append-only record.</b> Attendance events and the audit log cannot be updated or deleted. A database trigger and a privilege restriction both refuse it.</li>
+      <li><b>Passwords</b> are hashed with scrypt. Sessions are random tokens stored hashed, sent in an HttpOnly, SameSite cookie, and are revoked on sign-out.</li>
+      <li><b>Request protection.</b> Writes need a custom header and a same-origin check. Sign-in and sign-up are rate limited. Request bodies are size limited.</li>
+      <li><b>Browser protection.</b> A strict content security policy, no framing, and no third-party scripts, fonts or trackers on any page.</li>
+      <li><b>Minimal data.</b> A learner record holds a name and an optional student ID. There is no analytics and no advertising.</li>
+    </ul>
+  </div></div></section>
+
+  <section class="block"><div class="split"><h2>Not done yet</h2><div>
+    <ul class="plain">
+      <li>No independent security audit or penetration test.</li>
+      <li>No two-factor sign-in, single sign-on or password reset by email.</li>
+      <li>No legal review for any country. Child-data rules differ by region, so check them before real use.</li>
+      <li>Backups are yours to run. The self-hosting guide shows how, and recovery has not been rehearsed for you.</li>
+    </ul>
+    <p>If you find a vulnerability, please report it privately through the <a href="%REPO_URL%/security/advisories/new">repository’s security advisory form</a>.</p>
+  </div></div></section>
+</div></main>

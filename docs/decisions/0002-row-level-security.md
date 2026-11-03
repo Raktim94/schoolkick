@@ -1,0 +1,2 @@
+# 0002 Tenant isolation: code scoping plus PostgreSQL RLS
+Status: accepted. Each request runs in a transaction under an unprivileged role with `app.tenant_id` set; policies on tenant tables reject other tenants' rows. A forgotten WHERE clause then returns nothing instead of leaking. Users, sessions and tenants are outside RLS because sign-in happens before a tenant is known. Cost: the migration user must be able to create roles.

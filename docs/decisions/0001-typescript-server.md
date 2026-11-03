@@ -1,0 +1,2 @@
+# 0001 Server language: TypeScript on Node, not Go
+Status: accepted (reversible). The PRD suggested Go. In the build environment the Go module proxy was blocked by policy, so Go dependencies could not be fetched. Node 22 runs TypeScript directly (type stripping), so there is no build step for the server and one language across server and web. Cost: a larger runtime image than a static Go binary. Revisit if footprint matters; the API contract (OpenAPI) is language-neutral.

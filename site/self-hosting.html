@@ -1,0 +1,33 @@
+<main id="main" class="page"><div class="wrap">
+  <p class="crumbs"><a href="/">Home</a> / Self-hosting</p>
+  <h1>Self-hosting CampusOS with Docker or CasaOS</h1>
+  <p class="lede">One container for the app and one for PostgreSQL. It runs on Linux, Windows (Docker Desktop) and macOS, on x86 and ARM.</p>
+
+  <section class="block"><div class="split"><h2>Start it</h2><div>
+    <pre><code>git clone %REPO_URL%.git
+cd campusos
+cp deploy/.env.example deploy/.env      # set a database password and SITE_URL
+docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d</code></pre>
+    <p>Open <code>http://localhost:8080</code>, choose “Create institution”, and you are the administrator. Migrations run on start. Set <code>ALLOW_SIGNUP=0</code> once your institution exists to close public sign-up.</p>
+  </div></div></section>
+
+  <section class="block"><div class="split"><h2>Settings</h2><div class="scroll"><table>
+    <thead><tr><th scope="col">Variable</th><th scope="col">Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>DATABASE_URL</code></td><td>PostgreSQL connection string. Set by the compose file.</td></tr>
+      <tr><td><code>SITE_URL</code></td><td>Public address, used in page metadata and the sitemap. Example: <code>https://school.example.org</code></td></tr>
+      <tr><td><code>ALLOW_SIGNUP</code></td><td><code>1</code> lets anyone create an institution. <code>0</code> closes it.</td></tr>
+      <tr><td><code>PORT</code></td><td>Port inside the container. Default 8080.</td></tr>
+    </tbody>
+  </table></div></div></section>
+
+  <section class="block"><div class="split"><h2>HTTPS and backups</h2><div>
+    <p>Put a reverse proxy that terminates HTTPS in front of the app, such as Caddy or Nginx, and forward the <code>X-Forwarded-For</code> and <code>X-Forwarded-Proto</code> headers. Session cookies become Secure when the request is HTTPS.</p>
+    <p>Back up the database with <code>pg_dump</code>. The data volume is named <code>campusos-db</code>.</p>
+    <pre><code>docker compose -f deploy/docker-compose.yml exec db pg_dump -U campusos campusos &gt; backup.sql</code></pre>
+  </div></div></section>
+
+  <section class="block"><div class="split"><h2>CasaOS</h2><div>
+    <p>In CasaOS choose <b>Install a customized app</b>, then <b>Import</b>, and paste the contents of <code>deploy/docker-compose.yml</code>. The file carries the CasaOS metadata for name, icon, port and data volume.</p>
+  </div></div></section>
+</div></main>

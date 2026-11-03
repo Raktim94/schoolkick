@@ -1,0 +1,2 @@
+{ "appId": "org.campusos.app", "appName": "CampusOS", "webDir": "www",
+  "server": { "url": "https://YOUR-CAMPUSOS-HOST/app/", "cleartext": false } }
