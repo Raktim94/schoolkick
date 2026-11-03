@@ -10,9 +10,7 @@ import { Link, navigate, usePath } from './router';
 import { Empty, Loading, Status, useAction, useTheme } from './ui';
 import type { Theme } from './ui';
 
-const Logo = ({ size = 28 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor" /><path d="M12 24 32 14l20 10-20 10z" fill="#fff" /><path d="M20 32v10c0 4 6 8 12 8s12-4 12-8V32l-12 6z" fill="#fff" opacity=".85" /></svg>
-);
+const Logo = ({ size = 28 }: { size?: number }) => <img className="app-mark" src="/app/icon-192.png" width={size} height={size} alt="" />;
 const ICONS: Record<string, string> = {
   overview: 'M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-16v5h6V4h-6Z',
   classes: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Zm2 14h13M8 7h7',
@@ -20,6 +18,7 @@ const ICONS: Record<string, string> = {
   people: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-6 9a6 6 0 0 1 12 0m1-9a3 3 0 1 0 0-6m3 15a5 5 0 0 0-3-4.6',
   audit: 'M6 3h9l4 4v14H6V3Zm8 0v5h5M9 13h7M9 17h7',
   today: 'M5 5h14v15H5V5Zm0 5h14M9 3v4m6-4v4',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
 };
 const Icon = ({ name }: { name: string }) => <svg className="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={ICONS[name]} /></svg>;
 
@@ -50,6 +49,7 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
   const [theme, setTheme] = useTheme();
   const path = usePath();
   const items = navFor(active);
+  const moreActive = items.slice(3).some((i) => i.to === '/' ? path === '/' : path.startsWith(i.to));
   const out = async () => { await api('POST', '/auth/logout').catch(() => {}); onSignOut(); };
   const switchRole = (r: Role) => { setActive(r); try { localStorage.setItem('schoolkick:role', r); } catch { /* ignore */ } navigate('/'); };
   const classId = /^\/classes\/([0-9a-f-]{36})$/.exec(path)?.[1];
@@ -57,7 +57,7 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
   let page: ReactNode, title = 'Not found';
   const staff = active === 'owner' || active === 'registrar';
   if (path === '/') {
-    page = staff ? <Overview /> : active === 'teacher' ? <Today /> : active === 'guardian' ? <Guardian /> : <Empty title="Fees and reconciliation are planned for the next release" hint="Nothing to do here yet." />;
+    page = staff ? <Overview canAudit={active === 'owner'} /> : active === 'teacher' ? <Today /> : active === 'guardian' ? <Guardian /> : <Empty title="Fees and reconciliation are planned for the next release" hint="Nothing to do here yet." />;
     title = items[0].label;
   } else if (classId && (staff || active === 'teacher')) { page = <Attendance key={classId} classId={classId} back={staff ? '/classes' : '/'} />; title = 'Attendance'; }
   else if (staff && path === '/classes') { page = <Classes />; title = 'Classes'; }
@@ -75,7 +75,7 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
       <button className="btn secondary" onClick={out}>Sign out</button>
     </div>
   );
-  const links = (cls: string) => items.map((i) => {
+  const links = (cls: string, list = items) => list.map((i) => {
     const on = i.to === '/' ? path === '/' : path.startsWith(i.to);
     return <li key={i.to}><Link to={i.to} className={cls} aria-current={on ? 'page' : undefined}><Icon name={i.icon} />{i.label}</Link></li>;
   });
@@ -93,7 +93,13 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
         <details className="menu"><summary>Account</summary>{account}</details>
       </header>
       <main id="main" tabIndex={-1}>{page}</main>
-      {items.length > 1 && <nav className="tabbar" aria-label="Main"><ul>{links('tab')}</ul></nav>}
+      <nav className="tabbar" aria-label="Main"><ul>
+        {links('tab', items.slice(0, 3))}
+        {items.length > 3 && <li className="more-item"><details className="more-nav" key={path}>
+          <summary className={`tab${moreActive ? ' more-active' : ''}`} aria-label="More pages" aria-current={moreActive ? 'page' : undefined}><Icon name="more" /><span>More</span></summary>
+          <ul aria-label="More pages">{links('more-link', items.slice(3))}</ul>
+        </details></li>}
+      </ul></nav>
     </div>
   );
 }
@@ -125,7 +131,8 @@ function Auth({ onAuthed }: { onAuthed: () => void }) {
         {act.msg && <Status kind={act.msg.kind}>{act.msg.text}</Status>}
         <button className="btn" disabled={act.busy}>{act.busy ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create institution'}</button>
       </form>
-      <p className="muted"><a href="/">About SchoolKick</a>. Early release: do not use with real learner data until you have reviewed security and local privacy rules.</p>
+      <p className="muted"><a href="/">About SchoolKick</a> · <a href="/docs">Documentation</a> · <a href="/license">AGPL-3.0</a></p>
+      <p className="muted">Early release: review the security notes and your local privacy rules before using real learner data.</p>
     </main>
   );
 }

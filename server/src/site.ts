@@ -5,6 +5,7 @@ export type SitePage = { path: string; file: string; title: string; description:
 export const PAGES: SitePage[] = [
   { path: '/', file: 'index.html', nav: 'Home', menu: false, title: 'SchoolKick: free open-source school attendance software', description: 'Free, open-source school software you host yourself. Teachers take attendance on a phone, families see today’s status in a browser, and every correction keeps its history.' },
   { path: '/features', file: 'features.html', nav: 'Features', menu: true, title: 'Features: attendance, family view, CSV import | SchoolKick', description: 'Attendance with correction history, a family view that needs no app, a school overview dashboard and a CSV importer that checks every row first.' },
+  { path: '/docs', file: 'docs.html', nav: 'Docs', menu: true, title: 'SchoolKick documentation: install, operation and API', description: 'Guides for installing and self-hosting SchoolKick, using its attendance and guardian features, reviewing security, and reading the API reference.' },
   { path: '/get-started', file: 'get-started.html', nav: 'Get started', menu: true, kind: 'howto', title: 'Install SchoolKick: Docker, Node.js or CasaOS, step by step', description: 'Install the open-source school attendance app in about 15 minutes with Docker Compose or Node.js and PostgreSQL, then create your institution and take your first register.' },
   { path: '/screenshots', file: 'screenshots.html', nav: 'Screenshots', menu: true, title: 'Screenshots of the SchoolKick app on phone and desktop', description: 'Real screenshots of the teacher roster, correction history, family view, school overview and CSV import, in light and dark themes. All names are synthetic.' },
   { path: '/self-hosting', file: 'self-hosting.html', nav: 'Self-hosting', menu: true, title: 'Self-host SchoolKick with Docker or CasaOS', description: 'Run the open-source school platform on your own server with one Docker Compose file, or import it into CasaOS on a home server.' },
@@ -13,6 +14,7 @@ export const PAGES: SitePage[] = [
   { path: '/roadmap', file: 'roadmap.html', nav: 'Roadmap', menu: false, title: 'SchoolKick roadmap: what is built and what comes next', description: 'What works in v0.1, the next planned slices (password reset, fees, notifications) and what is deliberately not planned until real schools confirm it.' },
   { path: '/contribute', file: 'contribute.html', nav: 'Contribute', menu: false, title: 'Contribute to SchoolKick: setup, checks and pull requests', description: 'How to run SchoolKick locally, the checks to run before a pull request, how the code is organised and the rules that keep it safe for school data.' },
   { path: '/contributors', file: 'contributors.html', nav: 'Contributors', menu: false, title: 'SchoolKick contributors: the people building open-source school software', description: 'Meet the maintainer and contributors of SchoolKick, the free open-source school attendance platform, and find out how to report issues, send fixes or review security.' },
+  { path: '/license', file: 'license.html', nav: 'License', menu: false, title: 'SchoolKick license: GNU AGPL v3.0 only', description: 'SchoolKick is free software under the GNU Affero General Public License version 3 only (AGPL-3.0-only). Read the complete license text.' },
 ];
 const dir = fileURLToPath(new URL('../../site/', import.meta.url));
 const installerPath = fileURLToPath(new URL('../../packaging/deb/install-linux.sh', import.meta.url));
@@ -78,7 +80,7 @@ function layout(p: { title: string; description: string; path?: string; nav?: st
 ${p.noindex ? '<meta name="robots" content="noindex">' : `<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1"><link rel="canonical" href="${url}">`}
 <meta name="author" content="Raktim Ranjit"><link rel="alternate" type="text/plain" href="/llms.txt" title="Plain-text summary for AI assistants">
 <meta property="og:type" content="website"><meta property="og:site_name" content="SchoolKick"><meta property="og:locale" content="en"><meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.description)}"><meta property="og:url" content="${url}"><meta property="og:image" content="${siteUrl}/s/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="A school attendance register with slash marks for present and circles for absent">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${siteUrl}/s/og.png"><meta name="theme-color" content="#2459A6">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.title)}"><meta name="twitter:description" content="${esc(p.description)}"><meta name="twitter:image" content="${siteUrl}/s/og.png"><meta name="theme-color" content="#174b3b">
 <script src="/s/site.js"></script><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/s/favicon-32.png" type="image/png" sizes="32x32"><link rel="icon" href="/s/icon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/s/apple-touch-icon.png"><link rel="stylesheet" href="/s/site.css">
 ${ld.map((d) => `<script type="application/ld+json">${JSON.stringify(d)}</script>`).join('\n')}
 </head><body><a class="skip" href="#main">Skip to content</a>
@@ -90,8 +92,8 @@ ${main}
 <footer><div class="wrap foot">
 <div><a class="brand" href="/">${logo} SchoolKick</a><p>Open-source school attendance, AGPL-3.0 licensed. Early release: not security audited and not legally reviewed for any country.</p></div>
 <nav aria-label="Product"><h2>Product</h2>${['/features', '/screenshots', '/roadmap', '/faq'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}</nav>
-<nav aria-label="Run it"><h2>Run it</h2>${['/get-started', '/self-hosting', '/security'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}</nav>
-<nav aria-label="Project"><h2>Project</h2><a href="${repoUrl}">Source code</a><a href="${repoUrl}/issues">Report an issue</a>${['/contribute', '/contributors'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}<a href="/llms.txt">llms.txt</a></nav>
+<nav aria-label="Documentation"><h2>Documentation</h2>${['/docs', '/get-started', '/self-hosting', '/security'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}</nav>
+<nav aria-label="Project"><h2>Project</h2><a href="${repoUrl}">Source code</a><a href="${repoUrl}/issues">Report an issue</a>${['/license', '/contribute', '/contributors'].map((x) => link(PAGES.find((q) => q.path === x)!)).join('')}<a href="/llms.txt">llms.txt</a></nav>
 </div></footer>
 </body></html>`;
 }
@@ -109,7 +111,7 @@ export function loadSite(siteUrl: string, repoUrl: string) {
   const notFound = layout({ title: 'Page not found | SchoolKick', description: 'This page does not exist.', noindex: true }, fill(readFileSync(dir + '404.html', 'utf8')), siteUrl, repoUrl);
   const assets = new Map<string, Buffer>();
   for (const f of ['site.css', 'site.js', 'icon.png', 'icon-192.png', 'favicon-32.png', 'apple-touch-icon.png', 'logo.png', 'og.png', 'favicon.ico']) if (existsSync(dir + f)) assets.set(f, readFileSync(dir + f));
-  if (existsSync(dir + 'img')) for (const f of readdirSync(dir + 'img')) if (f.endsWith('.webp')) assets.set(f, readFileSync(dir + 'img/' + f));
+  if (existsSync(dir + 'img')) for (const f of readdirSync(dir + 'img')) if (f.endsWith('.webp') || f.endsWith('.png')) assets.set(f, readFileSync(dir + 'img/' + f));
   if (existsSync(shotsDir)) for (const f of readdirSync(shotsDir)) if (f.endsWith('.png')) assets.set(f, readFileSync(shotsDir + f));
   const installer = existsSync(installerPath) ? readFileSync(installerPath, 'utf8') : '';
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${PAGES.map((p) => `  <url><loc>${siteUrl}${p.path === '/' ? '/' : p.path}</loc><lastmod>${pages.get(p.path)!.mtime.toISOString().slice(0, 10)}</lastmod><priority>${p.path === '/' ? '1.0' : p.menu ? '0.8' : '0.5'}</priority></url>`).join('\n')}\n</urlset>\n`;

@@ -13,10 +13,11 @@ type Data = {
 };
 const RANGES = [7, 14, 30];
 
-export function Overview() {
+export function Overview({ canAudit = false }: { canAudit?: boolean }) {
   const [days, setDays] = useState(14);
   const { data, error, loading, reload } = useApi<Data>(`/insights/overview?days=${days}`);
-  if (!data) return error ? <Status kind="error">{error}</Status> : <Loading />;
+  const shortcuts = <nav className="dashboard-links" aria-label="Workspace shortcuts"><span>Go to</span><Link to="/classes">Classes</Link><Link to="/learners">Learners</Link><Link to="/people">People</Link>{canAudit && <Link to="/audit">Audit log</Link>}</nav>;
+  if (!data) return <><PageHead title="Overview" />{shortcuts}{error ? <Status kind="error">{error}</Status> : <Loading />}</>;
   const t = data.today, marked = t.expected - t.unmarked, attended = t.present + t.late;
   const parts: Part[] = [
     { key: 'present', label: 'Present', n: t.present, css: 'c-present' }, { key: 'absent', label: 'Absent', n: t.absent, css: 'c-absent' },
@@ -34,6 +35,7 @@ export function Overview() {
         </div>
         <button className="btn secondary" onClick={reload}>Refresh</button>
       </PageHead>
+      {shortcuts}
 
       {empty ? (
         <Empty title="Add learners and classes to see attendance here" hint="Create a class, enrol learners, and assign a teacher. The overview fills in as soon as attendance is taken.">
