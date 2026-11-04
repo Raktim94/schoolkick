@@ -25,7 +25,7 @@ export function Guardian() {
                 <ul className="strip" aria-label={`Attendance for ${l.name}, last two weeks`}>
                   {l.recent.map((r) => <li key={r.day} className={`mark ${r.status}`} title={`${fmtDay(r.day, { weekday: 'long', month: 'long', day: 'numeric' })}: ${STATUS[r.status].label}`}><small>{fmtDay(r.day, { weekday: 'narrow' })}</small><i aria-hidden="true">{STATUS[r.status].glyph}</i><span className="sr">{fmtDay(r.day)}: {STATUS[r.status].label}</span></li>)}
                 </ul>
-                <p className="muted small-print">/ present &nbsp; ○ absent &nbsp; L late &nbsp; E excused. Days with no mark are not shown.</p>
+                <p className="muted small-print">✓ present &nbsp; ○ absent &nbsp; L late &nbsp; E excused. Days with no mark are not shown.</p>
               </>
             )}
           </section>

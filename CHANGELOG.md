@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fixed low-contrast text on the teacher "Take attendance" button, the cramped guardian two-week strip (weekday labels now sit above the marks; present is shown as a check), the unreadable stacked fee actions (now clear expandable panels) and overlapping date labels on the mobile attendance chart.
 - Standardized new source, Docker and package configurations on app port 3847; configured host port overrides are preserved.
 - Added a current-source one-command installer with generated database credentials, readiness checks and existing-installation protection.
 - Expanded the installation page with complete setup commands and the older Debian package’s port distinction.

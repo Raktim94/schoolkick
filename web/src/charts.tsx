@@ -4,7 +4,7 @@ import type { KeyboardEvent, PointerEvent, ReactNode } from 'react';
 export type Status = 'present' | 'absent' | 'late' | 'excused';
 // Ledger marks: the glyph carries identity so colour is never the only cue.
 export const STATUS: Record<Status, { label: string; glyph: string }> = {
-  present: { label: 'Present', glyph: '/' }, absent: { label: 'Absent', glyph: '○' }, late: { label: 'Late', glyph: 'L' }, excused: { label: 'Excused', glyph: 'E' },
+  present: { label: 'Present', glyph: '✓' }, absent: { label: 'Absent', glyph: '○' }, late: { label: 'Late', glyph: 'L' }, excused: { label: 'Excused', glyph: 'E' },
 };
 export const StatusMark = ({ status, corrected }: { status: Status; corrected?: boolean }) => (
   <span className={`mark ${status}`}><i aria-hidden="true">{STATUS[status].glyph}</i>{STATUS[status].label}{corrected && <span className="tag" title="The school corrected this entry. The history is kept.">Corrected</span>}</span>
