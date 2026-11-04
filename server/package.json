@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/main.ts",
     "dev": "node --watch src/main.ts",
-    "test": "node --test \"test/*.test.ts\"",
+    "test": "node --test --test-concurrency=1 \"test/*.test.ts\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
