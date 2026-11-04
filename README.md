@@ -67,11 +67,11 @@ Permissions in detail: [roles and data boundaries](docs/wiki/04-roles-and-permis
 
 All names and records in screenshots are fictional demonstration data.
 
-![SchoolKick demo: overview, teacher attendance, family view and import checks](docs/screenshots/schoolkick-demo.gif)
+![SchoolKick school overview on desktop in the redesigned interface](docs/screenshots/dashboard-desktop.png)
 
-| School overview | Teacher register on a phone | Family view on a phone |
+| Fees (finance) | Teacher register on a phone | Family view on a phone |
 |---|---|---|
-| ![SchoolKick dashboard showing today's attendance, class registers and items needing attention](docs/screenshots/dashboard-desktop.png) | ![SchoolKick teacher roster on a phone](docs/screenshots/teacher-roster-mobile.png) | ![SchoolKick guardian view on a phone](docs/screenshots/guardian-mobile.png) |
+| ![SchoolKick fees list for finance staff with status pills and invoice actions](docs/screenshots/fees-staff-desktop.png) | ![SchoolKick teacher roster on a phone](docs/screenshots/teacher-roster-mobile.png) | ![SchoolKick guardian view on a phone](docs/screenshots/guardian-mobile.png) |
 
 ## Install
 
@@ -146,7 +146,7 @@ Questions and bugs: [open an issue](https://github.com/Raktim94/schoolkick/issue
 
 ## Technology
 
-- **Web application:** React, TypeScript and Vite
+- **Web application:** React, TypeScript, Vite, Tailwind CSS v4 and the free [BoardUI](https://www.boardui.com/) components (MIT; see [third-party notices](THIRD-PARTY-NOTICES.md))
 - **Public website:** Next.js static export, TypeScript and React
 - **API and web server:** Node.js, Hono and PostgreSQL
 - **Mobile packaging:** Capacitor

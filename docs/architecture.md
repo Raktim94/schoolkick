@@ -11,7 +11,7 @@ Browser (PWA, React)  ──►  Hono server (Node 22)  ──►  PostgreSQL 16
 
 **Data** (`server/migrations`): plain SQL, applied under an advisory lock. `attendance_events` and `audit_events` reject UPDATE and DELETE by trigger and by privilege. The current mark is the latest event per class, learner and day. Corrections require a reason and create an `attendance.correct` audit event.
 
-**Web** (`web/src`): History API routing under `/app`, no UI or chart library. Charts are SVG/CSS grid with tooltip, keyboard reading and a table view. A service worker caches only the app shell, never API responses.
+**Web** (`web/src`): History API routing under `/app`. UI built on Tailwind CSS v4 with source copied from the free tier of [BoardUI](https://www.boardui.com/) (MIT, see `THIRD-PARTY-NOTICES.md`) and React Aria for accessible primitives; the older screen styles live in a lower CSS layer (`web/src/styles.css`) and are being migrated. No chart library: charts are SVG/CSS grid with tooltip, keyboard reading and a table view. A service worker caches only the app shell, never API responses.
 
 **Public site** (`site/`, `server/src/site.ts`): static HTML with unique title, description, canonical, Open Graph and JSON-LD per page, sitemap, robots.txt, real 404 status. `/app` and `/api` send `X-Robots-Tag: noindex`.
 

@@ -55,8 +55,16 @@ export type Theme = 'auto' | 'light' | 'dark';
 export function useTheme(): [Theme, (t: Theme) => void] {
   const [t, setT] = useState<Theme>(() => { try { return (localStorage.getItem('schoolkick:theme') as Theme) || 'auto'; } catch { return 'auto'; } });
   useEffect(() => {
-    if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.dataset.theme = t;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => {
+      const dark = t === 'dark' || (t === 'auto' && mq.matches);
+      document.documentElement.classList.toggle('dark', dark);
+      if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.dataset.theme = t;
+    };
+    apply();
     try { localStorage.setItem('schoolkick:theme', t); } catch { /* storage unavailable */ }
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
   }, [t]);
   return [t, setT];
 }

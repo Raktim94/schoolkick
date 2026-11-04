@@ -9,6 +9,9 @@ import { Checkout, GuardianFees, Receipt, Reconciliation, Refunds, StaffFees } f
 import { Guardian } from './Guardian';
 import { Overview } from './Overview';
 import { Link, navigate, usePath } from './router';
+import { RiSearchLine, RiMoonLine, RiSunLine, RiComputerLine, RiLogoutBoxRLine, RiExchangeLine } from '@remixicon/react';
+import { Avatar } from '@/components/base/avatar/avatar';
+import { CommandPalette, CommandPaletteItem, CommandPaletteSection } from '@/components/base/command-palette/command-palette';
 import { Empty, Loading, Status, useAction, useTheme } from './ui';
 import type { Theme } from './ui';
 
@@ -56,6 +59,7 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
   const roles = ORDER.filter((r) => me.roles.includes(r));
   const [active, setActive] = useState<Role>(() => { try { const s = localStorage.getItem('schoolkick:role') as Role; return roles.includes(s) ? s : roles[0]; } catch { return roles[0]; } });
   const [theme, setTheme] = useTheme();
+  const [palette, setPalette] = useState(false);
   const path = usePath();
   const items = navFor(active);
   const moreActive = items.slice(3).some((i) => i.to === '/' ? path === '/' : path.startsWith(i.to));
@@ -92,7 +96,7 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
     <div className="account">
       {roles.length > 1 && <label>Viewing as<select value={active} onChange={(e) => switchRole(e.target.value as Role)}>{roles.map((r) => <option key={r} value={r}>{ROLE_LABEL[r]}</option>)}</select></label>}
       <label>Theme<select value={theme} onChange={(e) => setTheme(e.target.value as Theme)}><option value="auto">Match system</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
-      <p className="who"><b>{me.name}</b><span className="muted">{ROLE_LABEL[active]}</span></p>
+      <p className="who-row"><Avatar size="md" color="blue" initials={me.name.trim().charAt(0).toUpperCase()} aria-hidden="true" /><span className="who"><b>{me.name}</b><span className="muted">{ROLE_LABEL[active]}</span></span></p>
       <button className="btn secondary" onClick={out}>Sign out</button>
     </div>
   );
@@ -106,13 +110,32 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
       <a className="skip" href="#main">Skip to content</a>
       <aside className="side">
         <p className="inst"><Logo /><b>{me.institution}</b></p>
+        <button type="button" className="search-trigger" onClick={() => setPalette(true)}><RiSearchLine className="size-4" aria-hidden /><span>Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
         <nav aria-label="Main"><ul className="nav">{links('nav-link')}</ul></nav>
         {account}
       </aside>
       <header className="mtop">
         <span className="inst"><Logo size={24} /><b>{me.institution}</b></span>
-        <details className="menu"><summary>Account</summary>{account}</details>
+        <span className="mtop-actions">
+          <button type="button" className="icon-btn" onClick={() => setPalette(true)} aria-label="Search pages and actions"><RiSearchLine className="size-5" aria-hidden /></button>
+          <details className="menu"><summary>Account</summary>{account}</details>
+        </span>
       </header>
+      <CommandPalette isOpen={palette} onOpenChange={setPalette} aria-label="Search pages and actions" placeholder="Go to a page or run an action…"
+        onAction={(k) => { const id = String(k);
+          if (id.startsWith('go:')) navigate(id.slice(3));
+          else if (id.startsWith('theme:')) setTheme(id.slice(6) as Theme);
+          else if (id.startsWith('role:')) switchRole(id.slice(5) as Role);
+          else if (id === 'out') void out(); }}>
+        <CommandPaletteSection title="Pages">{items.map((i) => <CommandPaletteItem key={i.to} id={`go:${i.to}`}>{i.label}</CommandPaletteItem>)}</CommandPaletteSection>
+        {roles.length > 1 && <CommandPaletteSection title="View as">{roles.filter((r) => r !== active).map((r) => <CommandPaletteItem key={r} id={`role:${r}`} icon={RiExchangeLine}>{ROLE_LABEL[r]}</CommandPaletteItem>)}</CommandPaletteSection>}
+        <CommandPaletteSection title="Appearance">
+          <CommandPaletteItem id="theme:light" icon={RiSunLine}>Light theme</CommandPaletteItem>
+          <CommandPaletteItem id="theme:dark" icon={RiMoonLine}>Dark theme</CommandPaletteItem>
+          <CommandPaletteItem id="theme:auto" icon={RiComputerLine}>Match system theme</CommandPaletteItem>
+        </CommandPaletteSection>
+        <CommandPaletteSection title="Account"><CommandPaletteItem id="out" icon={RiLogoutBoxRLine}>Sign out</CommandPaletteItem></CommandPaletteSection>
+      </CommandPalette>
       <main id="main" tabIndex={-1}>{page}</main>
       <nav className="tabbar" aria-label="Main"><ul>
         {links('tab', items.slice(0, 3))}
