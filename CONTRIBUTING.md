@@ -6,3 +6,5 @@
 4. UI changes: keep status non-colour-only, keyboard operable, and check light, dark and 375px widths. `npm run e2e` must pass with no console errors.
 5. By opening a pull request you agree to the contribution terms in [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md): you keep your copyright and grant the maintainer the right to also distribute it under other licences.
 6. Do not add real learner data to tests, screenshots or issues.
+
+7. Re-recording the README clips after a UI change: start the app with `PAYMENTS_SANDBOX=1 PAYMENT_WEBHOOK_SECRET=x`, run `FRAMES=/tmp/sk-frames node e2e/gifs.mjs`, then `python3 e2e/gifs.py /tmp/sk-frames` (needs Pillow). Output goes to `docs/gifs/`.

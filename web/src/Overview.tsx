@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useCountUp } from '@/hooks/use-count-up';
 import { Register, SegBar, Trend, fmtDay } from './charts';
 import type { Part } from './charts';
 import { Link, navigate } from './router';
@@ -46,7 +47,7 @@ export function Overview({ canAudit = false }: { canAudit?: boolean }) {
           <div className="dash-main">
             <section className="panel hero-panel" aria-labelledby="today-h">
               <h2 id="today-h">Today</h2>
-              <div className="hero-fig"><span className="big">{marked ? `${Math.round((attended / marked) * 100)}%` : '—'}</span><span className="muted">{marked ? `present or late, ${marked} of ${t.expected} learners marked` : 'No attendance recorded yet today'}</span></div>
+              <div className="hero-fig"><span className="big">{marked ? <CountPct value={Math.round((attended / marked) * 100)} /> : '—'}</span><span className="muted">{marked ? `present or late, ${marked} of ${t.expected} learners marked` : 'No attendance recorded yet today'}</span></div>
               <SegBar parts={parts} total={t.expected} name="Today’s attendance" />
             </section>
             <section className="panel" aria-labelledby="trend-h"><h2 id="trend-h">Attendance rate</h2><Trend series={data.series} /></section>
@@ -69,4 +70,13 @@ export function Overview({ canAudit = false }: { canAudit?: boolean }) {
       )}
     </div>
   );
+}
+
+/** Rolls the headline percentage up from 0 on first view; shows the final number at once for reduced-motion users. */
+function CountPct({ value }: { value: number }) {
+  const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const [target, setTarget] = useState(reduce ? value : 0);
+  useEffect(() => { setTarget(value); }, [value]);
+  const shown = useCountUp(target, 900);
+  return <>{reduce ? value : shown}%</>;
 }

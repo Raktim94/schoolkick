@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { api } from './api';
+import { Skeleton } from '@/components/base/skeleton/skeleton';
 
 /** Load JSON from the API. While a new request runs the previous data stays on screen (no layout jump). */
 export function useApi<T>(path: string | null) {
@@ -20,7 +21,10 @@ export const Status = ({ kind, children }: { kind: 'ok' | 'error' | 'info'; chil
 export const Empty = ({ title, hint, children }: { title: string; hint?: string; children?: ReactNode }) => (
   <div className="empty"><b>{title}</b>{hint && <p>{hint}</p>}{children}</div>
 );
-export const Loading = () => <p className="muted" role="status">Loading…</p>;
+export const Loading = () => (
+  <div role="status" aria-live="polite" className="grid gap-3 max-w-xl"><span className="sr">Loading…</span>
+    <Skeleton className="h-6 w-1/3" /><Skeleton className="h-24 w-full" /><Skeleton className="h-24 w-full" /></div>
+);
 export const PageHead = ({ title, sub, children }: { title: string; sub?: string; children?: ReactNode }) => (
   <div className="page-head"><div><h1>{title}</h1>{sub && <p className="muted">{sub}</p>}</div>{children && <div className="page-actions">{children}</div>}</div>
 );

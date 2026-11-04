@@ -40,6 +40,7 @@ const problems = [];
 async function session(width, height, mail, fn) {
   const ctx = await browser.createBrowserContext(), page = await ctx.newPage();
   await page.setViewport({ width, height });
+  await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
   page.on('console', (m) => ['error', 'warning'].includes(m.type()) && !/40[0-9]|status of/.test(m.text()) && problems.push(`console ${m.type()}: ${m.text()}`));
   await page.goto(BASE + '/app', { waitUntil: 'networkidle0' });

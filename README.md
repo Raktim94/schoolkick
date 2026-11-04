@@ -36,6 +36,10 @@ SchoolKick lets teachers take a class register from a phone, shows each guardian
 
 > **Before using real learner data:** this release has had no independent security, accessibility or legal audit, and you, the operator, are responsible for HTTPS, backups, access control and local children's-data requirements. See [security, privacy and operations](docs/wiki/10-security-privacy-operations.md).
 
+<p align="center">
+  <img src="docs/features-animated.svg" alt="Animated strip of five working features: attendance, corrections, family view, fees with UPI, and CSV import" width="100%">
+</p>
+
 ## What works today
 
 Each item is backed by a named test in the status ledger, [`docs/traceability.md`](docs/traceability.md) (last reviewed 2026-11-04).
@@ -63,7 +67,23 @@ Each item is backed by a named test in the status ledger, [`docs/traceability.md
 
 Permissions in detail: [roles and data boundaries](docs/wiki/04-roles-and-permissions.md).
 
-## See SchoolKick
+## See it work
+
+Recorded from the running app with fictional demonstration data. Each clip comes from `e2e/gifs.mjs`, so it can be re-recorded after any UI change.
+
+| Teacher: attendance and a kept correction | Family: today, fees and exams |
+|---|---|
+| ![Teacher takes a class register on a phone, saves it, then corrects one mark with a reason that is kept in the history](docs/gifs/attendance.gif) | ![Guardian signs in on a phone and sees only their own learner, a corrected mark, fees and exam registration](docs/gifs/family.gif) |
+
+| Fees: UPI payment confirmed by the office | Import: CSV preview before anything is saved |
+|---|---|
+| ![Guardian pays a fee with a UPI QR code and enters the transaction ID; finance confirms it against the bank statement and a receipt is issued](docs/gifs/upi-payment.gif) | ![Owner pastes a CSV, sees the problem row in the preview, fixes it and imports two learners](docs/gifs/csv-import.gif) |
+
+| Overview, Ctrl+K search and dark theme |
+|---|
+| ![Owner overview with an animated attendance figure, then a Ctrl+K command palette to jump to Fees, then the dark theme](docs/gifs/overview-palette.gif) |
+
+## Screenshots
 
 All names and records in screenshots are fictional demonstration data.
 

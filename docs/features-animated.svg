@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-labelledby="t d">
+<title id="t">SchoolKick MVP features</title>
+<desc id="d">Five working features: class attendance, correction history, family view, fees with UPI QR payments confirmed by the office, and CSV import with a preview. A highlight moves across the cards.</desc>
+<style>text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}.t{font-size:20px;font-weight:700;fill:#1d2924}.s{font-size:15px;fill:#57675e}
+.card{fill:#fffdf8;stroke:#bdb3a1;stroke-width:2}.dot{fill:#174b3b}
+.act{animation:lift 15s infinite ease;transform-box:fill-box}
+@keyframes lift{0%,2%{transform:none}5%,19%{transform:translateY(-8px)}22%,100%{transform:none}}
+.ring{fill:none;stroke:#d7644d;stroke-width:3;opacity:0;animation:ring 15s infinite ease}
+@keyframes ring{0%,2%{opacity:0}5%,19%{opacity:1}22%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.act,.ring{animation:none!important;transform:none!important}.ring{opacity:0}}</style>
+<rect width="1200" height="260" fill="#faf7ef"/><rect y="248" width="1200" height="12" fill="#174b3b"/>
+<text x="60" y="52" font-size="30" font-weight="700" font-family="Georgia,serif" fill="#1d2924">What works today</text>
+<g class="act" style="animation-delay:0s"><rect class="card" x="60" y="86" width="204" height="130" rx="12"/><rect class="ring" style="animation-delay:0s" x="60" y="86" width="204" height="130" rx="12"/><circle class="dot" cx="88" cy="116" r="8"/><text class="t" x="78" y="154">Attendance</text><text class="s" x="78" y="180">Mark a register</text><text class="s" x="78" y="201">from a phone browser</text></g>
+<g class="act" style="animation-delay:3s"><rect class="card" x="282" y="86" width="204" height="130" rx="12"/><rect class="ring" style="animation-delay:3s" x="282" y="86" width="204" height="130" rx="12"/><circle class="dot" cx="310" cy="116" r="8"/><text class="t" x="300" y="154">Corrections</text><text class="s" x="300" y="180">Every change needs</text><text class="s" x="300" y="201">a reason and is kept</text></g>
+<g class="act" style="animation-delay:6s"><rect class="card" x="504" y="86" width="204" height="130" rx="12"/><rect class="ring" style="animation-delay:6s" x="504" y="86" width="204" height="130" rx="12"/><circle class="dot" cx="532" cy="116" r="8"/><text class="t" x="522" y="154">Family view</text><text class="s" x="522" y="180">Guardians see only</text><text class="s" x="522" y="201">their own learners</text></g>
+<g class="act" style="animation-delay:9s"><rect class="card" x="726" y="86" width="204" height="130" rx="12"/><rect class="ring" style="animation-delay:9s" x="726" y="86" width="204" height="130" rx="12"/><circle class="dot" cx="754" cy="116" r="8"/><text class="t" x="744" y="154">Fees and UPI</text><text class="s" x="744" y="180">UPI QR, confirmed</text><text class="s" x="744" y="201">by the office first</text></g>
+<g class="act" style="animation-delay:12s"><rect class="card" x="948" y="86" width="204" height="130" rx="12"/><rect class="ring" style="animation-delay:12s" x="948" y="86" width="204" height="130" rx="12"/><circle class="dot" cx="976" cy="116" r="8"/><text class="t" x="966" y="154">CSV import</text><text class="s" x="966" y="180">Preview every error</text><text class="s" x="966" y="201">before saving</text></g>
+</svg>

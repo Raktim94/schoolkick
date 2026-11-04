@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added five recorded workflow clips (`docs/gifs/`, re-recordable with `e2e/gifs.mjs`) and a second animated README component; replaced the stale demo GIF. Hero attendance figure now counts up (not under reduced motion); loading states use skeletons; theme choice is a segmented control; CSV import textarea is full width.
+- Content-Security-Policy now allows exactly one hashed stylesheet that React Aria injects at runtime (no `unsafe-inline`).
 - Redesigned the signed-in app on BoardUI's free, MIT-licensed design system (Tailwind CSS v4, React Aria): floating sidebar, neutral/blue token system with a proper dark mode, pill segmented controls, rounded panels and tables, an avatar account row, and a Ctrl/Cmd+K command palette for pages, theme, role switching and sign-out. All screenshots retaken. Third-party notices added.
 - Fixed low-contrast text on the teacher "Take attendance" button, the cramped guardian two-week strip (weekday labels now sit above the marks; present is shown as a check), the unreadable stacked fee actions (now clear expandable panels) and overlapping date labels on the mobile attendance chart.
 - Standardized new source, Docker and package configurations on app port 3847; configured host port overrides are preserved.

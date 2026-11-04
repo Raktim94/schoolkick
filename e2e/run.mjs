@@ -60,7 +60,7 @@ async function session(width, height, path, fn, { dark = false } = {}) {
   const ctx = await browser.createBrowserContext();
   const page = await ctx.newPage();
   await page.setViewport({ width, height, deviceScaleFactor: 1 });
-  if (dark) await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
+  await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }, ...(dark ? [{ name: 'prefers-color-scheme', value: 'dark' }] : [])]);
   page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
   page.on('console', (m) => ['error', 'warning'].includes(m.type()) && problems.push(`console ${m.type()}: ${m.text()}`));
   page.on('requestfailed', (r) => problems.push(`requestfailed: ${r.url()}`));
@@ -155,7 +155,7 @@ await session(1440, 900, '/app/', async (p) => {
 
 await session(1440, 900, '/app/', async (p) => {
   await login(p, email('owner')); await text(p, 'Class register');
-  await p.select('.account select', 'dark'); await new Promise((r) => setTimeout(r, 200));
+  await clickText(p, '.theme-ctl button', 'Dark'); await new Promise((r) => setTimeout(r, 200));
   await shot(p, 'dashboard-dark-desktop', true);
 });
 await session(768, 1024, '/app/', async (p) => { await login(p, email('owner')); await text(p, 'Class register'); await shot(p, 'dashboard-tablet', true); });

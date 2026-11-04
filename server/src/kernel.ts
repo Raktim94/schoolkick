@@ -57,7 +57,9 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
     c.header('X-Frame-Options', 'DENY');
     c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
     c.header('Permissions-Policy', 'camera=(self), microphone=(), geolocation=()');
-    c.header('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+    // style-src allows one hashed stylesheet: React Aria injects a single `touch-action` rule at runtime. If a React Aria upgrade changes
+    // that rule the browser reports the new hash in a CSP console error (the browser e2e fails on console errors); update the hash then.
+    c.header('Content-Security-Policy', "default-src 'self'; style-src 'self' 'sha256-38RhXrc7EdReTKsOm23ZPOCUgniTUUcjky8QOOrQx6o='; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
     if (/^\/(app|api)(\/|$)/.test(c.req.path)) c.header('X-Robots-Tag', 'noindex, nofollow'); // keep the product out of search; robots.txt must NOT block it or crawlers never see this
     if (c.req.path.startsWith('/api/')) c.header('Cache-Control', 'no-store');
     if (opts.log) console.log(JSON.stringify({ level: 'info', rid, method: c.req.method, path: c.req.path, status: c.res.status, ms: Math.round(performance.now() - t0) }));

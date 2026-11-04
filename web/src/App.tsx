@@ -10,6 +10,7 @@ import { Guardian } from './Guardian';
 import { Overview } from './Overview';
 import { Link, navigate, usePath } from './router';
 import { RiSearchLine, RiMoonLine, RiSunLine, RiComputerLine, RiLogoutBoxRLine, RiExchangeLine } from '@remixicon/react';
+import { SegmentedControl, SegmentedControlItem } from '@/components/base/segmented-control/segmented-control';
 import { Avatar } from '@/components/base/avatar/avatar';
 import { CommandPalette, CommandPaletteItem, CommandPaletteSection } from '@/components/base/command-palette/command-palette';
 import { Empty, Loading, Status, useAction, useTheme } from './ui';
@@ -95,7 +96,12 @@ function Shell({ me, onSignOut }: { me: Me; onSignOut: () => void }) {
   const account = (
     <div className="account">
       {roles.length > 1 && <label>Viewing as<select value={active} onChange={(e) => switchRole(e.target.value as Role)}>{roles.map((r) => <option key={r} value={r}>{ROLE_LABEL[r]}</option>)}</select></label>}
-      <label>Theme<select value={theme} onChange={(e) => setTheme(e.target.value as Theme)}><option value="auto">Match system</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+      <div className="theme-ctl"><span id="theme-l">Theme</span>
+        <SegmentedControl aria-labelledby="theme-l" selectedKeys={[theme]} onSelectionChange={(k) => { const v = [...k][0]; if (v) setTheme(String(v) as Theme); }} className="w-full">
+          <SegmentedControlItem id="auto" className="flex-1">System</SegmentedControlItem>
+          <SegmentedControlItem id="light" className="flex-1">Light</SegmentedControlItem>
+          <SegmentedControlItem id="dark" className="flex-1">Dark</SegmentedControlItem>
+        </SegmentedControl></div>
       <p className="who-row"><Avatar size="md" color="blue" initials={me.name.trim().charAt(0).toUpperCase()} aria-hidden="true" /><span className="who"><b>{me.name}</b><span className="muted">{ROLE_LABEL[active]}</span></span></p>
       <button className="btn secondary" onClick={out}>Sign out</button>
     </div>
