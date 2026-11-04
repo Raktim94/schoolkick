@@ -79,7 +79,7 @@ export function Trend({ series }: { series: { day: string; marked: number; atten
           {W > 0 && (
             <svg width={W} height={H} onPointerMove={move} onPointerLeave={() => setActive(null)} aria-hidden="true">
               {ticks.map((t) => <g key={t}><line className="grid" x1={m.l} x2={W - m.r} y1={y(t)} y2={y(t)} /><text className="axis" x={m.l - 8} y={y(t) + 4} textAnchor="end">{t}%</text></g>)}
-              {pts.map((p, i) => i % every === 0 || i === last ? <text key={p.day} className="axis" x={x(i)} y={H - 8} textAnchor={i === 0 ? 'start' : i === last ? 'end' : 'middle'}>{fmtDay(p.day)}</text> : null)}
+              {pts.map((p, i) => (i % every === 0 && (last - i >= every || i === last)) || i === last ? <text key={p.day} className="axis" x={x(i)} y={H - 8} textAnchor={i === 0 ? 'start' : i === last ? 'end' : 'middle'}>{fmtDay(p.day)}</text> : null)}
               <path className="area" d={area} /><path className="line" d={line} />
               {cur && <line className="cross" x1={x(a!)} x2={x(a!)} y1={m.t} y2={m.t + ih} />}
               <circle className="dot" cx={x(a ?? last)} cy={y(pts[a ?? last].rate)} r={5} />

@@ -2,7 +2,7 @@
 
 Last verified: **2026-11-04**, against source at `main` (version 0.3.0) and [`traceability.md`](../traceability.md).
 
-**Verification:** `npm run typecheck` and `npm run build` pass locally. The PostgreSQL-backed suite (`server/test/*.test.ts`, 37 test cases) could not be run locally (no database access), but **passes in CI** (GitHub Actions run 41798013140, 2026-11-04). CI had been failing on every earlier `main` run since 0.3.0 because the three test files ran concurrently and raced creating the cluster-wide `campusos_app` role; fixed by running test files serially (commit "Run API test files serially"). So "working" in the ledger had no green CI behind it until that fix.
+**Verification:** `npm run typecheck` and `npm run build` pass locally. The PostgreSQL-backed suite (`server/test/*.test.ts`, 34 test cases) passes locally against PostgreSQL (2026-11-04) and **in CI** (GitHub Actions run 41798013140, 2026-11-04). CI had been failing on every earlier `main` run since 0.3.0 because the three test files ran concurrently and raced creating the cluster-wide `campusos_app` role; fixed by running test files serially (commit "Run API test files serially"). So "working" in the ledger had no green CI behind it until that fix.
 
 **Release note:** the version in source is 0.3.0 but the only published GitHub release/tag is `v0.1.0`. A tagged 0.3.0 release is a maintainer decision.
 

@@ -9,7 +9,7 @@ scrypt password hashing · hashed opaque session tokens · HttpOnly SameSite coo
 Independent security, accessibility or legal audit · MFA · email password reset · distributed rate limiting · backup tooling · retention/deletion jobs · data export tooling beyond what you do in PostgreSQL · incident process · encryption at rest (rely on disk/DB encryption you configure).
 
 ## Operator responsibilities
-You run the server: HTTPS, OS patching, database access, backups, retention, notices to families, and compliance with local children's-data law. Jurisdiction-specific legal review is needed before any compliance claim (for India, the DPDP Rules 2025 include verifiable parental consent duties with a limited school exemption; commentary disagrees on rule numbers, so read the Gazette text with counsel).
+You run the server: HTTPS, OS patching, database access, backups, retention, notices to families, and compliance with local children's-data law. Jurisdiction-specific legal review is needed before any compliance claim (for India, the DPDP Rules 2025 require verifiable parental consent for children's data except for essential services such as education, per the [PIB explainer](https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/nov/doc20251117695301.pdf); the exact exemption conditions need Gazette-level review with counsel).
 
 ## Backup and restore (generic PostgreSQL practice; the project ships no tested procedure)
 ```sh

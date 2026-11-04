@@ -18,6 +18,14 @@
   <a href="docs/roadmap.md"><b>View the roadmap</b></a>
 </p>
 
+<p align="center">
+  <sub>Maintainer: <a href="https://www.raktimranjit.com/"><b>Raktim Ranjit</b></a> &nbsp;·&nbsp; <a href="https://schoolkick.nodedr.com/">Website</a> &nbsp;·&nbsp; <a href="#what-works-today">What works today</a> &nbsp;·&nbsp; <a href="#install">Quick start</a> &nbsp;·&nbsp; <a href="#see-schoolkick">Screenshots</a> &nbsp;·&nbsp; <a href="docs/wiki/README.md">Docs</a> &nbsp;·&nbsp; <a href="CONTRIBUTING.md">Contributing</a> &nbsp;·&nbsp; <a href="docs/roadmap.md">Roadmap</a></sub>
+</p>
+
+<p align="center">
+  <img src="docs/overview-animated.svg" alt="Animated overview with an illustrative sample screen: a class register is marked, then one mark is corrected and the original entry stays in a history list with its reason" width="100%">
+</p>
+
 # SchoolKick
 
 **Open-source, self-hosted school attendance that keeps a clear history of every correction.**
