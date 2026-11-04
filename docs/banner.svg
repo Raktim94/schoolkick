@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-labelledby="t d">
+  <title id="t">SchoolKick</title>
+  <desc id="d">SchoolKick: open-source school attendance with a kept correction history</desc>
+  <rect width="1200" height="260" fill="#faf7ef"/>
+  <rect y="248" width="1200" height="12" fill="#174b3b"/>
+  <g transform="translate(70 70)" font-family="Georgia, 'Times New Roman', serif">
+    <text x="0" y="62" font-size="76" font-weight="700" fill="#1d2924" letter-spacing="-2">SchoolKick</text>
+  </g>
+  <text x="72" y="190" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="25" fill="#57675e">Open-source school attendance with a kept correction history.</text>
+  <g transform="translate(900 40)" font-family="system-ui, sans-serif" font-size="20">
+    <rect width="265" height="180" rx="10" fill="#fffdf8" stroke="#bdb3a1" stroke-width="2"/>
+    <text x="20" y="38" fill="#57675e" font-size="16">Class 6B · Register</text>
+    <g fill="#174b3b"><circle cx="30" cy="72" r="9"/><circle cx="30" cy="108" r="9"/></g>
+    <circle cx="30" cy="144" r="9" fill="#d7644d"/>
+    <text x="52" y="79" fill="#1d2924">Present</text>
+    <text x="52" y="115" fill="#1d2924">Present</text>
+    <text x="52" y="151" fill="#1d2924">Absent · reason kept</text>
+  </g>
+</svg>

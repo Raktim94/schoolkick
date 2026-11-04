@@ -1,4 +1,4 @@
-# CampusOS — Product design system and experience brief
+# SchoolKick — Product design system and experience brief (formerly "CampusOS")
 
 **Audience:** school and college administrators, teachers, families, adult learners, coaching students, and support staff.  
 **Product job:** help each person complete today’s education task quickly, understand what changed, and trust the record.  

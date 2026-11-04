@@ -13,3 +13,5 @@ Next slices, each tested and handed off on its own:
 6. `/countries` page with honest statuses, i18n framework (EN, ES, HI, JA, FR), then country packs one at a time with acceptance checks.
 7. Payroll as a separate, restricted module with versioned, reviewed rule sets.
 8. Security review, accessibility audit, MFA for privileged roles before any production-readiness claim.
+
+See also: [wiki roadmap, launch profiles and discovery plan](wiki/13-roadmap-and-modules.md) and the [researched feature catalog](wiki/15-feature-catalog.md) (a backlog, not a commitment). Statuses here and in `traceability.md` are the source of truth.
