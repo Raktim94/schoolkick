@@ -26,13 +26,13 @@
   <img src="docs/overview-animated.svg" alt="Animated overview with an illustrative sample screen: a class register is marked, then one mark is corrected and the original entry stays in a history list with its reason" width="100%">
 </p>
 
-# SchoolKick
+# SchoolKick — Free, Open-Source School Management Software
 
-**Open-source, self-hosted school attendance that keeps a clear history of every correction.**
+**Self-hosted school attendance and administration software with a clear history of every correction.**
 
-SchoolKick lets teachers take a class register from a phone, shows each guardian only their own learners in a browser, and gives school staff one place to review attendance, imports, fees, exam registration and recent changes. No family app install is needed.
+SchoolKick is free, open-source school management software for schools that want to run their own system. Teachers can take attendance from a phone, guardians can check linked learners in a browser, and staff can manage learner imports, fee records, exam registration and recent changes. Families do not need to install an app. The current release is an early-stage school management system focused on core attendance and administration workflows; see [what works today](#what-works-today) and the [roadmap](docs/wiki/13-roadmap-and-modules.md) for the exact scope.
 
-**The direction:** a modular, configurable platform that can grow to serve schools, colleges and coaching providers. **Today:** an early release (v0.3.0) with the features listed below, no more. The [roadmap](docs/wiki/13-roadmap-and-modules.md) separates what exists from what is planned or still needs validation.
+Looking for the best free school management software for your school? Compare SchoolKick’s available features, deployment requirements and current limitations below. SchoolKick is self-hosted open-source software under AGPL-3.0-only; server, backup and support costs depend on how you choose to run it.
 
 > **Before using real learner data:** this release has had no independent security, accessibility or legal audit, and you, the operator, are responsible for HTTPS, backups, access control and local children's-data requirements. See [security, privacy and operations](docs/wiki/10-security-privacy-operations.md).
 
@@ -49,7 +49,7 @@ Each item is backed by a named test in the status ledger, [`docs/traceability.md
 - **Guardian view:** guardians see only linked learners, with recent attendance, fees and exams.
 - **CSV learner import** with a preview of row and column errors; invalid input creates no partial records.
 - **School overview and audit log** for staff.
-- **Fees:** numbered invoices, cash and UPI QR payments confirmed by the office, PDF receipts with a verification code, refund approval and a reconciliation queue. A card or bank gateway is **not** available (test provider only).
+- **Fees and UPI QR payments:** numbered invoices, cash and UPI QR payments confirmed by the office, PDF receipts with a verification code, refund approval and a reconciliation queue. The QR code is for fee payment; QR attendance check-in and a live card or bank payment gateway are **not** available (test provider only).
 - **Exam registration:** windows, attendance eligibility, fees and hall tickets. Marks and results are **not** available.
 - **Self-hosted data** in PostgreSQL you administer; the container runs read-only.
 
@@ -186,10 +186,12 @@ The API tests use PostgreSQL. Set `TEST_ADMIN_URL` to a disposable PostgreSQL da
 
 Bug reports, accessibility feedback, documentation improvements and code contributions are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md), read [`SECURITY.md`](SECURITY.md) for vulnerability reports and open a focused issue for larger changes.
 
-## License
+## License and maintainer
 
 SchoolKick is licensed under the **GNU Affero General Public License v3.0 only (AGPL-3.0-only)**. See [`LICENSE`](LICENSE). If you run a modified version for other people over a network, the license requires you to offer those users the corresponding source code. The SchoolKick name and logo are not granted under the software license. See [`COMMERCIAL-LICENSE.md`](COMMERCIAL-LICENSE.md) for the separate commercial licensing contact.
 
+Maintained by [Raktim Ranjit](https://www.raktimranjit.com/) for **NODEDR INFOTECH PRIVATE LIMITED** (India CIN: **U62091WR2026PTC294027**). Company details: [nodedr.com](https://www.nodedr.com/).
+
 ---
 
-Built for a clearer school day. Maintained by [Raktim Ranjit](https://www.raktimranjit.com/).
+Built for a clearer school day by [Raktim Ranjit](https://www.raktimranjit.com/) · [NODEDR INFOTECH PRIVATE LIMITED](https://www.nodedr.com/) (CIN: U62091WR2026PTC294027).
