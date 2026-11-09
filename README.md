@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="SchoolKick: open-source school attendance with a kept correction history" width="100%">
+  <img src="docs/hero-animated.svg" alt="SchoolKick: animated overview. A class register is marked and saved, one mark is corrected, and the original entry stays in a history list" width="100%">
 </p>
 
 <p align="center">
@@ -97,7 +97,23 @@ All names and records in screenshots are fictional demonstration data.
 
 Choose the path that matches your setup. The [installation guide](https://schoolkick.nodedr.com/get-started) includes requirements, current test status and follow-up steps.
 
-### One command (Docker)
+<p align="center">
+  <img src="docs/install-animated.svg" alt="Animated terminal: one curl command installs SchoolKick on Ubuntu or Debian and prints the address to open" width="100%">
+</p>
+
+### One command (Ubuntu / Debian, amd64 and arm64)
+
+```sh
+curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash
+```
+
+Installs Docker if missing, downloads the latest release `.deb`, verifies its SHA-256 checksum, installs it and starts SchoolKick at http://localhost:3847. Settings live in `/etc/schoolkick/schoolkick.env`. **Review [the script](packaging/deb/install-linux.sh) before piping it to a shell.**
+
+### CasaOS / ZimaOS
+
+In CasaOS choose **App Store → Custom Install → Import**, paste the contents of [`deploy/docker-compose.casaos.yml`](deploy/docker-compose.casaos.yml) and click **Install**. It pulls the published multi-arch image, keeps PostgreSQL private (no published port), stores data under `/DATA/AppData/schoolkick/` and adds a tile that opens `http://<your-box>:3847/app/`. Change the database password in the file before first start if the box is reachable by others.
+
+### One command (Docker, builds from source)
 
 Requires Bash, Git, curl, OpenSSL and Docker with Compose v2. On Windows, use WSL with Docker Desktop integration.
 

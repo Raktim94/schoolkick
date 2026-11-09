@@ -385,3 +385,5 @@ footer { background: var(--color-paper-2); border-top: 1px solid var(--color-rul
 .install-steps li::marker { color: var(--color-accent); font-weight: 700; }
 .install-steps h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
 .install-steps p { margin: .5rem 0; }
+
+.home-install .install-command{margin:1.2rem 0}.home-install .install-command pre{font-size:.78rem}.home-install-anim{width:100%;height:auto;border-radius:14px;display:block}

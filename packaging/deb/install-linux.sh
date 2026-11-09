@@ -5,7 +5,7 @@
 #
 # Downloads the .deb for the latest release from GitHub, checks its SHA-256, makes sure Docker and Docker Compose
 # are present, and installs the package with apt. The package starts SchoolKick under systemd (it runs in Docker)
-# and it is then available at http://localhost:8480.
+# and it is then available at http://localhost:3847.
 # Pin a version:  curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo SCHOOLKICK_VERSION=X.Y.Z bash
 # Read it first:  curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | less
 # Use a file you already downloaded (it must sit next to its .sha256):  sudo DEB_FILE=./schoolkick_X.Y.Z_amd64.deb bash install-linux.sh
@@ -71,4 +71,4 @@ chmod 0644 "$WORK/$FILE"
 
 say "Installing (the first start pulls the container images and can take a few minutes)"
 apt-get install -y "$WORK/$FILE"
-say "Done. Open http://localhost:8480  ·  status: systemctl status $PKG  ·  settings: /etc/$PKG/$PKG.env"
+say "Done. Open http://localhost:3847  ·  status: systemctl status $PKG  ·  settings: /etc/$PKG/$PKG.env"

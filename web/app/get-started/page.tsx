@@ -8,7 +8,27 @@ export const metadata: Metadata = {
 const compose = 'docker compose -f deploy/docker-compose.yml --env-file deploy/.env';
 const routes = [
   {
-    id: 'quick', n: '01', name: 'One-command installation',
+    id: 'deb', n: '01', name: 'Ubuntu or Debian, one command',
+    status: 'Linux · amd64 and arm64 · runs in Docker',
+    desc: 'Installs Docker if it is missing, downloads the latest release package, verifies its SHA-256 checksum, installs it and starts SchoolKick and PostgreSQL as a service.',
+    steps: [
+      { title: 'Install and start', text: 'Run as a user with sudo. The first start pulls the container images and can take a few minutes.', command: 'curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash' },
+      { title: 'Manage the service', text: 'Settings, including the port and database password, live in the env file. Restart after changing it.', command: 'systemctl status schoolkick\nsudoedit /etc/schoolkick/schoolkick.env\nsudo systemctl restart schoolkick' },
+    ],
+    next: 'Open http://localhost:3847/app/ (or your server address on port 3847) and choose Create institution.',
+  },
+  {
+    id: 'casaos', n: '02', name: 'CasaOS or ZimaOS',
+    status: 'Custom Install · amd64 and arm64',
+    desc: 'Uses the published image, so nothing is built on the box. PostgreSQL is not exposed on any port and its data is kept under /DATA/AppData/schoolkick.',
+    steps: [
+      { title: 'Import the app', text: 'In CasaOS open App Store, choose Custom Install, then Import, and paste the contents of this file (or download it first).', command: 'curl -fsSL https://raw.githubusercontent.com/Raktim94/schoolkick/main/deploy/docker-compose.casaos.yml' },
+      { title: 'Set a database password', text: 'Before you click Install, replace change-this-password in both places with a long random value.', command: 'openssl rand -hex 24' },
+    ],
+    next: 'Open the SchoolKick tile, or http://YOUR-BOX:3847/app/, and choose Create institution. Set ALLOW_SIGNUP to 0 afterwards.',
+  },
+  {
+    id: 'quick', n: '03', name: 'One-command installation',
     status: 'Current source · Docker required',
     desc: 'For Linux, macOS or Windows through WSL. Install Git, curl, OpenSSL and Docker with Compose v2 first; Docker must be running and accessible to your user.',
     steps: [
@@ -18,7 +38,7 @@ const routes = [
     next: 'Open http://localhost:3847/app/ on the machine running Docker. This route binds to the local machine by default. For a remote server, configure HTTPS and the public address before inviting people.',
   },
   {
-    id: 'docker', n: '02', name: 'Docker Compose, step by step',
+    id: 'docker', n: '04', name: 'Docker Compose, step by step',
     status: 'Linux · macOS · Windows',
     desc: 'Requires Git and Docker with Compose v2. Docker Desktop supplies Compose on Windows and macOS. The database stays in a persistent Docker volume.',
     steps: [
@@ -30,7 +50,7 @@ const routes = [
     next: 'Open http://localhost:3847/app/ and choose Create institution. After creating your owner account, set ALLOW_SIGNUP=0 in deploy/.env and run the start command again.',
   },
   {
-    id: 'source', n: '03', name: 'Run from source',
+    id: 'source', n: '05', name: 'Run from source',
     status: 'Developer route · Node.js 22.18+ · PostgreSQL 16',
     desc: 'The commands below use Bash and a local PostgreSQL installation on Ubuntu or Debian. PostgreSQL must be running; the account needs database ownership and permission to create the restricted application role.',
     steps: [
