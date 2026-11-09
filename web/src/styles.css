@@ -57,7 +57,7 @@ main{padding:1.5rem;max-width:72rem;width:100%;min-width:0} main:focus{outline:n
 }
 
 /* auth */
-.auth{display:grid;gap:1rem;justify-items:center;align-content:center;min-height:100vh;padding:1.5rem}
+.auth{max-width:none;display:grid;gap:1rem;justify-items:center;align-content:center;min-height:100vh;padding:1.5rem}
 .auth-card{display:grid;gap:.9rem;width:min(26rem,100%);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.5rem;box-shadow:var(--shadow)}
 .tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--line)}
 .tabs button{font:inherit;background:none;border:0;border-bottom:3px solid transparent;min-height:44px;padding:0 .75rem;color:var(--ink-2);cursor:pointer}
