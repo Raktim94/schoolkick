@@ -8,12 +8,15 @@
   <img alt="Node.js 22.18 or newer" src="https://img.shields.io/badge/node-%E2%89%A522.18-339933">
   <img alt="PostgreSQL 16" src="https://img.shields.io/badge/postgresql-16-336791">
   <a href="https://github.com/Raktim94/schoolkick/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/Raktim94/schoolkick/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="deploy/docker-compose.casaos.yml"><img alt="CasaOS and ZimaOS import" src="https://img.shields.io/badge/CasaOS%20%2F%20ZimaOS-import-1F6FEB"></a>
+  <img alt="Self-hosted" src="https://img.shields.io/badge/self--hosted-yes-174b3b">
+  <a href="CONTRIBUTING.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen"></a>
   <a href="docs/wiki/README.md"><img alt="Documentation" src="https://img.shields.io/badge/docs-wiki-informational"></a>
 </p>
 
 <p align="center">
   <a href="https://schoolkick.nodedr.com/app/"><b>Try the demo</b></a> &nbsp;·&nbsp;
-  <a href="#install"><b>Install with Docker</b></a> &nbsp;·&nbsp;
+  <a href="#install"><b>Install in one command</b></a> &nbsp;·&nbsp;
   <a href="docs/wiki/README.md"><b>Read the docs</b></a> &nbsp;·&nbsp;
   <a href="docs/roadmap.md"><b>View the roadmap</b></a>
 </p>
@@ -23,7 +26,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/overview-animated.svg" alt="Animated overview with an illustrative sample screen: a class register is marked, then one mark is corrected and the original entry stays in a history list with its reason" width="100%">
+  <a href="https://schoolkick.nodedr.com/"><img src="https://img.shields.io/badge/Go%20to%20the%20SchoolKick%20website-schoolkick.nodedr.com-174b3b?style=for-the-badge" alt="Go to the SchoolKick website"></a>
 </p>
 
 # SchoolKick — Free, Open-Source School Management Software
@@ -39,6 +42,46 @@ Looking for the best free school management software for your school? Compare Sc
 <p align="center">
   <img src="docs/features-animated.svg" alt="Animated strip of five working features: attendance, corrections, family view, fees with UPI, and CSV import" width="100%">
 </p>
+
+## What this is
+
+**SchoolKick** is open-source, self-hosted **school attendance and administration software** for schools, colleges and coaching centres. It replaces the paper register and the attendance spreadsheet with a system that never silently overwrites a mark: when an attendance entry changes, SchoolKick keeps the original entry, the new entry, the reason, the person and the time.
+
+It is built around one job per role, so each person sees only what they need:
+
+- a **teacher** marks only the exceptions in a class, from a phone;
+- a **guardian** opens a browser link and sees only their own learners (no app to install);
+- the **office** imports learners from CSV, issues numbered fee invoices, confirms cash and UPI QR payments, prints receipts, and runs exam registration;
+- the **owner** reviews the school overview and the audit log.
+
+Your data lives in a PostgreSQL database you administer. There is no subscription, no per-student licence and no analytics or advertising tracker.
+
+**Principles**
+
+1. **History is never rewritten.** Corrections add to the record; they cannot edit or delete it.
+2. **Each school's data is isolated.** Every table is scoped to an institution and enforced by PostgreSQL row-level security for a restricted application role.
+3. **Honest scope.** What works and what does not is listed, with a named test per working item, in [`docs/traceability.md`](docs/traceability.md).
+4. **Self-hosted by design.** One container plus PostgreSQL; the app container runs read-only with all Linux capabilities dropped.
+
+## Why SchoolKick
+
+- **A correction history nobody can edit.** Useful when attendance drives exam eligibility or fee disputes.
+- **Families without another app.** Guardians use a normal browser link; learners and guardians are linked explicitly.
+- **UPI-first fee collection (India).** A UPI QR payment is recorded by the guardian and confirmed by the office against the bank statement, then a PDF receipt with a verification code is issued. No gateway fees. A card or bank payment gateway is not available yet.
+- **Safe imports.** CSV import shows a row-by-row preview of errors first; invalid input creates no partial records.
+- **One command to run.** Ubuntu or Debian one-liner, a CasaOS/ZimaOS import, Docker Compose, or from source.
+- **Small and inspectable.** TypeScript, Hono, React and PostgreSQL; AGPL-3.0-only source you can read.
+
+## How to use SchoolKick
+
+1. **Install it** with one of the [install routes](#install) and open `http://<server>:3847/app/`.
+2. **Create your institution.** The first sign-in creates the school and the owner account. Set `ALLOW_SIGNUP=0` afterwards.
+3. **Add classes and people.** Create classes and teacher accounts; add learners one by one or import a CSV (`name`, `external_id`, `guardian_email`) and fix any row the preview flags.
+4. **Link guardians.** Each learner is linked to a guardian account, who then sees only that learner.
+5. **Take attendance.** A teacher opens a class on a phone, marks the exceptions and saves. To change a saved mark they enter a reason; the original stays in the history.
+6. **Run fees.** Finance creates invoices, records cash or confirms a guardian's UPI payment, and the guardian can download the receipt.
+7. **Register exams.** The registrar opens a registration window; eligibility uses attendance and fees; hall tickets are generated.
+8. **Review.** The owner checks the overview and the audit log of recent changes.
 
 ## What works today
 
@@ -111,7 +154,7 @@ Installs Docker if missing, downloads the latest release `.deb`, verifies its SH
 
 ### CasaOS / ZimaOS
 
-In CasaOS choose **App Store → Custom Install → Import**, paste the contents of [`deploy/docker-compose.casaos.yml`](deploy/docker-compose.casaos.yml) and click **Install**. It pulls the published multi-arch image, keeps PostgreSQL private (no published port), stores data under `/DATA/AppData/schoolkick/` and adds a tile that opens `http://<your-box>:3847/app/`. Change the database password in the file before first start if the box is reachable by others.
+In CasaOS choose **App Store → Custom Install → Import**, paste the contents of [`deploy/docker-compose.casaos.yml`](deploy/docker-compose.casaos.yml) and click **Install**. It uses the multi-arch image tag pinned in the file (published by the release workflow), keeps PostgreSQL private (no published port), stores data under `/DATA/AppData/schoolkick/` and adds a tile that opens `http://<your-box>:3847/app/`. Change the database password in the file before first start if the box is reachable by others.
 
 ### One command (Docker, builds from source)
 
@@ -179,6 +222,44 @@ The app uses a protected session cookie and includes no advertising trackers or 
 ## Support
 
 Questions and bugs: [open an issue](https://github.com/Raktim94/schoolkick/issues) (never include real learner data). Vulnerabilities: see [SECURITY.md](SECURITY.md).
+
+## FAQ
+
+**Is there a free, open-source school attendance software I can self-host?**
+Yes. SchoolKick is licensed AGPL-3.0-only. Install it on Ubuntu or Debian with one command, import it into CasaOS or ZimaOS, or use Docker Compose.
+
+**Does it keep a history of attendance corrections?**
+Yes. A changed mark needs a reason. The original entry, the new entry, the person and the time are kept and cannot be edited or deleted.
+
+**Do parents need to install an app?**
+No. Guardians sign in from a phone or computer browser and see only their linked learners' attendance, fees and exams.
+
+**Can I collect school fees with UPI?**
+You can record cash and UPI QR payments. A guardian submits the UPI transaction ID and the office confirms it against the bank statement before a receipt is issued. A card or bank payment gateway is not available yet.
+
+**Can I import students from Excel?**
+Export the sheet as CSV with `name`, `external_id` and `guardian_email` columns. SchoolKick previews every row and reports problems before saving anything.
+
+**Does it handle marks, report cards, timetables or messaging?**
+Not yet. Exam registration, eligibility and hall tickets work; marks and results, messaging, timetable, admissions, learner accounts and native apps are on the [roadmap](docs/roadmap.md).
+
+**Can I run it on a Raspberry Pi, NAS or home server?**
+Yes, the Docker image targets amd64 and arm64, and the [CasaOS/ZimaOS manifest](deploy/docker-compose.casaos.yml) installs it as an app.
+
+**Is it safe for real children's data?**
+It has had no independent security, accessibility or legal audit and has no MFA or email password reset yet. You are responsible for HTTPS, backups and local data-protection rules. Read [security, privacy and operations](docs/wiki/10-security-privacy-operations.md) first.
+
+**Does it work offline?**
+It is self-hosted, so it runs on your own network without any cloud service. Teachers' phones need to reach the server.
+
+**Who makes it?**
+[Raktim Ranjit](https://www.raktimranjit.com/projects/schoolkick) for [NodeDR Infotech](https://www.nodedr.com/). See also the [SchoolKick case study](https://www.raktimranjit.com/projects/schoolkick).
+
+## More from NodeDR
+
+[OrderRestro](https://github.com/Raktim94/nodedr-restaurant-pos) (restaurant POS) · [Rechvix](https://rechvix.nodedr.com/) (GST billing) · [KinetiRx](https://kinetirx.nodedr.com/) (pharmacy) · [Submify](https://submify.nodedr.com/) (forms) · [all products](https://www.nodedr.com/).
+
+**Topics:** school management software, school attendance app, open source school ERP, self-hosted, guardian portal, school fee management, UPI QR, exam registration, CSV import, PostgreSQL, TypeScript, CasaOS, ZimaOS, Docker.
 
 ## Technology
 
