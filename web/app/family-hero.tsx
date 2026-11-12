@@ -1,0 +1,8 @@
+import styles from './family-hero.module.css';
+
+export default function FamilyHero() {
+  return <section className={styles.hero}><div className={styles.grid}>
+    <div><p className={styles.label}>School attendance & management software</p><h1>A clearer register. A connected school day.</h1><p className={styles.lead}>Take attendance, keep corrections traceable and give families a browser view. SchoolKick brings the everyday work of your school together on a server you control.</p><div className={styles.actions}><a href="/get-started/">Install SchoolKick ↗</a><a href="/screenshots/">See the product →</a></div><p className={styles.facts}>Open source · Self-hosted · AGPL-3.0-only · Early release</p><p className={styles.support}><a href="/docs/">Documentation</a> · <a href="https://www.nodedr.com/contact">Contact the team</a> · <a href="https://www.nodedr.com/software">All NodeDR products</a></p></div>
+    <figure><div className={styles.frame}><div className={styles.bar}><span aria-hidden="true">● ● ●</span> SchoolKick / School overview</div><img src="/s/dashboard-desktop.webp" width="1440" height="970" alt="SchoolKick overview showing attendance, class registers and items needing attention" fetchPriority="high" /></div><figcaption>Real SchoolKick screen · demonstration records only. <a href="/screenshots/">Explore product screens →</a></figcaption></figure>
+    </div><div className={styles.workflow}><p>The work, connected</p><ol><li><b>01 · Register</b><span>Take class attendance.</span></li><li><b>02 · Correction</b><span>Keep the change and its reason.</span></li><li><b>03 · Families</b><span>Open a linked browser view.</span></li><li><b>04 · Office</b><span>Review fees and exams.</span></li></ol></div></section>;
+}
