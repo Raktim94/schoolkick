@@ -16,4 +16,7 @@
   <url><loc>https://schoolkick.nodedr.com/license/</loc><priority>0.4</priority></url>
   <url><loc>https://schoolkick.nodedr.com/contribute/</loc><priority>0.4</priority></url>
   <url><loc>https://schoolkick.nodedr.com/contributors/</loc><priority>0.4</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/compare/</loc><priority>0.7</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/about/</loc><priority>0.6</priority></url>
+  <url><loc>https://schoolkick.nodedr.com/contact/</loc><priority>0.6</priority></url>
 </urlset>
