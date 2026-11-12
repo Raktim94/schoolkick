@@ -96,10 +96,10 @@ export default function Install() {
         <thead><tr><th scope="col">Route</th><th scope="col">Result</th></tr></thead>
         <tbody>
           <tr><th scope="row">04 Docker Compose, from current source</th><td>Tested end to end: build, health check, first launch, institution created, class and learner saved, restart, re-run, port conflict refused, default removal kept the data, explicit purge removed it.</td></tr>
-          <tr><th scope="row">01 Ubuntu or Debian package (v0.1.0)</th><td>Inspected, not fully installed: amd64 and arm64 checksums match, the package wraps Docker and pins the 0.1.0 image (both architectures exist), and the installer stops safely without systemd, without root, or on a non-Debian system. A full install on a systemd host was not run.</td></tr>
-          <tr><th scope="row">03 One-command installation</th><td>Prerequisite check verified (stops with “Install git first”). The full script was not run on the test host; its steps match route 04.</td></tr>
+          <tr><th scope="row">01 Ubuntu or Debian package (v0.1.0)</th><td>Inspected, not fully installed: amd64 and arm64 checksums match, the package wraps Docker and pins the 0.1.0 image (both architectures exist), and the installer stops safely without systemd, without root, or on a non-Debian system. The package’s own install, re-install, remove and purge scripts were run in a throwaway container: the settings file was created with owner-only permissions, re-installing left it unchanged, and removal and purge both keep it. Starting the service needs systemd, so a full install on a systemd host was not run.</td></tr>
+          <tr><th scope="row">03 One-command installation</th><td>Prerequisite check verified (stops with “Install git first”). The full script could not be run on the test host, which already has a SchoolKick project (the script refuses to run in that case, by design); its steps match route 04, which was run in full.</td></tr>
           <tr><th scope="row">02 CasaOS or ZimaOS, 05 Run from source</th><td>Not tested.</td></tr>
-          <tr><th scope="row">macOS, Windows, arm64</th><td>Not tested.</td></tr>
+          <tr><th scope="row">macOS, Windows, arm64</th><td>Not tested. No such environment was available; the test host has no arm64 emulation.</td></tr>
         </tbody>
       </table></div>
     </article></section>
