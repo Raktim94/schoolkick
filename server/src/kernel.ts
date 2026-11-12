@@ -59,7 +59,11 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
     c.header('Permissions-Policy', 'camera=(self), microphone=(), geolocation=()');
     // style-src allows one hashed stylesheet: React Aria injects a single `touch-action` rule at runtime. If a React Aria upgrade changes
     // that rule the browser reports the new hash in a CSP console error (the browser e2e fails on console errors); update the hash then.
-    c.header('Content-Security-Policy', "default-src 'self'; style-src 'self' 'sha256-38RhXrc7EdReTKsOm23ZPOCUgniTUUcjky8QOOrQx6o='; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+    // The signed-in app (/app) and the API keep the strict policy: no inline script at all. The public marketing pages are a static
+    // Next.js export whose bootstrap data is inlined in <script> tags that cannot carry per-request nonces; under the strict policy the browser
+    // blocks them, the pages never hydrate and every client-side control (Copy buttons, tabs, menu) is dead. They get `script-src 'unsafe-inline'`.
+    const strictPath = /^\/(app|api)(\/|$)/.test(c.req.path);
+    c.header('Content-Security-Policy', `default-src 'self'; ${strictPath ? '' : "script-src 'self' 'unsafe-inline'; "}style-src 'self' 'sha256-38RhXrc7EdReTKsOm23ZPOCUgniTUUcjky8QOOrQx6o='; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`);
     if (/^\/(app|api)(\/|$)/.test(c.req.path)) c.header('X-Robots-Tag', 'noindex, nofollow'); // keep the product out of search; robots.txt must NOT block it or crawlers never see this
     if (c.req.path.startsWith('/api/')) c.header('Cache-Control', 'no-store');
     if (opts.log) console.log(JSON.stringify({ level: 'info', rid, method: c.req.method, path: c.req.path, status: c.res.status, ms: Math.round(performance.now() - t0) }));
