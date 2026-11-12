@@ -1,15 +1,11 @@
 User-agent: *
 Allow: /
 
-# Public product information is available to answer/search assistants too.
+# Search and answer-engine indexers, and agents acting for a person who asked: welcome on public pages.
 # This permission applies to public pages; it does not grant access to accounts.
-User-agent: GPTBot
-Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 User-agent: ChatGPT-User
-Allow: /
-User-agent: ClaudeBot
 Allow: /
 User-agent: Claude-SearchBot
 Allow: /
@@ -19,15 +15,35 @@ User-agent: PerplexityBot
 Allow: /
 User-agent: Perplexity-User
 Allow: /
+
+# Model-training crawlers: not permitted. (Also blocked at the Cloudflare edge; robots.txt is advisory.)
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: Claude-Web
+Disallow: /
+User-agent: anthropic-ai
+Disallow: /
 User-agent: Google-Extended
-Allow: /
+Disallow: /
 User-agent: Applebot-Extended
-Allow: /
+Disallow: /
 User-agent: Amazonbot
-Allow: /
+Disallow: /
 User-agent: Meta-ExternalAgent
-Allow: /
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Bytespider
+Disallow: /
 User-agent: cohere-ai
-Allow: /
+Disallow: /
+User-agent: Diffbot
+Disallow: /
+User-agent: ImagesiftBot
+Disallow: /
+User-agent: Omgilibot
+Disallow: /
 
 Sitemap: https://schoolkick.nodedr.com/sitemap.xml

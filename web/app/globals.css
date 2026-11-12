@@ -387,3 +387,26 @@ footer { background: var(--color-paper-2); border-top: 1px solid var(--color-rul
 .install-steps p { margin: .5rem 0; }
 
 .home-install .install-command{margin:1.2rem 0}.home-install .install-command pre{font-size:.78rem}.home-install-anim{width:100%;height:auto;border-radius:14px;display:block}
+
+/* Install commands: copy button, before-you-run panel */
+.install-command.copyable{position:relative}
+.install-command.copyable pre{padding-right:5.5rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.copy-btn{position:absolute;top:.6rem;right:.6rem;min-height:44px;min-width:44px;padding:.4rem .9rem;border-radius:var(--radius-ctl);border:1px solid var(--color-term-line);background:transparent;color:var(--color-term-ink);font:600 var(--text-sm) var(--font-body);cursor:pointer}
+.copy-btn:hover{background:var(--color-term-line)}
+.copy-btn:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}
+.copy-error{display:block;margin-top:.5rem;color:var(--color-warn);font-size:var(--text-sm)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.before-run{margin:1rem 0 1.5rem;border:1px solid var(--color-rule-strong);border-radius:var(--radius-card);background:var(--color-paper)}
+.before-run summary{cursor:pointer;font-weight:700;padding:.9rem 1.1rem;min-height:44px}
+.before-grid{display:grid;gap:1.2rem;padding:0 1.1rem 1.1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.before-grid h3{font-size:var(--text-sm);text-transform:uppercase;letter-spacing:.06em;color:var(--color-muted);margin:0 0 .4rem}
+.before-grid ul{margin:0;padding-left:1.1rem;display:grid;gap:.35rem}
+/* Compare / about / contact */
+.info-table-wrap{overflow-x:auto;margin:1.5rem 0}
+.info-table{width:100%;border-collapse:collapse;font-size:var(--text-sm)}
+.info-table th,.info-table td{border-bottom:1px solid var(--color-rule);padding:.8rem .7rem;text-align:left;vertical-align:top}
+.info-table thead th{color:var(--color-muted);font-weight:600}
+.info-cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));margin:1.5rem 0}
+.info-cards article{border:1px solid var(--color-rule);border-radius:var(--radius-card);padding:1.2rem;background:#fbf9f4}
+.info-cards h2,.info-cards h3{font-size:var(--text-lg);margin:0 0 .4rem}
+.info-prose{max-width:46rem}
