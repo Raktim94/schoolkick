@@ -89,6 +89,20 @@ export default function Install() {
       <p className="guide-status"><b>Next:</b> {r.next}</p>
     </article>)}</section>
     <section className="wrap install-guides"><article className="install-guide"><h2>Need a different port?</h2><p>For the quick installer, set SCHOOLKICK_PORT on the first run:</p><CopyCommand label="Quick installer with a different port" command={'curl -fsSL https://schoolkick.nodedr.com/install.sh | SCHOOLKICK_PORT=3848 bash'} /><p>With Compose, change HTTP_PORT and SITE_URL in deploy/.env, then run the start command again. Existing installations keep their configured port.</p><h3>Already installed through the Debian package?</h3><p>The currently published v0.1.0 package uses port 8480. Its settings are in /etc/schoolkick/schoolkick.env. The quick installer above builds current source; it does not upgrade or move an existing package installation.</p></article></section>
+    <section className="wrap install-guides"><article className="install-guide" id="tested"><h2>What has been tested</h2>
+      <p>Run on 12 November 2026 against SchoolKick source commit 8a884a9 and the published v0.1.0 release, on Debian 13 (x86-64) with Docker 29.9.2, in throwaway containers with synthetic data only. Passing one route does not mean every platform works.</p>
+      <div className="info-table-wrap"><table className="info-table">
+        <caption className="sr-only">Installation routes and what was verified</caption>
+        <thead><tr><th scope="col">Route</th><th scope="col">Result</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">04 Docker Compose, from current source</th><td>Tested end to end: build, health check, first launch, institution created, class and learner saved, restart, re-run, port conflict refused, default removal kept the data, explicit purge removed it.</td></tr>
+          <tr><th scope="row">01 Ubuntu or Debian package (v0.1.0)</th><td>Inspected, not fully installed: amd64 and arm64 checksums match, the package wraps Docker and pins the 0.1.0 image (both architectures exist), and the installer stops safely without systemd, without root, or on a non-Debian system. A full install on a systemd host was not run.</td></tr>
+          <tr><th scope="row">03 One-command installation</th><td>Prerequisite check verified (stops with “Install git first”). The full script was not run on the test host; its steps match route 04.</td></tr>
+          <tr><th scope="row">02 CasaOS or ZimaOS, 05 Run from source</th><td>Not tested.</td></tr>
+          <tr><th scope="row">macOS, Windows, arm64</th><td>Not tested.</td></tr>
+        </tbody>
+      </table></div>
+    </article></section>
     <section className="install-next"><div className="wrap"><p className="eyebrow">After the first sign-in</p><h2>Make the first register useful.</h2><ol><li>Create your school and owner account.</li><li>Create classes, teacher accounts and guardian accounts.</li><li>Add learners, enrol them and link their guardians.</li><li>Take attendance and check the family view.</li></ol><a className="btn" href="/docs/">Open the documentation</a></div></section>
     <section className="wrap install-safety"><p className="eyebrow">Before inviting your school</p><h2>Set up HTTPS and backups.</h2><p>Set SITE_URL to your public HTTPS address. Keep the local binding when a reverse proxy or tunnel runs on the same host. Set ALLOW_SIGNUP=0 once your school exists and restart the app.</p><div><a href="/security/">Security notes</a><a href="/privacy/">Privacy notice</a><a href="/self-hosting/">Hosting and backups</a></div></section>
   </main>;
