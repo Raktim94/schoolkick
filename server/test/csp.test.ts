@@ -11,6 +11,7 @@ describe('content security policy', () => {
     for (const path of ['/', '/get-started/', '/features/']) {
       const csp = (await client(env.app).get(path)).headers.get('content-security-policy') ?? '';
       assert.match(csp, /script-src 'self' 'unsafe-inline'/, path);
+      assert.match(csp, /style-src-attr 'unsafe-inline'/, path); // framework-injected style attributes only; <style> blocks stay hash-only
       assert.match(csp, /frame-ancestors 'none'/, path);
     }
   });
@@ -18,7 +19,7 @@ describe('content security policy', () => {
     for (const path of ['/app/', '/api/v1/classes', '/api/v1/openapi.json']) {
       const csp = (await client(env.app).get(path)).headers.get('content-security-policy') ?? '';
       assert.doesNotMatch(csp, /unsafe-inline/, path);
-      assert.doesNotMatch(csp, /script-src/, path); // falls back to default-src 'self'
+      assert.doesNotMatch(csp, /script-src|style-src-attr/, path); // falls back to default-src 'self'
     }
   });
 });

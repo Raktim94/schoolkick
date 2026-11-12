@@ -63,7 +63,7 @@ export function createKernel(db: Db, opts: { log?: boolean } = {}) {
     // Next.js export whose bootstrap data is inlined in <script> tags that cannot carry per-request nonces; under the strict policy the browser
     // blocks them, the pages never hydrate and every client-side control (Copy buttons, tabs, menu) is dead. They get `script-src 'unsafe-inline'`.
     const strictPath = /^\/(app|api)(\/|$)/.test(c.req.path);
-    c.header('Content-Security-Policy', `default-src 'self'; ${strictPath ? '' : "script-src 'self' 'unsafe-inline'; "}style-src 'self' 'sha256-38RhXrc7EdReTKsOm23ZPOCUgniTUUcjky8QOOrQx6o='; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`);
+    c.header('Content-Security-Policy', `default-src 'self'; ${strictPath ? '' : "script-src 'self' 'unsafe-inline'; style-src-attr 'unsafe-inline'; "}style-src 'self' 'sha256-38RhXrc7EdReTKsOm23ZPOCUgniTUUcjky8QOOrQx6o='; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`);
     if (/^\/(app|api)(\/|$)/.test(c.req.path)) c.header('X-Robots-Tag', 'noindex, nofollow'); // keep the product out of search; robots.txt must NOT block it or crawlers never see this
     if (c.req.path.startsWith('/api/')) c.header('Cache-Control', 'no-store');
     if (opts.log) console.log(JSON.stringify({ level: 'info', rid, method: c.req.method, path: c.req.path, status: c.res.status, ms: Math.round(performance.now() - t0) }));
