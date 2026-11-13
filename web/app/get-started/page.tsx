@@ -14,13 +14,13 @@ const routes: Route[] = [
   {
     id: 'deb', n: '01', name: 'Ubuntu or Debian, one command',
     status: 'Linux · amd64 and arm64 · runs in Docker',
-    desc: 'Installs Docker if it is missing, downloads the latest release package, verifies its SHA-256 checksum, installs it and starts SchoolKick and PostgreSQL as a service. The package wraps Docker; it is not a native application. The latest published release is v0.1.0, which is older than the current source used by routes 03 to 05.',
+    desc: 'Installs Docker if it is missing, downloads the latest release package, verifies its SHA-256 checksum, installs it and starts SchoolKick and PostgreSQL as a service. The package wraps Docker; it is not a native application.',
     before: { needs: ['Ubuntu or Debian with apt and systemd, on amd64 or arm64', 'sudo (root) access and internet access to GitHub and the Docker registries'], does: ['Installs Docker and the Compose plugin if they are missing', 'Downloads the latest release .deb from GitHub and checks its SHA-256 before installing', 'Installs a systemd service that runs the version-pinned SchoolKick and PostgreSQL containers'], changes: ['Adds the schoolkick systemd service and /etc/schoolkick/schoolkick.env (random database secrets are generated)', 'Stores learner data in a Docker volume on this machine', 'Stops with a message and changes nothing without systemd, root, or a Debian/Ubuntu system'] },
     steps: [
       { title: 'Install and start', text: 'Run as a user with sudo. The first start pulls the container images and can take a few minutes.', command: 'curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash' },
       { title: 'Manage the service', text: 'Settings, including the port and database password, live in the env file. Restart after changing it.', command: 'systemctl status schoolkick\nsudoedit /etc/schoolkick/schoolkick.env\nsudo systemctl restart schoolkick' },
     ],
-    next: 'The published v0.1.0 package listens on port 8480: open http://localhost:8480/app/ (or your server address on port 8480) and choose Create institution.',
+    next: 'Open http://localhost:3847/app/ (the port is HOST_PORT in /etc/schoolkick/schoolkick.env) and choose Create institution. The package listens on this machine only until you set BIND_ADDRESS, so put an HTTPS reverse proxy or tunnel in front of it to reach it from other devices.',
   },
   {
     id: 'casaos', n: '02', name: 'CasaOS or ZimaOS',
@@ -76,7 +76,7 @@ export default function Install() {
       <p className="crumbs"><a href="/">Home</a> / Install</p>
       <p className="eyebrow">Your server · your school · your records</p>
       <h1>Install SchoolKick.<br />Open your first register.</h1>
-      <p className="lede">Start with one command, or follow each step yourself. Routes 02 to 05 open the app on port 3847; the published Ubuntu/Debian package (v0.1.0) uses port 8480.</p>
+      <p className="lede">Start with one command, or follow each step yourself. Every route opens the app on port 3847. Only the older v0.1.0 Debian package used port 8480.</p>
       <p className="install-meta"><span>Default port 3847</span><span>AGPL-3.0-only</span><span>No cloud account required</span></p>
     </div></section>
     <section className="wrap install-chooser"><p className="eyebrow">Choose your setup</p><h2>A quick start, with the details close by.</h2>
@@ -88,7 +88,7 @@ export default function Install() {
       <ol className="install-steps">{r.steps.map(step => <li key={step.title}><h3>{step.title}</h3><p>{step.text}</p><CopyCommand command={step.command} label={step.title} /></li>)}</ol>
       <p className="guide-status"><b>Next:</b> {r.next}</p>
     </article>)}</section>
-    <section className="wrap install-guides"><article className="install-guide"><h2>Need a different port?</h2><p>For the quick installer, set SCHOOLKICK_PORT on the first run:</p><CopyCommand label="Quick installer with a different port" command={'curl -fsSL https://schoolkick.nodedr.com/install.sh | SCHOOLKICK_PORT=3848 bash'} /><p>With Compose, change HTTP_PORT and SITE_URL in deploy/.env, then run the start command again. Existing installations keep their configured port.</p><h3>Already installed through the Debian package?</h3><p>The currently published v0.1.0 package uses port 8480. Its settings are in /etc/schoolkick/schoolkick.env. The quick installer above builds current source; it does not upgrade or move an existing package installation.</p></article></section>
+    <section className="wrap install-guides"><article className="install-guide"><h2>Need a different port?</h2><p>For the quick installer, set SCHOOLKICK_PORT on the first run:</p><CopyCommand label="Quick installer with a different port" command={'curl -fsSL https://schoolkick.nodedr.com/install.sh | SCHOOLKICK_PORT=3848 bash'} /><p>With Compose, change HTTP_PORT and SITE_URL in deploy/.env, then run the start command again. Existing installations keep their configured port.</p><h3>Already installed through the Debian package?</h3><p>Packages up to v0.1.0 used port 8480, and from 0.3.0 the package uses 3847 and listens on this machine only. Settings are in /etc/schoolkick/schoolkick.env; running the installer again installs the latest package, and an existing settings file keeps its current port. The quick installer above builds current source; it does not upgrade or move an existing package installation.</p></article></section>
     <section className="wrap install-guides"><article className="install-guide" id="tested"><h2>What has been tested</h2>
       <p>Run on 12 November 2026 against SchoolKick source commit 8a884a9 and the published v0.1.0 release, on Debian 13 (x86-64) with Docker 29.9.2, in throwaway containers with synthetic data only. Passing one route does not mean every platform works.</p>
       <div className="info-table-wrap"><table className="info-table">

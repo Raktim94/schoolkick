@@ -24,7 +24,7 @@ SchoolKick runs with Node.js and PostgreSQL or Docker Compose. The Ubuntu/Debian
 
 ## Quick installation
 
-The current-source installer requires Bash, Git, curl, OpenSSL and running Docker with Compose v2. Run `curl -fsSL https://schoolkick.nodedr.com/install.sh | bash`. It generates a random database password, refuses existing installations and uses http://localhost:3847/app/. Windows users can run it in WSL with Docker Desktop integration. Full commands: https://schoolkick.nodedr.com/get-started/. Existing published v0.1.0 Debian packages still use port 8480.
+The current-source installer requires Bash, Git, curl, OpenSSL and running Docker with Compose v2. Run `curl -fsSL https://schoolkick.nodedr.com/install.sh | bash`. It generates a random database password, refuses existing installations and uses http://localhost:3847/app/. Windows users can run it in WSL with Docker Desktop integration. Full commands: https://schoolkick.nodedr.com/get-started/. Debian packages up to v0.1.0 used port 8480; from 0.3.0 the package uses 3847 and an existing settings file keeps its current port.
 
 ## API and AI tools
 
