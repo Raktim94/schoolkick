@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'SchoolKick compared: self-hosted, hosted and spreadsheet attendance',
+  title: 'Self-hosted vs hosted vs spreadsheet attendance',
   description: 'A fair comparison of SchoolKick with hosted school management software and spreadsheets or paper registers: data ownership, setup effort, what is available today and where another option fits better.',
   alternates: { canonical: '/compare/' },
 };

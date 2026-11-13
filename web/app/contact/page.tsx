@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Contact and support: SchoolKick',
+  title: 'Contact and support',
   description: 'Ask a setup question, report a bug, send a security report or reach the NodeDR team about SchoolKick.',
   alternates: { canonical: '/contact/' },
 };

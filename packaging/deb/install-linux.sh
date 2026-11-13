@@ -5,7 +5,7 @@
 #
 # Downloads the .deb for the latest release from GitHub, checks its SHA-256, makes sure Docker and Docker Compose
 # are present, and installs the package with apt. The package starts SchoolKick under systemd (it runs in Docker)
-# and it is then available at http://localhost:3847.
+# and it is then available at http://localhost:<HOST_PORT from /etc/schoolkick/schoolkick.env, 3847 by default>.
 # Pin a version:  curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo SCHOOLKICK_VERSION=X.Y.Z bash
 # Read it first:  curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | less
 # Use a file you already downloaded (it must sit next to its .sha256):  sudo DEB_FILE=./schoolkick_X.Y.Z_amd64.deb bash install-linux.sh
@@ -57,7 +57,7 @@ else
     # The /releases/latest redirect has no API rate limit (shared networks get HTTP 403 from api.github.com); the API is the fallback.
     VERSION="$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/$REPO/releases/latest" 2>/dev/null | sed -n 's|.*/releases/tag/v\{0,1\}||p' || true)"
     [ -n "$VERSION" ] || VERSION="$(curl -fsSL "https://api.github.com/repos/$REPO/releases/latest" | sed -n 's/.*"tag_name": *"v\{0,1\}\([^"]*\)".*/\1/p' | head -n1)"
-    [ -n "$VERSION" ] || die "Could not determine the latest version. Set SCHOOLKICK_VERSION, for example SCHOOLKICK_VERSION=0.3.0."
+    [ -n "$VERSION" ] || die "Could not determine the latest version. Set SCHOOLKICK_VERSION to a version listed at https://github.com/$REPO/releases."
   fi
   VERSION="${VERSION#v}"
   FILE="${PKG}_${VERSION}_${ARCH}.deb"
@@ -71,4 +71,5 @@ chmod 0644 "$WORK/$FILE"
 
 say "Installing (the first start pulls the container images and can take a few minutes)"
 apt-get install -y "$WORK/$FILE"
-say "Done. Open http://localhost:3847  ·  status: systemctl status $PKG  ·  settings: /etc/$PKG/$PKG.env"
+PORT_OPEN="$(sed -n 's/^HOST_PORT=//p' "/etc/$PKG/$PKG.env" 2>/dev/null | head -n1)"
+say "Done. Open http://localhost:${PORT_OPEN:-3847}/app/  ·  status: systemctl status $PKG  ·  settings: /etc/$PKG/$PKG.env"

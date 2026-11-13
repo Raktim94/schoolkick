@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-export const metadata:Metadata={title:'SchoolKick documentation: install, school operations and API',description:'Guides for installation, attendance, family access, fees, exam registration, security and integrating with the SchoolKick API.',alternates:{canonical:'/docs/'}};
+export const metadata:Metadata={title:'Documentation: install, operate and API',description:'Guides for installation, attendance, family access, fees, exam registration, security and integrating with the SchoolKick API.',alternates:{canonical:'/docs/'}};
 const sections=[
  {id:'install',label:'01 · Install',title:'Choose a route that fits your server.',body:'Ubuntu/Debian installer, Docker Compose or a Node.js development setup. Each route lists prerequisites, commands and what to do after the first sign-in.',href:'/get-started/',link:'Open installation guide'},
  {id:'first-register',label:'02 · First day',title:'Create the school and take a first register.',body:'Set up an owner account, create classes, invite teachers and guardians, add learners and make the first attendance record.',href:'/features/#teachers',link:'See attendance features'},

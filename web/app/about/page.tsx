@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'About SchoolKick',
+  title: 'About the project',
   description: 'Who makes SchoolKick, why it is self-hosted and open source, how it is licensed, and where it fits in the NodeDR software family.',
   alternates: { canonical: '/about/' },
 };

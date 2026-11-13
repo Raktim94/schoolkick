@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import CopyCommand from '../copy-command';
 
 export const metadata: Metadata = {
-  title: 'Install SchoolKick on port 3847',
+  title: 'Install on Ubuntu, Debian, Docker or CasaOS',
   description: 'Install SchoolKick with one command or follow complete Docker Compose and source setup steps. Default app port: 3847.',
   alternates: { canonical: '/get-started/' },
 };

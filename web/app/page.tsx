@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import RegisterScene from './register-scene';
 import FamilyHero from './family-hero';
 import CopyCommand from './copy-command';
-export const metadata: Metadata = { title: 'Free School Attendance and Management Software', description: 'Self-hosted school attendance, fee and exam registration software. Teachers take the register, families use a browser view, and staff keep changes traceable.', alternates: { canonical: '/' } };
+export const metadata: Metadata = { title: { absolute: 'SchoolKick: free, self-hosted school attendance software' }, description: 'Self-hosted school attendance, fee and exam registration software. Teachers take the register, families use a browser view, and staff keep changes traceable.', alternates: { canonical: '/' } };
 export default function Home() { return <main id="main">
   <FamilyHero />
   <section className="home-install"><div className="wrap home-install-layout"><div><p className="eyebrow">One command · Ubuntu, Debian or CasaOS</p><h2>Running in a few minutes.</h2><p>Install with a single command on Ubuntu or Debian, import the app into CasaOS, or choose Docker or source. Each route is explained with what it needs.</p><CopyCommand label="Ubuntu and Debian installation command" command="curl -fsSL https://schoolkick.nodedr.com/install-linux.sh | sudo bash" /><p><a className="btn" href="/get-started/">All install methods <span aria-hidden="true">→</span></a></p></div><img className="home-install-anim" src="/s/install-animated.svg" width="1200" height="400" alt="Animated terminal: one command installs SchoolKick and prints the address to open" loading="lazy" decoding="async"/></div></section>

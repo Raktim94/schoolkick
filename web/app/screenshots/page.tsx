@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-export const metadata:Metadata={title:'SchoolKick product screenshots',description:'See SchoolKick attendance, family access, fees and exam registration screens on phone and desktop. Every screenshot uses fictional demonstration records.',alternates:{canonical:'/screenshots/'}};
+export const metadata:Metadata={title:'Product screenshots',description:'See SchoolKick attendance, family access, fees and exam registration screens on phone and desktop. Every screenshot uses fictional demonstration records.',alternates:{canonical:'/screenshots/'}};
 const shots=[
  ['dashboard-desktop.webp','School overview','Attendance today, recent changes, class register and items needing attention.'],
  ['teacher-roster-mobile.webp','Teacher register','A phone-sized class roster with status controls and a clear save action.'],

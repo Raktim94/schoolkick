@@ -5,6 +5,7 @@
 ## Product
 
 - Stage: early release, version 0.3.0.
+- Ports: the Docker, source and current Debian package installs open the app at http://localhost:3847/app/. Debian packages published as v0.1.0 use port 8480 instead; their port is HOST_PORT in /etc/schoolkick/schoolkick.env.
 - Audience: schools and education teams that can operate their own server.
 - Available: class attendance, learner and guardian records, correction history, CSV learner import with validation, school overview, family browser view, invoices, office-confirmed cash or UPI QR payments, receipts, refund approval, exam registration, exam fees and hall tickets.
 - Not available yet: card/bank payment provider integration, marks entry and result release, messaging, timetable, password reset by email, teacher QR check-in, learning content and native mobile applications.

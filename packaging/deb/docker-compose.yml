@@ -13,7 +13,7 @@ services:
       SITE_URL: ${SITE_URL:-http://localhost:3847}
       ALLOW_SIGNUP: ${ALLOW_SIGNUP:-1}
     ports:
-      - '${BIND_ADDRESS:-0.0.0.0}:${HOST_PORT:-3847}:3847'
+      - '${BIND_ADDRESS:-127.0.0.1}:${HOST_PORT:-3847}:3847'
     read_only: true
     security_opt: ['no-new-privileges:true']
     cap_drop: [ALL]
